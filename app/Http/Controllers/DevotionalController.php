@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDevotionalRequest;
 use App\Http\Requests\UpdateDevotionalRequest;
 use App\Models\Devotional;
+use App\Http\Resources\DevotionalResource;
+use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class DevotionalController extends Controller
 {
@@ -13,7 +16,13 @@ class DevotionalController extends Controller
      */
     public function index()
     {
-        return Devotional::all();
+        $devotionals = Devotional::orderBy('created_at', 'desc')->get();
+        if (request()->wantsJson()) {
+            return DevotionalResource::collection($devotionals);
+        }
+        return Inertia::render('Devotionals/Index', [
+            'devotionals' => DevotionalResource::collection($devotionals)
+        ]);
     }
 
     /**
@@ -21,7 +30,7 @@ class DevotionalController extends Controller
      */
     public function create()
     {
-        return view('devotional.create');
+        return Inertia::render('Devotionals/Create');
     }
 
     /**
@@ -29,7 +38,13 @@ class DevotionalController extends Controller
      */
     public function store(StoreDevotionalRequest $request)
     {
-        return Devotional::create($request->all());
+        $devotional = Devotional::create($request->all());
+
+        if (request()->wantsJson()) {
+            return new DevotionalResource($devotional);
+        }
+
+        return redirect()->route('devotionals.index')->with('success', 'Devocional creado con éxito.');
     }
 
     /**
@@ -37,7 +52,7 @@ class DevotionalController extends Controller
      */
     public function show(Devotional $devotional)
     {
-        return $devotional;
+        return new DevotionalResource($devotional);
     }
 
     /**
@@ -45,7 +60,9 @@ class DevotionalController extends Controller
      */
     public function edit(Devotional $devotional)
     {
-        return view('devotional.edit', compact('devotional'));
+        return Inertia::render('Devotionals/Edit', [
+            'devotional' => new DevotionalResource($devotional)
+        ]);
     }
 
     /**
@@ -53,7 +70,13 @@ class DevotionalController extends Controller
      */
     public function update(UpdateDevotionalRequest $request, Devotional $devotional)
     {
-        return $devotional->update($request->all());
+        $devotional->update($request->all());
+
+        if (request()->wantsJson()) {
+            return new DevotionalResource($devotional);
+        }
+
+        return redirect()->route('devotionals.index')->with('success', 'Devocional actualizado con éxito.');
     }
 
     /**
@@ -61,6 +84,24 @@ class DevotionalController extends Controller
      */
     public function destroy(Devotional $devotional)
     {
-        return $devotional->delete();
+        $devotional->delete();
+
+        if (request()->wantsJson()) {
+             return response()->noContent();
+        }
+
+        return redirect()->route('devotionals.index')->with('success', 'Devocional eliminado con éxito.');
+    }
+
+    /**
+     * Return the daily devotionals
+     */
+    public function dailyDevotionals()
+    {
+        $devotional = Devotional::where('status', 'published')->orderBy('created_at', 'desc')->first();
+        if (!$devotional) {
+             return response()->json(['message' => 'No published devotional found'], 404);
+        }
+        return new DevotionalResource($devotional);
     }
 }

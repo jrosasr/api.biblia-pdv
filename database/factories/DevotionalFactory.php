@@ -18,7 +18,27 @@ class DevotionalFactory extends Factory
     {
         return [
             'title' => fake()->sentence(3),
-            'content' => fake()->paragraph(3),
+            'content' => [
+                'time' => now()->timestamp,
+                'blocks' => [
+                    [
+                        'id' => \Illuminate\Support\Str::random(10),
+                        'type' => 'header',
+                        'data' => [
+                            'text' => fake()->sentence(3),
+                            'level' => 2
+                        ]
+                    ],
+                    [
+                        'id' => \Illuminate\Support\Str::random(10),
+                        'type' => 'paragraph',
+                        'data' => [
+                            'text' => fake()->paragraph(3)
+                        ]
+                    ]
+                ],
+                'version' => '2.30.0'
+            ],
             'published' => fake()->boolean(10),
             'slug' => fake()->slug(),
             'status' => fake()->randomElement(['draft', 'published']),

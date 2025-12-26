@@ -23,10 +23,18 @@ class StoreDevotionalRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'published' => 'required|boolean',
+            'content' => 'required|array',
+            'published' => 'boolean',
             'slug' => 'required|string|max:255|unique:devotionals,slug',
             'status' => 'required|in:draft,published',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'slug' => \Illuminate\Support\Str::slug($this->title),
+            'published' => $this->status === 'published',
+        ]);
     }
 }

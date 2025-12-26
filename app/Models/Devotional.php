@@ -9,4 +9,17 @@ class Devotional extends Model
 {
     /** @use HasFactory<\Database\Factories\DevotionalFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'content',
+        'published',
+        'slug',
+        'status',
+    ];
+
+    protected $casts = [
+        'content' => 'array',
+        'published' => 'boolean',
+    ];
 }

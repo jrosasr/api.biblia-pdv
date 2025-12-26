@@ -8,12 +8,13 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// prefixo v1 with middleware auth:sanctum
-Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
-    Route::apiResource('devotionals', DevotionalController::class);
-});
+// Devotionals CRUD API
+Route::apiResource('devotionals', DevotionalController::class)->names('api.devotionals');
 
-// endpoint return array with version of api
+// Daily devotionals
+Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
+
+// Endpoint return array with version of api
 Route::get('/version', function () {
     return [
         'version' => '1.0.0',

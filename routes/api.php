@@ -14,6 +14,9 @@ Route::apiResource('devotionals', DevotionalController::class)->names('api.devot
 // Daily devotionals
 Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
 
+// Increment readings
+Route::get('incrementReadings/{id}', [DevotionalController::class, 'incrementReadings']);
+
 // Endpoint return array with version of api
 Route::get('/version', function () {
     return [

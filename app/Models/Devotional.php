@@ -16,10 +16,12 @@ class Devotional extends Model
         'published',
         'slug',
         'status',
+        'readings',
     ];
 
     protected $casts = [
         'content' => 'array',
         'published' => 'boolean',
+        'readings' => 'integer',
     ];
 }

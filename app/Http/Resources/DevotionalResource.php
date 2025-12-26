@@ -19,6 +19,9 @@ class DevotionalResource extends JsonResource
             'title' => $this->title,
             'content' => $this->content,
             'status' => $this->status,
+            'readings' => $this->readings,
+            'published' => $this->published,
+            'slug' => $this->slug,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

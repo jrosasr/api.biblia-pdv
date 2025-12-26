@@ -42,6 +42,7 @@ class DevotionalFactory extends Factory
             'published' => fake()->boolean(10),
             'slug' => fake()->slug(),
             'status' => fake()->randomElement(['draft', 'published']),
+            'readings' => fake()->numberBetween(0, 1000),
         ];
     }
 }

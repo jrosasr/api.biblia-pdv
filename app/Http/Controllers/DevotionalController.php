@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class DevotionalController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de los recursos.
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create()
     {
@@ -34,7 +34,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena un nuevo devocional en el almacenamiento.
      */
     public function store(StoreDevotionalRequest $request)
     {
@@ -48,7 +48,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el devocional especificado.
      */
     public function show(Devotional $devotional)
     {
@@ -56,7 +56,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el devocional especificado.
      */
     public function edit(Devotional $devotional)
     {
@@ -66,7 +66,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el devocional
      */
     public function update(UpdateDevotionalRequest $request, Devotional $devotional)
     {
@@ -80,7 +80,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina el devocional
      */
     public function destroy(Devotional $devotional)
     {
@@ -94,7 +94,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Return the daily devotionals
+     * Obtiene el devocional diario
      */
     public function dailyDevotionals()
     {
@@ -103,5 +103,14 @@ class DevotionalController extends Controller
              return response()->json(['message' => 'No published devotional found'], 404);
         }
         return new DevotionalResource($devotional);
+    }
+
+    /**
+     * Incrementa las lecturas de un devocional
+     */
+    public function incrementReadings(Devotional $devotional)
+    {
+        $devotional->increment('readings');
+        return response()->noContent();
     }
 }

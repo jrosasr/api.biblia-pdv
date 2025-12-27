@@ -13,6 +13,9 @@ class DevotionalSeeder extends Seeder
      */
     public function run(): void
     {
-        Devotional::factory()->count(10)->create();
+        // Crear 10 devocionales con fechas aleatorias entre 2 semanas atrás y hoy
+        Devotional::factory()->count(10)->create([
+            'published_at' => fake()->dateTimeBetween('-2 weeks', 'now'),
+        ]);
     }
 }

@@ -1,6 +1,38 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
+import { Bar } from 'vue-chartjs'
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
+
+const props = defineProps({
+    readingsData: Array,
+});
+
+const chartData = {
+  labels: props.readingsData.map(item => item.date),
+  datasets: [
+    {
+      label: 'Lecturas por día',
+      backgroundColor: '#f87979',
+      data: props.readingsData.map(item => item.total_readings)
+    }
+  ]
+}
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false
+}
 </script>
 
 <template>
@@ -21,7 +53,11 @@ import { Head } from '@inertiajs/vue3';
                     class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800"
                 >
                     <div class="p-6 text-gray-900 dark:text-gray-100">
-                        You're logged in!
+                        <h3 class="text-lg font-medium mb-4">Estadísticas de Lectura</h3>
+                        <div class="h-96">
+                             <Bar :data="chartData" :options="chartOptions" v-if="readingsData.length > 0"/>
+                             <div v-else class="text-center text-gray-500">No hay datos de lectura disponibles.</div>
+                        </div>
                     </div>
                 </div>
             </div>

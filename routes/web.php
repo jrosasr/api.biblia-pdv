@@ -17,7 +17,16 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $readings = \App\Models\Devotional::selectRaw('DATE(published_at) as date, SUM(readings) as total_readings')
+        ->whereNotNull('published_at')
+        // ->where('status', 'published')
+        ->groupBy('date')
+        ->orderBy('date', 'asc')
+        ->get();
+
+    return Inertia::render('Dashboard', [
+        'readingsData' => $readings
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

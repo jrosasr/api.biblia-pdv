@@ -43,6 +43,8 @@ class DevotionalFactory extends Factory
             'slug' => fake()->slug(),
             'status' => fake()->randomElement(['draft', 'published']),
             'readings' => fake()->numberBetween(0, 1000),
+            // published_at debe asignar dias aleatorios de hoy a 2 semanas atrás
+            'published_at' => fake()->dateTimeBetween('-2 weeks', 'now'),
         ];
     }
 }

@@ -27,6 +27,7 @@ class UpdateDevotionalRequest extends FormRequest
             'published' => 'boolean',
             'slug' => 'required|string|max:255|unique:devotionals,slug,' . $this->devotional->id,
             'status' => 'required|in:draft,published',
+            'published_at' => 'nullable|date',
         ];
     }
 

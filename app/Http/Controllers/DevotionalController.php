@@ -98,7 +98,7 @@ class DevotionalController extends Controller
      */
     public function dailyDevotionals()
     {
-        $devotional = Devotional::where('status', 'published')->orderBy('created_at', 'desc')->first();
+        $devotional = Devotional::where('status', 'published')->orderBy('published_at', 'desc')->first();
         if (!$devotional) {
              return response()->json(['message' => 'No published devotional found'], 404);
         }

@@ -17,11 +17,13 @@ class Devotional extends Model
         'slug',
         'status',
         'readings',
+        'published_at',
     ];
 
     protected $casts = [
         'content' => 'array',
         'published' => 'boolean',
         'readings' => 'integer',
+        'published_at' => 'datetime',
     ];
 }

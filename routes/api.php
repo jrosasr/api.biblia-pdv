@@ -9,20 +9,22 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 // Devotionals CRUD API
-Route::apiResource('devotionals', DevotionalController::class)->names('api.devotionals');
+// Route::apiResource('devotionals', DevotionalController::class)->names('api.devotionals');
 
-// Daily devotionals
-Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
-
-// Increment readings
-Route::get('incrementReadings/{id}', [DevotionalController::class, 'incrementReadings']);
-
-// Endpoint return array with version of api
-Route::get('/version', function () {
-    return [
-        'version' => '1.0.0',
-        'versionApp' => '1.0.0',
-        'status' => 'ok',
-        'message' => 'APIbiblia-pdv',
-    ];
+Route::prefix('v1')->group(function () {
+    // Daily devotionals
+    Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
+    
+    // Increment readings
+    Route::get('incrementReadings/{id}', [DevotionalController::class, 'incrementReadings']);
+    
+    // Endpoint return array with version of api
+    Route::get('/version', function () {
+        return [
+            'version' => '1.0.0',
+            'versionApp' => '1.0.0',
+            'status' => 'ok',
+            'message' => 'APIbiblia-pdv',
+        ];
+    });
 });

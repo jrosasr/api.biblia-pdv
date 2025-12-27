@@ -18,6 +18,7 @@ const form = useForm({
     image: props.devotional.data.image || '',
     video: props.devotional.data.video || '',
     audio: props.devotional.data.audio || '',
+    published_at: props.devotional.data.published_at ? new Date(props.devotional.data.published_at).toISOString().slice(0, 16) : '',
 });
 
 const submit = () => {
@@ -75,6 +76,19 @@ const submit = () => {
                                     <option value="published">Publicado</option>
                                 </select>
                                 <InputError class="mt-2" :message="form.errors.status" />
+
+                            </div>
+
+                            <!-- Published At -->
+                            <div>
+                                <InputLabel for="published_at" value="Fecha de Publicación" />
+                                <TextInput
+                                    id="published_at"
+                                    type="datetime-local"
+                                    class="mt-1 block w-full"
+                                    v-model="form.published_at"
+                                />
+                                <InputError class="mt-2" :message="form.errors.published_at" />
                             </div>
 
                             <div class="flex items-center gap-4">

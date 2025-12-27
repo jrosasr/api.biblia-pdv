@@ -27,6 +27,7 @@ class StoreDevotionalRequest extends FormRequest
             'published' => 'boolean',
             'slug' => 'required|string|max:255|unique:devotionals,slug',
             'status' => 'required|in:draft,published',
+            'published_at' => 'nullable|date',
         ];
     }
 
@@ -35,6 +36,7 @@ class StoreDevotionalRequest extends FormRequest
         $this->merge([
             'slug' => \Illuminate\Support\Str::slug($this->title),
             'published' => $this->status === 'published',
+            'published_at' => $this->published_at ?? ($this->status === 'published' ? now() : null),
         ]);
     }
 }

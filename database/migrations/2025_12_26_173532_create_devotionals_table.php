@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable()->comment('Titulo del devocional');
             $table->jsonb('content')->nullable()->comment('Contenido del devocional');
             $table->boolean('published')->default(false)->comment('Publicado');
+            $table->timestamp('published_at')->nullable()->comment('Fecha de publicación');
             $table->string('slug')->unique()->comment('Slug del devocional');
             $table->bigInteger('readings')->unsigned()->default(0)->comment('Lecturas del devocional');
 

@@ -14,6 +14,7 @@ const form = useForm({
     image: '',
     video: '',
     audio: '',
+    published_at: '',
 });
 
 const submit = () => {
@@ -71,6 +72,19 @@ const submit = () => {
                                     <option value="published">Publicado</option>
                                 </select>
                                 <InputError class="mt-2" :message="form.errors.status" />
+
+                            </div>
+
+                            <!-- Published At -->
+                            <div>
+                                <InputLabel for="published_at" value="Fecha de Publicación" />
+                                <TextInput
+                                    id="published_at"
+                                    type="datetime-local"
+                                    class="mt-1 block w-full"
+                                    v-model="form.published_at"
+                                />
+                                <InputError class="mt-2" :message="form.errors.published_at" />
                             </div>
 
                             <div class="flex items-center gap-4">

@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('devotionals', DevotionalController::class);
+    Route::resource('device-tokens', \App\Http\Controllers\DeviceTokenController::class);
+    Route::post('device-tokens/{device_token}/send', [\App\Http\Controllers\DeviceTokenController::class, 'sendNotification'])->name('device-tokens.send');
 });
 
 require __DIR__.'/auth.php';

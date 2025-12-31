@@ -43,6 +43,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Devocionales
                                 </NavLink>
+                                <NavLink
+                                    :href="route('device-tokens.index')"
+                                    :active="route().current('device-tokens.*')"
+                                >
+                                    Dispositivos
+                                </NavLink>
                             </div>
                         </div>
 
@@ -145,10 +151,16 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="route('devotionals.index')"
+                            :active="route().current('devotionals.*')"
                         >
-                            Dashboard
+                            Devocionales
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('device-tokens.index')"
+                            :active="route().current('device-tokens.*')"
+                        >
+                            Dispositivos
                         </ResponsiveNavLink>
                     </div>
 

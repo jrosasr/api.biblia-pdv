@@ -2,11 +2,23 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 
 defineProps({
     devotionals: Object,
 });
+
+const notifyNewDevotional = () => {
+    if (confirm('¿Deseas enviar una notificación a todos los dispositivos sobre el nuevo devocional?')) {
+        router.post(route('notifications.new-devotional'), {}, {
+            preserveScroll: true,
+            onSuccess: () => {
+                // Success message is handled by Inertia flash
+            }
+        });
+    }
+};
 
 const deleteDevotional = (id) => {
     if (confirm('¿Estás seguro de eliminar este devocional?')) {
@@ -29,11 +41,16 @@ const formatDate = (dateString) => {
         <template #header>
             <div class="flex justify-between items-center">
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Devocionales</h2>
-                <Link :href="route('devotionals.create')">
-                    <PrimaryButton>
-                        Nuevo Devocional
-                    </PrimaryButton>
-                </Link>
+                <div class="flex space-x-2">
+                    <SecondaryButton @click="notifyNewDevotional">
+                        Notificar sobre nuevo devocional
+                    </SecondaryButton>
+                    <Link :href="route('devotionals.create')">
+                        <PrimaryButton>
+                            Nuevo Devocional
+                        </PrimaryButton>
+                    </Link>
+                </div>
             </div>
         </template>
 

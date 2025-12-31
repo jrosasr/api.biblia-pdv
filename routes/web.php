@@ -36,6 +36,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('devotionals', DevotionalController::class);
     Route::resource('device-tokens', \App\Http\Controllers\DeviceTokenController::class);
     Route::post('device-tokens/{device_token}/send', [\App\Http\Controllers\DeviceTokenController::class, 'sendNotification'])->name('device-tokens.send');
+    
+    // Notifications
+    Route::post('notifications/new-devotional', [\App\Http\Controllers\NotificationController::class, 'notifyNewDevotional'])->name('notifications.new-devotional');
 });
 
 require __DIR__.'/auth.php';

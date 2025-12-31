@@ -70,19 +70,6 @@ const sendTestNotification = async () => {
                              <div v-else class="text-center text-gray-500">No hay datos de lectura disponibles.</div>
                         </div>
                     </div>
-                    <div class="p-6 border-t border-gray-100 dark:border-gray-700">
-                        <h3 class="text-lg font-medium mb-4">Prueba de Notificaciones FCM</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            Presiona el botón para enviar una notificación de prueba al tema "all". 
-                            Asegúrate de que tus dispositivos estén suscritos o usa el endpoint /api/test-fcm?token=TU_TOKEN para enviar a un dispositivo específico.
-                        </p>
-                        <button 
-                            @click="sendTestNotification"
-                            class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors"
-                        >
-                            Enviar Notificación de Prueba
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

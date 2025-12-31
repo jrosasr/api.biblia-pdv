@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/version', function () {
         return [
             'version' => '1.0.0',
-            'versionApp' => '1.0.4',
+            'versionApp' => '1.0.5',
             'status' => 'ok',
             'message' => 'APIbiblia-pdv',
         ];

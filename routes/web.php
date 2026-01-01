@@ -16,6 +16,9 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/account/delete', [\App\Http\Controllers\Auth\AccountDeletionController::class, 'show'])->name('account.delete.show');
+Route::post('/account/delete', [\App\Http\Controllers\Auth\AccountDeletionController::class, 'destroy'])->name('account.delete.destroy');
+
 Route::get('/dashboard', function () {
     $readings = \App\Models\Devotional::selectRaw('DATE(published_at) as date, SUM(readings) as total_readings')
         ->whereNotNull('published_at')

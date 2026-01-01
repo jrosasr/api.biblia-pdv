@@ -36,9 +36,11 @@ class DeviceTokenController extends Controller
             'device_id' => 'nullable|string',
             'device_name' => 'nullable|string',
             'platform' => 'nullable|string',
-            'user_id' => 'nullable|exists:users,id',
             'topics' => 'nullable|array',
         ]);
+
+        $topics = $request->input('topics', []);
+        $userId = \Auth::guard('sanctum')->id() ?? $request->input('user_id');
 
         $query = DeviceToken::query();
         if ($request->filled('device_id')) {
@@ -49,14 +51,11 @@ class DeviceTokenController extends Controller
 
         $deviceToken = $query->first();
 
-        $topics = $request->input('topics', []);
-
         if ($deviceToken) {
-            // Logic to sync topics in Firebase could go here if required
             // For now, we update the DB record
             $deviceToken->update([
                 'fcm_token' => $request->fcm_token,
-                'user_id' => $request->user_id ?? $deviceToken->user_id,
+                'user_id' => $userId ?? $deviceToken->user_id,
                 'device_name' => $request->device_name ?? $deviceToken->device_name,
                 'platform' => $request->platform ?? $deviceToken->platform,
                 'topics' => $topics,
@@ -64,7 +63,7 @@ class DeviceTokenController extends Controller
             ]);
         } else {
             $deviceToken = DeviceToken::create([
-                'user_id' => $request->user_id,
+                'user_id' => $userId,
                 'device_id' => $request->device_id,
                 'fcm_token' => $request->fcm_token,
                 'device_name' => $request->device_name,
@@ -74,7 +73,6 @@ class DeviceTokenController extends Controller
             ]);
         }
 
-        // Optional: Sync with Firebase
         try {
             $messaging = app('firebase.messaging');
             foreach ($topics as $topic) {

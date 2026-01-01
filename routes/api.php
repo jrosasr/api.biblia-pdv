@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DevotionalController;
+use App\Http\Controllers\Api\AuthController;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
 
@@ -31,6 +32,15 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::post('device-tokens', [\App\Http\Controllers\DeviceTokenController::class, 'store']);
+
+    // Auth routes
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+    
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('profile', [AuthController::class, 'profile']);
+    });
 });
 
 Route::get('/test-fcm', function (Request $request) {

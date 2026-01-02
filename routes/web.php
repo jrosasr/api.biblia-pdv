@@ -42,6 +42,9 @@ Route::middleware('auth')->group(function () {
     
     // Notifications
     Route::post('notifications/new-devotional', [\App\Http\Controllers\NotificationController::class, 'notifyNewDevotional'])->name('notifications.new-devotional');
+
+    Route::resource('bible-series', \App\Http\Controllers\BibleSeriesController::class);
+    Route::resource('bible-stories', \App\Http\Controllers\BibleStoryController::class);
 });
 
 require __DIR__.'/auth.php';

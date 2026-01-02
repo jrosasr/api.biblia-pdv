@@ -49,6 +49,18 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dispositivos
                                 </NavLink>
+                                <NavLink
+                                    :href="route('bible-series.index')"
+                                    :active="route().current('bible-series.*')"
+                                >
+                                    Series
+                                </NavLink>
+                                <NavLink
+                                    :href="route('bible-stories.index')"
+                                    :active="route().current('bible-stories.*')"
+                                >
+                                    Historias
+                                </NavLink>
                             </div>
                         </div>
 
@@ -161,6 +173,18 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('device-tokens.*')"
                         >
                             Dispositivos
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('bible-series.index')"
+                            :active="route().current('bible-series.*')"
+                        >
+                            Series
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('bible-stories.index')"
+                            :active="route().current('bible-stories.*')"
+                        >
+                            Historias
                         </ResponsiveNavLink>
                     </div>
 

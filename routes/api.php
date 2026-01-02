@@ -76,6 +76,11 @@ Route::prefix('v1')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('profile', [AuthController::class, 'profile']);
         Route::post('bible-stories/{bibleStory}/favorite', [\App\Http\Controllers\BibleStoryController::class, 'toggleFavorite']);
+        
+        // Bible Favorites routes
+        Route::get('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'index']);
+        Route::post('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store']);
+        Route::delete('favorites/{favoriteId}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy']);
     });
 });
 

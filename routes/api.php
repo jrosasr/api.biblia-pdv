@@ -41,6 +41,21 @@ Route::prefix('v1')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('profile', [AuthController::class, 'profile']);
         Route::post('bible-stories/{bibleStory}/favorite', [\App\Http\Controllers\BibleStoryController::class, 'toggleFavorite']);
+        
+        // Bible Favorites routes
+        Route::get('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'index']);
+        Route::post('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store']);
+        Route::delete('favorites/{favoriteId}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy']);
+
+        // Reading Streaks routes
+        Route::get('reading-streak', [\App\Http\Controllers\ReadingStreakController::class, 'index']);
+        Route::post('reading-streak', [\App\Http\Controllers\ReadingStreakController::class, 'update']);
+
+        // Reading Logs routes
+        Route::get('reading-logs', [\App\Http\Controllers\ReadingLogController::class, 'index']);
+
+        // Track reading
+        Route::post('reading/track', [\App\Http\Controllers\ReadingController::class, 'track']);
     });
 });
 

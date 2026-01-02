@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 use App\Models\UserActivity;
 
@@ -58,5 +59,37 @@ class User extends Authenticatable
     public function activities(): HasMany
     {
         return $this->hasMany(UserActivity::class);
+    }
+
+    /**
+     * Get the favorites for the user.
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(BibleFavorite::class);
+    }
+
+    /**
+     * Get the reading streak for the user.
+     */
+    public function readingStreak(): HasOne
+    {
+        return $this->hasOne(ReadingStreak::class);
+    }
+
+    /**
+     * Get the reading logs for the user.
+     */
+    public function readingLogs(): HasMany
+    {
+        return $this->hasMany(ReadingLog::class);
+    }
+
+    /**
+     * Get the bible chapters read by the user.
+     */
+    public function bibleChapterReadings(): HasMany
+    {
+        return $this->hasMany(BibleChapterReading::class);
     }
 }

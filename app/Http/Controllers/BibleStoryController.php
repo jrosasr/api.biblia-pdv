@@ -6,21 +6,27 @@ use App\Http\Requests\StoreBibleStoryRequest;
 use App\Http\Requests\UpdateBibleStoryRequest;
 use App\Models\BibleStory;
 use App\Models\BibleSeries;
-use App\Models\UserActivity;
+use App\Services\BibleStoryService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class BibleStoryController extends Controller
 {
+    protected $storyService;
+
+    public function __construct(BibleStoryService $storyService)
+    {
+        $this->storyService = $storyService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $stories = BibleStory::with('series')->get();
         return Inertia::render('BibleStories/Index', [
-            'stories' => $stories
+            'stories' => $this->storyService->getAllStories()
         ]);
     }
 
@@ -39,13 +45,10 @@ class BibleStoryController extends Controller
      */
     public function store(StoreBibleStoryRequest $request)
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = Storage::url($request->file('cover_image')->store('stories', 'public'));
-        }
-
-        BibleStory::create($data);
+        $this->storyService->createStory(
+            $request->validated(),
+            $request->file('cover_image')
+        );
 
         return redirect()->route('bible-stories.index')
             ->with('success', 'Historia creada exitosamente.');
@@ -77,19 +80,11 @@ class BibleStoryController extends Controller
      */
     public function update(UpdateBibleStoryRequest $request, BibleStory $bibleStory)
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            // Delete old image
-            if ($bibleStory->cover_image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $bibleStory->cover_image));
-            }
-            $data['cover_image'] = Storage::url($request->file('cover_image')->store('stories', 'public'));
-        } else {
-            unset($data['cover_image']);
-        }
-
-        $bibleStory->update($data);
+        $this->storyService->updateStory(
+            $bibleStory,
+            $request->validated(),
+            $request->file('cover_image')
+        );
 
         return redirect()->route('bible-stories.index')
             ->with('success', 'Historia actualizada exitosamente.');
@@ -100,10 +95,7 @@ class BibleStoryController extends Controller
      */
     public function destroy(BibleStory $bibleStory)
     {
-        if ($bibleStory->cover_image) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $bibleStory->cover_image));
-        }
-        $bibleStory->delete();
+        $this->storyService->deleteStory($bibleStory);
 
         return redirect()->route('bible-stories.index')
             ->with('success', 'Historia eliminada exitosamente.');
@@ -114,36 +106,17 @@ class BibleStoryController extends Controller
      */
     public function toggleFavorite(Request $request, BibleStory $bibleStory)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$user) {
             return response()->json(['message' => 'Unauthenticated'], 401);
         }
 
-        $activity = UserActivity::where('user_id', $user->id)
-            ->where('type', 'favorite')
-            ->where('activitable_type', BibleStory::class)
-            ->where('activitable_id', $bibleStory->id)
-            ->first();
+        $result = $this->storyService->toggleFavorite(
+            $user,
+            $bibleStory,
+            $request->header('X-Platform', 'web')
+        );
 
-        if ($activity) {
-            $activity->delete();
-            return response()->json([
-                'message' => 'Quitado de favoritos',
-                'is_favorite' => false
-            ]);
-        }
-
-        UserActivity::create([
-            'user_id' => $user->id,
-            'type' => 'favorite',
-            'activitable_type' => BibleStory::class,
-            'activitable_id' => $bibleStory->id,
-            'platform' => $request->header('X-Platform', 'web'),
-        ]);
-
-        return response()->json([
-            'message' => 'Agregado a favoritos',
-            'is_favorite' => true
-        ]);
+        return response()->json($result);
     }
 }

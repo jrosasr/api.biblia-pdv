@@ -69,6 +69,7 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::post('logout', [AuthController::class, 'logout']);
+        Route::delete('account', [AuthController::class, 'deleteAccount']);
         Route::get('profile', [AuthController::class, 'profile']);
         Route::post('bible-stories/{bibleStory}/favorite', [\App\Http\Controllers\BibleStoryController::class, 'toggleFavorite']);
         

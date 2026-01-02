@@ -11,44 +11,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Devotionals CRUD API
-// Route::apiResource('devotionals', DevotionalController::class)->names('api.devotionals');
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/test-fcm', function (Request $request) {
-        try {
-            $messaging = app('firebase.messaging');
-            $token = $request->query('token');
-            $topic = $request->query('topic', 'all');
-
-            if ($token) {
-                $message = CloudMessage::withTarget('token', $token);
-            } else {
-                $message = CloudMessage::withTarget('topic', $topic);
-            }
-
-            $message = $message->withNotification(Notification::create(
-                $request->query('title', 'Prueba de FCM'),
-                $request->query('body', '¡Hola! Este es un mensaje de prueba desde la API.')
-            ))
-            ->withData(['test' => 'data']);
-
-            $messaging->send($message);
-            
-            return response()->json([
-                'status' => 'success', 
-                'message' => 'Notification sent',
-                'target' => $token ? 'token' : "topic: $topic"
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error', 
-                'message' => $e->getMessage()
-            ], 500);
-        }
-    });
-});
-
 Route::prefix('v1')->group(function () {
     // Daily devotionals
     Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
@@ -73,6 +35,39 @@ Route::prefix('v1')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     
     Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/test-fcm', function (Request $request) {
+            try {
+                $messaging = app('firebase.messaging');
+                $token = $request->query('token');
+                $topic = $request->query('topic', 'all');
+
+                if ($token) {
+                    $message = CloudMessage::withTarget('token', $token);
+                } else {
+                    $message = CloudMessage::withTarget('topic', $topic);
+                }
+
+                $message = $message->withNotification(Notification::create(
+                    $request->query('title', 'Prueba de FCM'),
+                    $request->query('body', '¡Hola! Este es un mensaje de prueba desde la API.')
+                ))
+                ->withData(['test' => 'data']);
+
+                $messaging->send($message);
+                
+                return response()->json([
+                    'status' => 'success', 
+                    'message' => 'Notificación enviada con éxito',
+                    'target' => $token ? 'token' : "topic: $topic"
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error', 
+                    'message' => $e->getMessage()
+                ], 500);
+            }
+        });
+
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('profile', [AuthController::class, 'profile']);
         Route::post('bible-stories/{bibleStory}/favorite', [\App\Http\Controllers\BibleStoryController::class, 'toggleFavorite']);
@@ -91,33 +86,6 @@ Route::prefix('v1')->group(function () {
 
         // Track reading
         Route::post('reading/track', [\App\Http\Controllers\ReadingController::class, 'track']);
-    });
-});
-
-Route::get('/test-fcm', function (Request $request) {
-    try {
-        $messaging = app('firebase.messaging');
-        $token = $request->query('token');
-        $topic = $request->query('topic', 'all');
-
-        if ($token) {
-            $message = CloudMessage::withTarget('token', $token);
-        } else {
-            $message = CloudMessage::withTarget('topic', $topic);
-        }
-
-        $message = $message->withNotification(Notification::create(
-            $request->query('title', 'Prueba de FCM'),
-            $request->query('body', '¡Hola! Este es un mensaje de prueba desde la API.')
-        ))
-        ->withData(['test' => 'data']);
-
-        $messaging->send($message);
-        
-        // Bible Favorites routes
-        Route::get('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'index']);
-        Route::post('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store']);
-        Route::delete('favorites/{favoriteId}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy']);
     });
 });
 

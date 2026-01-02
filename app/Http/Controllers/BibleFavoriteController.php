@@ -4,22 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBibleFavoriteRequest;
 use App\Http\Resources\BibleFavoriteResource;
-use App\Models\BibleFavorite;
-use Illuminate\Http\Request;
+use App\Services\BibleFavoriteService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class BibleFavoriteController extends Controller
 {
+    protected $favoriteService;
+
+    public function __construct(BibleFavoriteService $favoriteService)
+    {
+        $this->favoriteService = $favoriteService;
+    }
+
     /**
      * Display a listing of the user's favorites.
      */
     public function index()
     {
-        $favorites = Auth::user()->favorites()
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+        $favorites = $this->favoriteService->getUserFavorites(Auth::user());
         return BibleFavoriteResource::collection($favorites);
     }
 
@@ -28,33 +30,14 @@ class BibleFavoriteController extends Controller
      */
     public function store(StoreBibleFavoriteRequest $request)
     {
-        $validated = $request->validated();
-        
-        Log::info('Syncing favorites', ['count' => count($validated['favorites'])]);
-
-        $user = Auth::user();
-        $saved = [];
-
-        foreach ($validated['favorites'] as $item) {
-            $favorite = $user->favorites()->updateOrCreate(
-                ['favorite_id' => $item['id']],
-                [
-                    'version_id' => $item['versionId'] ?? null,
-                    'book_number' => $item['bookNumber'],
-                    'book_name' => $item['bookName'],
-                    'chapter' => $item['chapter'],
-                    'verse' => $item['verse'],
-                    'text' => $item['text'],
-                    'note' => $item['note'] ?? null,
-                    'verses' => $item['verses'] ?? null,
-                ]
-            );
-            $saved[] = $favorite;
-        }
+        $saved = $this->favoriteService->syncFavorites(
+            Auth::user(),
+            $request->validated()['favorites']
+        );
 
         return response()->json([
             'message' => 'Favoritos guardados exitosamente',
-            'count' => count($saved),
+            'count' => $saved->count(),
             'data' => BibleFavoriteResource::collection($saved)
         ]);
     }
@@ -64,9 +47,7 @@ class BibleFavoriteController extends Controller
      */
     public function destroy($favoriteId)
     {
-        $deleted = Auth::user()->favorites()
-            ->where('favorite_id', $favoriteId)
-            ->delete();
+        $deleted = $this->favoriteService->deleteFavorite(Auth::user(), $favoriteId);
 
         if ($deleted) {
             return response()->json(['message' => 'Favorito eliminado']);

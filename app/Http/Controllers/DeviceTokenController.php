@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\DeviceToken;
+use App\Services\DeviceTokenService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
 
 class DeviceTokenController extends Controller
 {
+    protected $tokenService;
+
+    public function __construct(DeviceTokenService $tokenService)
+    {
+        $this->tokenService = $tokenService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tokens = DeviceToken::with('user')->latest()->get();
+        $tokens = $this->tokenService->getAllTokens();
 
         if (request()->wantsJson()) {
             return response()->json($tokens);
@@ -39,49 +46,9 @@ class DeviceTokenController extends Controller
             'topics' => 'nullable|array',
         ]);
 
-        $topics = $request->input('topics', []);
-        $userId = \Auth::guard('sanctum')->id() ?? $request->input('user_id');
+        $userId = Auth::guard('sanctum')->id() ?? $request->input('user_id');
 
-        $query = DeviceToken::query();
-        if ($request->filled('device_id')) {
-            $query->where('device_id', $request->device_id);
-        } else {
-            $query->where('fcm_token', $request->fcm_token);
-        }
-
-        $deviceToken = $query->first();
-
-        if ($deviceToken) {
-            // For now, we update the DB record
-            $deviceToken->update([
-                'fcm_token' => $request->fcm_token,
-                'user_id' => $userId ?? $deviceToken->user_id,
-                'device_name' => $request->device_name ?? $deviceToken->device_name,
-                'platform' => $request->platform ?? $deviceToken->platform,
-                'topics' => $topics,
-                'last_used_at' => now(),
-            ]);
-        } else {
-            $deviceToken = DeviceToken::create([
-                'user_id' => $userId,
-                'device_id' => $request->device_id,
-                'fcm_token' => $request->fcm_token,
-                'device_name' => $request->device_name,
-                'platform' => $request->platform,
-                'topics' => $topics,
-                'last_used_at' => now(),
-            ]);
-        }
-
-        try {
-            $messaging = app('firebase.messaging');
-            foreach ($topics as $topic) {
-                $messaging->subscribeToTopic($topic, $request->fcm_token);
-            }
-        } catch (\Exception $e) {
-            // Log error but don't fail the request
-            \Log::error("Error subscribing to topics: " . $e->getMessage());
-        }
+        $deviceToken = $this->tokenService->updateOrCreateToken($validated, $userId);
 
         return response()->json([
             'status' => 'success',
@@ -94,7 +61,7 @@ class DeviceTokenController extends Controller
      */
     public function destroy(DeviceToken $deviceToken)
     {
-        $deviceToken->delete();
+        $this->tokenService->deleteToken($deviceToken);
 
         if (request()->wantsJson()) {
             return response()->json(['status' => 'success']);
@@ -114,16 +81,11 @@ class DeviceTokenController extends Controller
         ]);
 
         try {
-            $messaging = app('firebase.messaging');
-
-            $message = CloudMessage::withTarget('token', $deviceToken->fcm_token)
-                ->withNotification(Notification::create(
-                    $request->title,
-                    $request->body
-                ))
-                ->withData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK']);
-
-            $messaging->send($message);
+            $this->tokenService->sendNotification(
+                $deviceToken,
+                $request->title,
+                $request->body
+            );
 
             if (request()->wantsJson()) {
                 return response()->json([

@@ -6,27 +6,37 @@ use App\Http\Requests\StoreDevotionalRequest;
 use App\Http\Requests\UpdateDevotionalRequest;
 use App\Models\Devotional;
 use App\Http\Resources\DevotionalResource;
+use App\Services\DevotionalService;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class DevotionalController extends Controller
 {
+    protected $devotionalService;
+
+    public function __construct(DevotionalService $devotionalService)
+    {
+        $this->devotionalService = $devotionalService;
+    }
+
     /**
-     * Muestra una lista de los recursos.
+     * Display a listing of the devotionals.
      */
     public function index()
     {
-        $devotionals = Devotional::orderBy('created_at', 'desc')->get();
+        $devotionals = $this->devotionalService->getAllDevotionals();
+
         if (request()->wantsJson()) {
             return DevotionalResource::collection($devotionals);
         }
+
         return Inertia::render('Devotionals/Index', [
             'devotionals' => DevotionalResource::collection($devotionals)
         ]);
     }
 
     /**
-     * Muestra el formulario para crear un nuevo recurso.
+     * Show the form for creating a new devotional.
      */
     public function create()
     {
@@ -34,11 +44,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Almacena un nuevo devocional en el almacenamiento.
+     * Store a new devotional in storage.
      */
     public function store(StoreDevotionalRequest $request)
     {
-        $devotional = Devotional::create($request->all());
+        $devotional = $this->devotionalService->createDevotional($request->validated());
 
         if (request()->wantsJson()) {
             return new DevotionalResource($devotional);
@@ -48,7 +58,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Muestra el devocional especificado.
+     * Display the specified devotional.
      */
     public function show(Devotional $devotional)
     {
@@ -56,7 +66,7 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Muestra el formulario para editar el devocional especificado.
+     * Show the form for editing the specified devotional.
      */
     public function edit(Devotional $devotional)
     {
@@ -66,11 +76,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Actualiza el devocional
+     * Update the devotional.
      */
     public function update(UpdateDevotionalRequest $request, Devotional $devotional)
     {
-        $devotional->update($request->all());
+        $this->devotionalService->updateDevotional($devotional, $request->validated());
 
         if (request()->wantsJson()) {
             return new DevotionalResource($devotional);
@@ -80,11 +90,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Elimina el devocional
+     * Delete the devotional.
      */
     public function destroy(Devotional $devotional)
     {
-        $devotional->delete();
+        $this->devotionalService->deleteDevotional($devotional);
 
         if (request()->wantsJson()) {
              return response()->noContent();
@@ -94,11 +104,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Obtiene el devocional diario
+     * Get the latest daily devotional.
      */
     public function dailyDevotionals()
     {
-        $devotional = Devotional::where('status', 'published')->orderBy('published_at', 'desc')->first();
+        $devotional = $this->devotionalService->getDailyDevotional();
         if (!$devotional) {
              return response()->json(['message' => 'No published devotional found'], 404);
         }
@@ -106,11 +116,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Incrementa las lecturas de un devocional
+     * Increment the readings count.
      */
     public function incrementReadings(Devotional $devotional)
     {
-        $devotional->increment('readings');
+        $this->devotionalService->incrementReadings($devotional);
         return response()->noContent();
     }
 }

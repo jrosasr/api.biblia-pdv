@@ -81,6 +81,43 @@ Route::prefix('v1')->group(function () {
         Route::get('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'index']);
         Route::post('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store']);
         Route::delete('favorites/{favoriteId}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy']);
+
+        // Reading Streaks routes
+        Route::get('reading-streak', [\App\Http\Controllers\ReadingStreakController::class, 'index']);
+        Route::post('reading-streak', [\App\Http\Controllers\ReadingStreakController::class, 'update']);
+
+        // Reading Logs routes
+        Route::get('reading-logs', [\App\Http\Controllers\ReadingLogController::class, 'index']);
+
+        // Track reading
+        Route::post('reading/track', [\App\Http\Controllers\ReadingController::class, 'track']);
+    });
+});
+
+Route::get('/test-fcm', function (Request $request) {
+    try {
+        $messaging = app('firebase.messaging');
+        $token = $request->query('token');
+        $topic = $request->query('topic', 'all');
+
+        if ($token) {
+            $message = CloudMessage::withTarget('token', $token);
+        } else {
+            $message = CloudMessage::withTarget('topic', $topic);
+        }
+
+        $message = $message->withNotification(Notification::create(
+            $request->query('title', 'Prueba de FCM'),
+            $request->query('body', '¡Hola! Este es un mensaje de prueba desde la API.')
+        ))
+        ->withData(['test' => 'data']);
+
+        $messaging->send($message);
+        
+        // Bible Favorites routes
+        Route::get('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'index']);
+        Route::post('favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store']);
+        Route::delete('favorites/{favoriteId}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy']);
     });
 });
 

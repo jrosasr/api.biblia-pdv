@@ -3,19 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Devotional;
+use App\Services\NotificationService;
+use App\Services\DevotionalService;
 use Illuminate\Http\Request;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
 
 class NotificationController extends Controller
 {
+    protected $notificationService;
+    protected $devotionalService;
+
+    public function __construct(NotificationService $notificationService, DevotionalService $devotionalService)
+    {
+        $this->notificationService = $notificationService;
+        $this->devotionalService = $devotionalService;
+    }
+
+    /**
+     * Notify users about the latest published devotional.
+     */
     public function notifyNewDevotional(Request $request)
     {
         try {
-            // Get the latest published devotional
-            $devotional = Devotional::where('status', 'published')
-                ->orderBy('published_at', 'desc')
-                ->first();
+            $devotional = $this->devotionalService->getDailyDevotional();
 
             if (!$devotional) {
                 return response()->json([
@@ -24,20 +33,7 @@ class NotificationController extends Controller
                 ], 404);
             }
 
-            $messaging = app('firebase.messaging');
-
-            $title = "¡Nuevo Devocional Disponible!";
-            $body = $devotional->title;
-
-            $message = CloudMessage::withTarget('topic', 'all')
-                ->withNotification(Notification::create($title, $body))
-                ->withData([
-                    'type' => 'new_devotional',
-                    'devotional_id' => (string)$devotional->id,
-                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK'
-                ]);
-
-            $messaging->send($message);
+            $this->notificationService->notifyNewDevotional($devotional);
 
             if ($request->wantsJson()) {
                 return response()->json([
@@ -49,8 +45,6 @@ class NotificationController extends Controller
             return redirect()->back()->with('success', 'Notificación enviada con éxito.');
 
         } catch (\Exception $e) {
-            \Log::error("FCM Notification Error: " . $e->getMessage());
-            
             if ($request->wantsJson()) {
                 return response()->json([
                     'status' => 'error',

@@ -61,6 +61,12 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Historias
                                 </NavLink>
+                                <NavLink
+                                    :href="route('users.index')"
+                                    :active="route().current('users.*')"
+                                >
+                                    Usuarios
+                                </NavLink>
                             </div>
                         </div>
 
@@ -185,6 +191,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('bible-stories.*')"
                         >
                             Historias
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('users.index')"
+                            :active="route().current('users.*')"
+                        >
+                            Usuarios
                         </ResponsiveNavLink>
                     </div>
 

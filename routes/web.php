@@ -45,6 +45,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('bible-series', \App\Http\Controllers\BibleSeriesController::class);
     Route::resource('bible-stories', \App\Http\Controllers\BibleStoryController::class);
+
+    // User management (Streaks and Favorites)
+    Route::get('/users', [\App\Http\Controllers\UserManagementController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'show'])->name('users.show');
 });
 
 require __DIR__.'/auth.php';

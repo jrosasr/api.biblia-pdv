@@ -5,19 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBibleSeriesRequest;
 use App\Http\Requests\UpdateBibleSeriesRequest;
 use App\Models\BibleSeries;
-use Illuminate\Support\Facades\Storage;
+use App\Services\BibleSeriesService;
 use Inertia\Inertia;
 
 class BibleSeriesController extends Controller
 {
+    protected $seriesService;
+
+    public function __construct(BibleSeriesService $seriesService)
+    {
+        $this->seriesService = $seriesService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $series = BibleSeries::withCount('stories')->get();
         return Inertia::render('BibleSeries/Index', [
-            'series' => $series
+            'series' => $this->seriesService->getAllSeries()
         ]);
     }
 
@@ -34,13 +40,10 @@ class BibleSeriesController extends Controller
      */
     public function store(StoreBibleSeriesRequest $request)
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            $data['cover_image'] = Storage::url($request->file('cover_image')->store('series', 'public'));
-        }
-
-        BibleSeries::create($data);
+        $this->seriesService->createSeries(
+            $request->validated(),
+            $request->file('cover_image')
+        );
 
         return redirect()->route('bible-series.index')
             ->with('success', 'Serie creada exitosamente.');
@@ -71,19 +74,11 @@ class BibleSeriesController extends Controller
      */
     public function update(UpdateBibleSeriesRequest $request, BibleSeries $bibleSeries)
     {
-        $data = $request->validated();
-
-        if ($request->hasFile('cover_image')) {
-            // Delete old image
-            if ($bibleSeries->cover_image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $bibleSeries->cover_image));
-            }
-            $data['cover_image'] = Storage::url($request->file('cover_image')->store('series', 'public'));
-        } else {
-            unset($data['cover_image']);
-        }
-
-        $bibleSeries->update($data);
+        $this->seriesService->updateSeries(
+            $bibleSeries,
+            $request->validated(),
+            $request->file('cover_image')
+        );
 
         return redirect()->route('bible-series.index')
             ->with('success', 'Serie actualizada exitosamente.');
@@ -94,10 +89,7 @@ class BibleSeriesController extends Controller
      */
     public function destroy(BibleSeries $bibleSeries)
     {
-        if ($bibleSeries->cover_image) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $bibleSeries->cover_image));
-        }
-        $bibleSeries->delete();
+        $this->seriesService->deleteSeries($bibleSeries);
 
         return redirect()->route('bible-series.index')
             ->with('success', 'Serie eliminada exitosamente.');

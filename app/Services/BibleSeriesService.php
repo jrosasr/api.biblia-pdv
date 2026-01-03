@@ -23,7 +23,7 @@ class BibleSeriesService
     public function createSeries(array $data, ?UploadedFile $image = null): BibleSeries
     {
         if ($image) {
-            $data['cover_image'] = Storage::url($image->store('series', 'public'));
+            $data['cover_image'] = $image->store('series', 'public');
         }
 
         return BibleSeries::create($data);
@@ -37,9 +37,9 @@ class BibleSeriesService
         if ($image) {
             // Delete old image
             if ($series->cover_image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $series->cover_image));
+                Storage::disk('public')->delete($series->cover_image);
             }
-            $data['cover_image'] = Storage::url($image->store('series', 'public'));
+            $data['cover_image'] = $image->store('series', 'public');
         }
 
         $series->update($data);
@@ -52,7 +52,7 @@ class BibleSeriesService
     public function deleteSeries(BibleSeries $series): bool
     {
         if ($series->cover_image) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $series->cover_image));
+            Storage::disk('public')->delete($series->cover_image);
         }
         return $series->delete();
     }

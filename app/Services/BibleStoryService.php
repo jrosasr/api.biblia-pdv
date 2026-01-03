@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\BibleStory;
 use App\Models\User;
 use App\Models\UserActivity;
+use App\Models\BibleSeries;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
@@ -20,12 +21,20 @@ class BibleStoryService
     }
 
     /**
+     * Get stories by series.
+     */
+    public function getStoriesBySeries(BibleSeries $series): Collection
+    {
+        return BibleStory::where('series_id', $series->id)->get();
+    }
+
+    /**
      * Create a new bible story.
      */
     public function createStory(array $data, ?UploadedFile $image = null): BibleStory
     {
         if ($image) {
-            $data['cover_image'] = Storage::url($image->store('stories', 'public'));
+            $data['cover_image'] = $image->store('stories', 'public');
         }
 
         return BibleStory::create($data);
@@ -39,9 +48,9 @@ class BibleStoryService
         if ($image) {
             // Delete old image
             if ($story->cover_image) {
-                Storage::disk('public')->delete(str_replace('/storage/', '', $story->cover_image));
+                Storage::disk('public')->delete($story->cover_image);
             }
-            $data['cover_image'] = Storage::url($image->store('stories', 'public'));
+            $data['cover_image'] = $image->store('stories', 'public');
         }
 
         $story->update($data);
@@ -54,7 +63,7 @@ class BibleStoryService
     public function deleteStory(BibleStory $story): bool
     {
         if ($story->cover_image) {
-            Storage::disk('public')->delete(str_replace('/storage/', '', $story->cover_image));
+            Storage::disk('public')->delete($story->cover_image);
         }
         return $story->delete();
     }

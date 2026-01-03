@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateBibleStoryRequest;
 use App\Models\BibleStory;
 use App\Models\BibleSeries;
 use App\Services\BibleStoryService;
+use App\Http\Resources\BibleStoryResource; // Imported
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -18,6 +19,24 @@ class BibleStoryController extends Controller
     public function __construct(BibleStoryService $storyService)
     {
         $this->storyService = $storyService;
+    }
+
+    /**
+     * API: List all stories.
+     */
+    public function list(Request $request)
+    {
+        $stories = $this->storyService->getAllStories();
+        return BibleStoryResource::collection($stories);
+    }
+
+    /**
+     * API: List stories by series.
+     */
+    public function listBySeries(BibleSeries $bibleSeries)
+    {
+        $stories = $this->storyService->getStoriesBySeries($bibleSeries);
+        return BibleStoryResource::collection($stories);
     }
 
     /**

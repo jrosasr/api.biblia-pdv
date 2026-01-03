@@ -15,6 +15,12 @@ Route::prefix('v1')->group(function () {
     // Daily devotionals
     Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
     
+    // Bible Series & Stories
+    Route::get('bible-series', [\App\Http\Controllers\BibleSeriesController::class, 'list']);
+    Route::get('bible-stories', [\App\Http\Controllers\BibleStoryController::class, 'list']);
+    Route::get('bible-series/{bibleSeries}/stories', [\App\Http\Controllers\BibleStoryController::class, 'listBySeries']);
+    Route::get('storage/{path}', [\App\Http\Controllers\Api\StorageController::class, 'show'])->where('path', '.*');
+    
     // Increment readings
     Route::get('incrementReadings/{id}', [DevotionalController::class, 'incrementReadings']);
     

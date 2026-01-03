@@ -6,6 +6,8 @@ use App\Http\Requests\StoreBibleSeriesRequest;
 use App\Http\Requests\UpdateBibleSeriesRequest;
 use App\Models\BibleSeries;
 use App\Services\BibleSeriesService;
+use App\Http\Resources\BibleSeriesResource; // Imported
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class BibleSeriesController extends Controller
@@ -15,6 +17,15 @@ class BibleSeriesController extends Controller
     public function __construct(BibleSeriesService $seriesService)
     {
         $this->seriesService = $seriesService;
+    }
+
+    /**
+     * API: List all series.
+     */
+    public function list(Request $request)
+    {
+        $series = $this->seriesService->getAllSeries();
+        return BibleSeriesResource::collection($series);
     }
 
     /**

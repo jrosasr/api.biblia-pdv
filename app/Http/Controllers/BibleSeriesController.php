@@ -34,7 +34,7 @@ class BibleSeriesController extends Controller
     public function index()
     {
         return Inertia::render('BibleSeries/Index', [
-            'series' => $this->seriesService->getAllSeries()
+            'series' => BibleSeriesResource::collection($this->seriesService->getAllSeries())->resolve()
         ]);
     }
 

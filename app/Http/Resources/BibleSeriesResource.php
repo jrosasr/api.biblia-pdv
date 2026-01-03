@@ -19,6 +19,7 @@ class BibleSeriesResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'cover_image' => $this->cover_image ? url("api/v1/storage/" . preg_replace('/^(\/?storage\/|\/)/', '', $this->cover_image)) : null,
+            'stories_count' => $this->whenCounted('stories'),
             'created_at' => $this->created_at->toIso8601String(),
             'updated_at' => $this->updated_at->toIso8601String(),
         ];

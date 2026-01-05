@@ -5,13 +5,24 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @property mixed $favorite_id
+ * @property mixed $version_id
+ * @property mixed $book_number
+ * @property mixed $book_name
+ * @property mixed $chapter
+ * @property mixed $verse
+ * @property mixed $text
+ * @property mixed $note
+ * @property mixed $verses
+ * @property mixed $created_at
+ * @responseField id string The unique ID of the favorite.
+ * @responseField versionId string ID of the Bible version used.
+ * @responseField bookNumber integer The book number (1-66).
+ * @responseField createdAt datetime The registration creation date.
+ */
 class BibleFavoriteResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return [

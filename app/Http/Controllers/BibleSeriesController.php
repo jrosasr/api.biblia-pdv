@@ -10,6 +10,11 @@ use App\Http\Resources\BibleSeriesResource; // Imported
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
+/**
+ * @group Biblical Content
+ *
+ * Biblical series and stories organized for reading.
+ */
 class BibleSeriesController extends Controller
 {
     protected $seriesService;
@@ -20,7 +25,11 @@ class BibleSeriesController extends Controller
     }
 
     /**
-     * API: List all series.
+     * List series (API)
+     *
+     * Returns all available biblical series with their covers and story count.
+     *
+     * @unauthenticated
      */
     public function list(Request $request)
     {

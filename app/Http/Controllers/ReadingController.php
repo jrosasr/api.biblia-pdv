@@ -7,6 +7,10 @@ use App\Http\Resources\ReadingStreakResource;
 use App\Services\ReadingService;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @group Devotionals
+ * @subgroup Reading Statistics
+ */
 class ReadingController extends Controller
 {
     protected $readingService;
@@ -17,8 +21,12 @@ class ReadingController extends Controller
     }
 
     /**
-     * Track a reading event.
-     * Updates logs, streaks, and specific chapter tracking.
+     * Track reading progress
+     *
+     * Updates history, streaks, and specific tracking of read chapters.
+     * Should be called every time the user finishes reading a chapter or story.
+     *
+     * @authenticated
      */
     public function track(TrackReadingRequest $request)
     {

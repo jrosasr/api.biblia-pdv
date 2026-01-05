@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
+/**
+ * @group Biblical Content
+ *
+ * Detailed biblical stories.
+ */
 class BibleStoryController extends Controller
 {
     protected $storyService;
@@ -22,7 +27,11 @@ class BibleStoryController extends Controller
     }
 
     /**
-     * API: List all stories.
+     * List stories (API)
+     *
+     * Returns all biblical stories from all series.
+     *
+     * @unauthenticated
      */
     public function list(Request $request)
     {
@@ -31,7 +40,12 @@ class BibleStoryController extends Controller
     }
 
     /**
-     * API: List stories by series.
+     * List stories by series (API)
+     *
+     * Returns all stories belonging to a specific series.
+     *
+     * @unauthenticated
+     * @urlParam bibleSeries integer required The ID of the series. Example: 1
      */
     public function listBySeries(BibleSeries $bibleSeries)
     {
@@ -121,7 +135,12 @@ class BibleStoryController extends Controller
     }
 
     /**
-     * Toggle favorite status for a story.
+     * Toggle favorite (Story)
+     *
+     * Allows the user to mark or unmark a biblical story as a favorite.
+     *
+     * @authenticated
+     * @urlParam bibleStory integer required The ID of the story. Example: 1
      */
     public function toggleFavorite(Request $request, BibleStory $bibleStory)
     {

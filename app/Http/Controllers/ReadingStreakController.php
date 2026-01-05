@@ -7,6 +7,10 @@ use App\Models\ReadingStreak;
 use App\Services\ReadingService;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @group Devotionals
+ * @subgroup Reading Statistics
+ */
 class ReadingStreakController extends Controller
 {
     protected $readingService;
@@ -17,7 +21,11 @@ class ReadingStreakController extends Controller
     }
 
     /**
-     * Get the authenticated user's reading streak.
+     * Get reading streak
+     *
+     * Returns the user's current streak of consecutive reading days.
+     *
+     * @authenticated
      */
     public function index()
     {

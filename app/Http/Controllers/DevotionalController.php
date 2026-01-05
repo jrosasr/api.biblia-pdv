@@ -10,6 +10,11 @@ use App\Services\DevotionalService;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
+/**
+ * @group Devotionals
+ *
+ * Management of daily devotionals and reading statistics.
+ */
 class DevotionalController extends Controller
 {
     protected $devotionalService;
@@ -20,7 +25,12 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Display a listing of the devotionals.
+     * List devotionals
+     *
+     * Retrieves a paginated list of all available devotionals.
+     * Supports both administrative views (Inertia) and JSON responses for the API.
+     *
+     * @authenticated
      */
     public function index()
     {
@@ -44,7 +54,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Store a new devotional in storage.
+     * Create a devotional
+     *
+     * Allows creating a new devotional in the system.
+     *
+     * @authenticated
      */
     public function store(StoreDevotionalRequest $request)
     {
@@ -58,7 +72,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Display the specified devotional.
+     * View devotional
+     *
+     * Retrieves the details of a specific devotional by its ID or slug.
+     *
+     * @authenticated
      */
     public function show(Devotional $devotional)
     {
@@ -76,7 +94,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Update the devotional.
+     * Update devotional
+     *
+     * Allows modifying data for an existing devotional.
+     *
+     * @authenticated
      */
     public function update(UpdateDevotionalRequest $request, Devotional $devotional)
     {
@@ -90,7 +112,11 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Delete the devotional.
+     * Delete devotional
+     *
+     * Permanently deletes a devotional from the system.
+     *
+     * @authenticated
      */
     public function destroy(Devotional $devotional)
     {
@@ -104,7 +130,20 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Get the latest daily devotional.
+     * Get devotional of the day
+     *
+     * Returns the most recent published devotional for today.
+     * This is the main endpoint for the mobile application.
+     *
+     * @unauthenticated
+     * @response 200 {
+     *   "data": {
+     *     "id": 1,
+     *     "title": "A new beginning",
+     *     "content": "...",
+     *     "published_at": "2024-03-20T10:00:00.000000Z"
+     *   }
+     * }
      */
     public function dailyDevotionals()
     {
@@ -116,7 +155,13 @@ class DevotionalController extends Controller
     }
 
     /**
-     * Increment the readings count.
+     * Increment readings
+     *
+     * Increments the reading count of a specific devotional.
+     * Should be called every time a user opens the devotional.
+     *
+     * @unauthenticated
+     * @urlParam devotional integer required The ID of the devotional. Example: 1
      */
     public function incrementReadings(Devotional $devotional)
     {

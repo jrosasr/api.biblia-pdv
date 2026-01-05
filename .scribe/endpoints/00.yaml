@@ -1,0 +1,294 @@
+name: Devotionals
+description: |-
+
+  Management of daily devotionals and reading statistics.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/daily-devotionals
+    metadata:
+      custom: []
+      groupName: Devotionals
+      groupDescription: |-
+
+        Management of daily devotionals and reading statistics.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Get devotional of the day'
+      description: |-
+        Returns the most recent published devotional for today.
+        This is the main endpoint for the mobile application.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "data": {
+              "id": 1,
+              "title": "A new beginning",
+              "content": "...",
+              "published_at": "2024-03-20T10:00:00.000000Z"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/v1/incrementReadings/{id}'
+    metadata:
+      custom: []
+      groupName: Devotionals
+      groupDescription: |-
+
+        Management of daily devotionals and reading statistics.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Increment readings'
+      description: |-
+        Increments the reading count of a specific devotional.
+        Should be called every time a user opens the devotional.
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the incrementReading.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      devotional:
+        custom: []
+        name: devotional
+        description: 'The ID of the devotional.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: 1
+      devotional: 1
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 204
+        content: ''
+        headers:
+          cache-control: 'no-cache, private'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/reading-streak
+    metadata:
+      custom: []
+      groupName: Devotionals
+      groupDescription: ''
+      subgroup: 'Reading Statistics'
+      subgroupDescription: ''
+      title: 'Get reading streak'
+      description: "Returns the user's current streak of consecutive reading days."
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/v1/reading-logs
+    metadata:
+      custom: []
+      groupName: Devotionals
+      groupDescription: ''
+      subgroup: 'Reading Statistics'
+      subgroupDescription: ''
+      title: 'Reading history'
+      description: 'Retrieves a paginated list of days on which the user has performed readings.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/reading/track
+    metadata:
+      custom: []
+      groupName: Devotionals
+      groupDescription: ''
+      subgroup: 'Reading Statistics'
+      subgroupDescription: ''
+      title: 'Track reading progress'
+      description: |-
+        Updates history, streaks, and specific tracking of read chapters.
+        Should be called every time the user finishes reading a chapter or story.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      versionId:
+        custom: []
+        name: versionId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bookNumber:
+        custom: []
+        name: bookNumber
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      bookName:
+        custom: []
+        name: bookName
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      chapterNumber:
+        custom: []
+        name: chapterNumber
+        description: ''
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      versionId: consequatur
+      bookNumber: 17
+      bookName: consequatur
+      chapterNumber: 17
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null

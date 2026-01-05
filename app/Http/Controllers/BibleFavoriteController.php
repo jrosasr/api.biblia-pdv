@@ -7,6 +7,14 @@ use App\Http\Resources\BibleFavoriteResource;
 use App\Services\BibleFavoriteService;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * @group Favorite Management
+ *
+ * Endpoints for users to manage their favorite verses and personal notes.
+ * All endpoints require authentication.
+ *
+ * @authenticated
+ */
 class BibleFavoriteController extends Controller
 {
     protected $favoriteService;
@@ -17,7 +25,12 @@ class BibleFavoriteController extends Controller
     }
 
     /**
-     * Display a listing of the user's favorites.
+     * List favorites
+     *
+     * Retrieves all verses marked as favorites by the authenticated user.
+     *
+     * @apiResourceCollection App\Http\Resources\BibleFavoriteResource
+     * @apiResourceModel App\Models\BibleFavorite
      */
     public function index()
     {
@@ -26,7 +39,28 @@ class BibleFavoriteController extends Controller
     }
 
     /**
-     * Store a listing of favorites.
+     * Sync/Save favorites
+     *
+     * Allows saving a bulk list of favorites. If the `id` already exists, the note or content will be updated.
+     *
+     * @response 201 {
+     *  "message": "Favorites saved successfully",
+     *  "count": 1,
+     *  "data": [
+     *    {
+     *      "id": "uuid-1234",
+     *      "versionId": "RV1960",
+     *      "bookNumber": 43,
+     *      "bookName": "Juan",
+     *      "chapter": 3,
+     *      "verse": 16,
+     *      "text": "For God so loved the world...",
+     *      "note": "Central verse",
+     *      "verses": null,
+     *      "createdAt": "2024-03-20T15:00:00.000000Z"
+     *    }
+     *  ]
+     * }
      */
     public function store(StoreBibleFavoriteRequest $request)
     {
@@ -43,7 +77,14 @@ class BibleFavoriteController extends Controller
     }
 
     /**
-     * Remove the specified favorite.
+     * Delete favorite
+     *
+     * Deletes a specific verse from the user's favorites list.
+     *
+     * @authenticated
+     * @urlParam favoriteId string required The unique ID of the favorite. Example: fav_998877
+     * @response 200 { "message": "Favorite deleted" }
+     * @response 404 { "message": "Favorite not found" }
      */
     public function destroy($favoriteId)
     {

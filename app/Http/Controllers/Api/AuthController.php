@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DeviceToken;
 
+/**
+ * @group Authentication
+ *
+ * Endpoints to manage user access, registration, and profile.
+ */
 class AuthController extends Controller
 {
     protected $authService;
@@ -20,6 +25,13 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
+    /**
+     * User registration
+     *
+     * Allows creating a new user account. Upon registration, an immediate access token is returned.
+     *
+     * @unauthenticated
+     */
     public function register(RegisterRequest $request)
     {
         $result = $this->authService->register($request->validated());
@@ -31,6 +43,13 @@ class AuthController extends Controller
         ], 201);
     }
 
+    /**
+     * Log in
+     *
+     * Authenticates a user with their credentials and returns a Bearer token.
+     *
+     * @unauthenticated
+     */
     public function login(LoginRequest $request)
     {
         $result = $this->authService->login($request->validated());
@@ -42,6 +61,13 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Log out
+     *
+     * Invalidates the current user's access token.
+     *
+     * @authenticated
+     */
     public function logout(Request $request)
     {
         $this->authService->logout($request->user());
@@ -51,11 +77,26 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * User profile
+     *
+     * Retrieves information for the currently authenticated user.
+     *
+     * @authenticated
+     */
     public function profile(Request $request)
     {
         return new UserResource($request->user());
     }
 
+    /**
+     * Delete account
+     *
+     * Permanently deletes the user account and all associated data (favorites, readings, activities).
+     * This action cannot be undone.
+     *
+     * @authenticated
+     */
     public function deleteAccount(Request $request)
     {
         $user = $request->user();
@@ -87,7 +128,7 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'message' => 'Ocurrió un error al eliminar la cuenta.',
+                'message' => 'An error occurred while deleting the account.',
                 'error' => $e->getMessage()
             ], 500);
         }

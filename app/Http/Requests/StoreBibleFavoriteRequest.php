@@ -4,21 +4,25 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @bodyParam favorites array required Lista de versículos favoritos.
+ * @bodyParam favorites[].id string required El ID único del favorito (UUID o similar). Example: fav_123
+ * @bodyParam favorites[].versionId string ID de la versión de la Biblia. Example: RV1960
+ * @bodyParam favorites[].bookNumber int required Número del libro (1-66). Example: 1
+ * @bodyParam favorites[].bookName string required Nombre del libro. Example: Génesis
+ * @bodyParam favorites[].chapter int required Número del capítulo. Example: 1
+ * @bodyParam favorites[].verse int required Número del versículo inicial. Example: 1
+ * @bodyParam favorites[].text string required El contenido del versículo. Example: En el principio...
+ * @bodyParam favorites[].note string Una nota personal opcional. Example: Mi versículo favorito.
+ * @bodyParam favorites[].verses array Arreglo de versículos adicionales si es un rango.
+ */
 class StoreBibleFavoriteRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [

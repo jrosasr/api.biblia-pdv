@@ -192,6 +192,7 @@ function navigateToResult(result) {
                     </Link>
                     
                     <Link 
+                        v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                         :href="route('dashboard')" 
                         class="px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-[#8B6F47] dark:bg-[#E3C598] text-white dark:text-[#111111] hover:opacity-90 transition-opacity whitespace-nowrap"
                     >
@@ -295,8 +296,13 @@ function navigateToResult(result) {
                         <!-- Footer / Account Actions -->
                         <div class="flex-shrink-0 p-6 border-t border-[#E0D5C9] dark:border-[#2E2A25] bg-white/30 dark:bg-white/5 backdrop-blur-sm">
                             <template v-if="$page.props.auth.user">
-                                <div class="grid grid-cols-2 gap-3">
-                                    <Link :href="route('dashboard')" @click="isMenuModalOpen = false" class="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-[#8B6F47] dark:bg-[#E3C598] text-white dark:text-[#111111] font-black group">
+                                <div :class="($page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')) ? 'grid grid-cols-2 gap-3' : 'block'">
+                                    <Link 
+                                        v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
+                                        :href="route('dashboard')" 
+                                        @click="isMenuModalOpen = false" 
+                                        class="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-[#8B6F47] dark:bg-[#E3C598] text-white dark:text-[#111111] font-black group"
+                                    >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                         </svg>
@@ -307,7 +313,7 @@ function navigateToResult(result) {
                                         method="post" 
                                         as="button" 
                                         @click="isMenuModalOpen = false"
-                                        class="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-red-500/10 dark:bg-red-500/20 text-red-500 font-black group"
+                                        class="flex flex-col items-center justify-center gap-2 p-4 rounded-3xl bg-red-500/10 dark:bg-red-500/20 text-red-500 font-black group w-full"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

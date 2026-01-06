@@ -15,6 +15,20 @@ Route::get('/api/bible/verses/{version}/{bookId}/{chapter}', [\App\Http\Controll
 Route::get('/api/bible/search', [\App\Http\Controllers\BibleReaderController::class, 'search']);
 Route::get('/devocional-diario', [\App\Http\Controllers\DevotionalController::class, 'publicShow'])->name('devotionals.public');
 
+// Static Pages
+Route::get('/privacidad', function () {
+    return Inertia::render('Legal/Privacy');
+})->name('privacy');
+
+Route::get('/terminos', function () {
+    return Inertia::render('Legal/Terms');
+})->name('terms');
+
+Route::get('/contacto', function () {
+    return Inertia::render('Contact');
+})->name('contact');
+Route::post('/contacto', [\App\Http\Controllers\ContactMessageController::class, 'store'])->middleware('auth')->name('contact.store');
+
 
 Route::get('/account/delete', [\App\Http\Controllers\Auth\AccountDeletionController::class, 'show'])->name('account.delete.show');
 Route::post('/account/delete', [\App\Http\Controllers\Auth\AccountDeletionController::class, 'destroy'])->name('account.delete.destroy');
@@ -22,7 +36,6 @@ Route::post('/account/delete', [\App\Http\Controllers\Auth\AccountDeletionContro
 Route::get('/dashboard', function () {
     $readings = \App\Models\Devotional::selectRaw('DATE(published_at) as date, SUM(readings) as total_readings')
         ->whereNotNull('published_at')
-        // ->where('status', 'published')
         ->groupBy('date')
         ->orderBy('date', 'asc')
         ->get();
@@ -30,7 +43,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
         'readingsData' => $readings
     ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'role:admin|writer'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,14 +59,22 @@ Route::middleware('auth')->group(function () {
     Route::post('notifications/new-devotional', [\App\Http\Controllers\NotificationController::class, 'notifyNewDevotional'])->name('notifications.new-devotional');
     Route::post('notifications/custom', [\App\Http\Controllers\NotificationController::class, 'sendCustomNotification'])->name('notifications.custom');
 
-    Route::resource('bible-series', \App\Http\Controllers\BibleSeriesController::class);
-    Route::resource('bible-stories', \App\Http\Controllers\BibleStoryController::class);
+    Route::resource('bible-series', \App\Http\Controllers\BibleSeriesController::class)->middleware('role:admin');
+    Route::resource('bible-stories', \App\Http\Controllers\BibleStoryController::class)->middleware('role:admin');
 
     // User management (Streaks and Favorites)
     Route::get('/mi-perfil', [\App\Http\Controllers\UserManagementController::class, 'profile'])->name('profile.public-show');
     Route::get('/mis-favoritos', [\App\Http\Controllers\UserManagementController::class, 'favorites'])->name('profile.favorites');
-    Route::get('/users', [\App\Http\Controllers\UserManagementController::class, 'index'])->name('users.index');
-    Route::get('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'show'])->name('users.show');
+    Route::post('/favorites', [\App\Http\Controllers\BibleFavoriteController::class, 'store'])->name('favorites.store');
+    Route::delete('/favorites/{id}', [\App\Http\Controllers\BibleFavoriteController::class, 'destroy'])->name('favorites.destroy');
+    
+    // Admin only user management
+    Route::middleware('role:admin')->group(function() {
+        Route::get('/users', [\App\Http\Controllers\UserManagementController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'show'])->name('users.show');
+        Route::post('/users/{user}/role', [\App\Http\Controllers\UserManagementController::class, 'updateRole'])->name('users.update-role');
+        Route::resource('contact-messages', \App\Http\Controllers\ContactMessageController::class)->only(['index', 'show', 'destroy']);
+    });
 });
 
 require __DIR__.'/auth.php';

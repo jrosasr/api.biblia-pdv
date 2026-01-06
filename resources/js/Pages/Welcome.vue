@@ -1,8 +1,9 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import BibleHeader from '@/Components/BibleHeader.vue';
+import BibleFooter from '@/Components/BibleFooter.vue';
 import AboutModal from '@/Components/AboutModal.vue';
 
 const props = defineProps({
@@ -42,6 +43,12 @@ const testamentFilter = ref(1); // 1: Old, 2: New
 // Search is now handled by BibleHeader
 // We only need to handle the navigation when a result is selected
 const isAboutModalOpen = ref(false);
+const selectedVerses = ref([]);
+const isNoteModalOpen = ref(false);
+
+const noteForm = useForm({
+    note: '',
+});
 
 // watch removed
 
@@ -185,6 +192,48 @@ const filteredBooks = computed(() => {
 });
 
 
+
+function toggleSelection(verse) {
+    const index = selectedVerses.value.findIndex(v => v.id === verse.id);
+    if (index === -1) {
+        selectedVerses.value.push(verse);
+    } else {
+        selectedVerses.value.splice(index, 1);
+    }
+}
+
+function openNoteModal() {
+    if (selectedVerses.value.length === 0) return;
+    noteForm.reset();
+    isNoteModalOpen.value = true;
+}
+
+function saveFavorites() {
+    const favorites = selectedVerses.value.map(verse => ({
+        id: `${selectedVersion.value}-${selectedBook.value.id}-${selectedChapter.value}-${verse.verse}`,
+        versionId: selectedVersion.value,
+        bookNumber: selectedBook.value.id,
+        bookName: selectedBook.value.name,
+        chapter: selectedChapter.value,
+        verse: verse.verse,
+        text: verse.text,
+        note: noteForm.note,
+    }));
+
+    noteForm.transform((data) => ({
+        favorites: favorites
+    })).post(route('favorites.store'), {
+        onSuccess: () => {
+            selectedVerses.value = [];
+            isNoteModalOpen.value = false;
+            // Optionally show success toast
+        },
+        onError: (errors) => {
+            console.error(errors);
+        }
+    });
+}
+
 onMounted(async () => {
     if (isDark.value) document.documentElement.classList.add('dark');
     await fetchChapters();
@@ -257,14 +306,52 @@ onMounted(async () => {
                     <span class="text-[#9B8D82] animate-pulse">Cargando Palabra de Vida...</span>
                 </div>
                 <template v-else>
-                    <div v-for="v in verses" :key="v.id" :id="`verse-${v.verse}`" class="group flex gap-5 items-start p-2 rounded-xl transition-all duration-500">
-                        <span class="text-[#8B6F47] dark:text-[#E3C598] font-bold text-xs mt-2.5 opacity-60 min-w-[1.5rem] tracking-tighter">{{ v.verse }}</span>
-                        <p class="text-xl md:text-2xl text-[#3A3026] dark:text-[#F5F0E6] group-hover:text-black dark:group-hover:text-white transition-colors duration-200">
+                    <div 
+                        v-for="v in verses" 
+                        :key="v.id" 
+                        :id="`verse-${v.verse}`" 
+                        @click="toggleSelection(v)"
+                        :class="[
+                            'group flex gap-5 items-start p-3 rounded-xl transition-all duration-300 cursor-pointer select-none',
+                            selectedVerses.find(sel => sel.id === v.id) 
+                                ? 'bg-[#8B6F47]/20 dark:bg-[#E3C598]/20 translate-x-2' 
+                                : 'hover:bg-[#8B6F47]/5 dark:hover:bg-[#E3C598]/5'
+                        ]"
+                    >
+                        <span 
+                            class="font-bold text-xs mt-2.5 min-w-[1.5rem] tracking-tighter transition-colors"
+                            :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#8B6F47] dark:text-[#E3C598] opacity-100' : 'text-[#8B6F47] dark:text-[#E3C598] opacity-60'"
+                        >{{ v.verse }}</span>
+                        <p 
+                            class="text-xl md:text-2xl transition-colors duration-200"
+                            :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#3A3026] dark:text-[#F5F0E6] font-medium' : 'text-[#3A3026] dark:text-[#F5F0E6] group-hover:text-black dark:group-hover:text-white'"
+                        >
                             {{ v.text }}
                         </p>
                     </div>
                 </template>
             </div>
+
+            <!-- Floating Action Bar for Selection -->
+            <Transition name="fade">
+                <div v-if="selectedVerses.length > 0" class="fixed bottom-8 left-0 right-0 z-40 px-4 flex justify-center">
+                    <div class="bg-[#3A3026] dark:bg-[#E3C598] text-[#F5F0E6] dark:text-[#3A3026] rounded-full shadow-2xl px-6 py-3 flex items-center gap-6">
+                        <span class="font-bold text-sm">{{ selectedVerses.length }} seleccionado{{ selectedVerses.length > 1 ? 's' : '' }}</span>
+                        <div class="h-6 w-px bg-white/20 dark:bg-black/20"></div>
+                        <button @click="openNoteModal" class="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            Favorito <span class="hidden sm:inline">& Nota</span>
+                        </button>
+                        <button @click="selectedVerses = []" class="p-1 hover:bg-white/10 dark:hover:bg-black/10 rounded-full transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </Transition>
 
 
             <!-- Bottom Navigation -->
@@ -374,10 +461,57 @@ onMounted(async () => {
         
         <!-- Search Modal removed -->
 
+        <BibleFooter @openAboutModal="isAboutModalOpen = true" />
+
         <AboutModal 
             :isOpen="isAboutModalOpen"
             @close="isAboutModalOpen = false"
         />
+
+        <!-- Note Modal -->
+        <Transition name="fade">
+            <div v-if="isNoteModalOpen" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-4">
+                <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" @click="isNoteModalOpen = false"></div>
+                <div class="relative w-full max-w-lg bg-[#FFF8F0] dark:bg-[#1C1C1C] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+                    <div class="p-6 border-b border-[#E0D5C9] dark:border-[#2E2A25] flex justify-between items-center bg-[#F5EBE0] dark:bg-[#222222]">
+                        <h3 class="text-xl font-black text-[#3A3026] dark:text-[#F5F0E6]">Guardar Favorito</h3>
+                        <button @click="isNoteModalOpen = false" class="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/5 text-[#3A3026] dark:text-[#F5F0E6]">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="p-6 space-y-4">
+                        <div class="bg-[#8B6F47]/5 dark:bg-[#E3C598]/5 p-4 rounded-xl border border-[#8B6F47]/10 dark:border-[#E3C598]/10 max-h-32 overflow-y-auto">
+                            <p class="text-sm text-[#8B6F47] dark:text-[#E3C598] font-bold mb-2">Versículos seleccionados:</p>
+                            <div v-for="v in selectedVerses" :key="v.id" class="flex gap-2 text-[#3A3026] dark:text-[#F5F0E6] text-sm mb-1">
+                                <span class="font-black">{{ v.verse }}:</span>
+                                <span class="truncate">{{ v.text }}</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-black uppercase tracking-widest text-[#8B6F47] dark:text-[#E3C598] mb-2">Nota Personal (Opcional)</label>
+                            <textarea 
+                                v-model="noteForm.note"
+                                rows="4"
+                                class="w-full bg-white dark:bg-[#111111] border-2 border-[#E0D5C9] dark:border-[#2E2A25] rounded-2xl p-4 focus:border-[#8B6F47] dark:focus:border-[#E3C598] focus:ring-0 transition-all text-[#3A3026] dark:text-[#F5F0E6] font-medium resize-none"
+                                placeholder="Escribe una reflexión sobre estos versículos..."
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            @click="saveFavorites"
+                            :disabled="noteForm.processing"
+                            class="w-full py-4 bg-[#8B6F47] dark:bg-[#E3C598] text-white dark:text-[#111111] font-black rounded-2xl hover:brightness-110 transition-all disabled:opacity-50"
+                        >
+                            {{ noteForm.processing ? 'Guardando...' : 'Guardar en Favoritos' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </Transition>
 
     </div>
 </template>

@@ -42,46 +42,53 @@ function toggleTheme() {
                                 class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
                             >
                                 <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
                                 </NavLink>
                                 <NavLink
-                                    :href="route('user-devotionals.public-index')"
-                                    :active="route().current('user-devotionals.*')"
-                                >
-                                    Mis Devocionales
-                                </NavLink>
-                                <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                                     :href="route('devotionals.index')"
                                     :active="route().current('devotionals.*')"
                                 >
-                                    Admin Devocionales
+                                    Devocionales
                                 </NavLink>
                                 <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
                                     :href="route('device-tokens.index')"
                                     :active="route().current('device-tokens.*')"
                                 >
                                     Dispositivos
                                 </NavLink>
                                 <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
                                     :href="route('bible-series.index')"
                                     :active="route().current('bible-series.*')"
                                 >
                                     Series
                                 </NavLink>
                                 <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
                                     :href="route('bible-stories.index')"
                                     :active="route().current('bible-stories.*')"
                                 >
                                     Historias
                                 </NavLink>
                                 <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
                                     :href="route('users.index')"
                                     :active="route().current('users.*')"
                                 >
                                     Usuarios
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
+                                    :href="route('contact-messages.index')"
+                                    :active="route().current('contact-messages.*')"
+                                >
+                                    Mensajes
                                 </NavLink>
                             </div>
                         </div>
@@ -195,68 +202,87 @@ function toggleTheme() {
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
-                            :href="route('user-devotionals.index')"
+                            v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
+                            :href="route('dashboard')"
+                            :active="route().current('dashboard')"
+                        >
+                            Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('user-devotionals.public-index')"
                             :active="route().current('user-devotionals.*')"
                         >
                             Mis Devocionales
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                             :href="route('devotionals.index')"
                             :active="route().current('devotionals.*')"
                         >
                             Admin Devocionales
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
                             :href="route('device-tokens.index')"
                             :active="route().current('device-tokens.*')"
                         >
                             Dispositivos
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
                             :href="route('bible-series.index')"
                             :active="route().current('bible-series.*')"
                         >
                             Series
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
                             :href="route('bible-stories.index')"
                             :active="route().current('bible-stories.*')"
                         >
                             Historias
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
                             :href="route('users.index')"
                             :active="route().current('users.*')"
                         >
                             Usuarios
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
+                            :href="route('contact-messages.index')"
+                            :active="route().current('contact-messages.*')"
+                        >
+                            Mensajes
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div
-                        class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600"
+                        class="border-t border-border pb-1 pt-4"
                     >
                         <div class="px-4">
                             <div
-                                class="text-base font-medium text-gray-800 dark:text-gray-200"
+                                class="text-base font-medium text-text"
                             >
                                 {{ $page.props.auth.user.name }}
                             </div>
-                            <div class="text-sm font-medium text-gray-500">
+                            <div class="text-sm font-medium text-text-secondary">
                                 {{ $page.props.auth.user.email }}
                             </div>
                         </div>
 
                         <div class="mt-3 space-y-1">
                             <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
+                                Perfil
                             </ResponsiveNavLink>
                             <ResponsiveNavLink
                                 :href="route('logout')"
                                 method="post"
                                 as="button"
                             >
-                                Log Out
+                                Cerrar sesión
                             </ResponsiveNavLink>
                         </div>
                     </div>

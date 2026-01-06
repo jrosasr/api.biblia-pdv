@@ -20,29 +20,29 @@ const emit = defineEmits(['close']);
                 </div>
                 <div class="flex-1 overflow-y-auto p-8 space-y-8">
                     <div class="flex flex-col items-center text-center space-y-4">
-                        <div class="w-20 h-20 bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                            </svg>
+                        <div class="w-24 h-24 bg-white dark:bg-white/10 rounded-2xl flex items-center justify-center shadow-lg overflow-hidden border border-[#E0D5C9] dark:border-[#2E2A25] transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                            <img src="/icon.webp" alt="Biblia PDV" class="w-full h-full object-cover" />
                         </div>
                         <div>
-                            <h4 class="text-2xl font-bold text-[#3A3026] dark:text-[#F5F0E6]">Biblia: Palabra de Vida</h4>
-                            <p class="text-[#9B8D82]">Versión 1.0.6</p>
+                            <h4 class="text-2xl font-black text-[#3A3026] dark:text-[#F5F0E6]">Biblia: Palabra de Vida</h4>
+                            <p class="text-[#8B6F47] dark:text-[#9B8D82] font-medium">Versión 1.0.6</p>
                         </div>
                     </div>
 
-                    <div class="bg-[#F5EBE0] dark:bg-[#222222] p-6 rounded-3xl space-y-4">
-                        <h5 class="text-xl font-bold text-[#8B6F47] dark:text-[#E3C598]">Nuestra Misión</h5>
-                        <p class="text-lg leading-relaxed text-[#6B5D52] dark:text-[#CFC6B8]">
-                            Biblia: Palabra de Vida es un proyecto 100% gratuito que ofrece varias versiones de la biblia y 100% sin publicidad.
-                        </p>
-                        <p class="text-lg leading-relaxed text-[#6B5D52] dark:text-[#CFC6B8]">
-                            Nuestro objetivo es facilitar el acceso a las Sagradas Escrituras a través de una interfaz moderna, intuitiva y fácil de usar. Creemos que la palabra de Dios debe estar al alcance de todos, sin distracciones ni barreras económicas.
+                    <div class="bg-gradient-to-br from-[#8B6F47] to-[#5A4D41] dark:from-[#E3C598] dark:to-[#8B6F47] p-8 sm:p-12 rounded-[2.5rem] text-white dark:text-[#111111] shadow-xl relative overflow-hidden group">
+                        <div class="absolute -top-10 -right-10 opacity-20 group-hover:scale-110 transition-transform">
+                             <svg xmlns="http://www.w3.org/2000/svg" class="w-48 h-48" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl sm:text-3xl font-black mb-4 relative z-10">Misión Biblia PDV</h3>
+                        <p class="text-base sm:text-lg font-medium opacity-90 leading-relaxed relative z-10">
+                            Nuestra misión es utilizar la tecnología para facilitar el acceso a la Palabra de Dios, proporcionando herramientas modernas que enriquezcan tu vida espiritual diaria.
                         </p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div v-for="feature in ['Múltiples versiones', 'Lectura offline', 'Sin publicidad', 'Interfaz moderna', 'Seguimiento de lectura', 'Devocionales diarios']" :key="feature" class="flex items-center gap-3 p-4 rounded-2xl border border-[#E0D5C9] dark:border-[#2E2A25] text-[#3A3026] dark:text-[#F5F0E6]">
+                        <div v-for="feature in ['Múltiples versiones', 'Sin publicidad', 'Interfaz moderna', 'Seguimiento de lectura', 'Devocionales diarios']" :key="feature" class="flex items-center gap-3 p-4 rounded-2xl border border-[#E0D5C9] dark:border-[#2E2A25] text-[#3A3026] dark:text-[#F5F0E6]">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                             </svg>

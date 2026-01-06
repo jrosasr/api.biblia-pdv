@@ -13,14 +13,26 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        $users = User::with(['readingStreak'])
+        $users = User::with(['readingStreak', 'roles'])
             ->withCount('favorites')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         return Inertia::render('Users/Index', [
-            'users' => $users
+            'users' => $users,
+            'roles' => \Spatie\Permission\Models\Role::all()
         ]);
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        $request->validate([
+            'role' => 'required|string|exists:roles,name'
+        ]);
+
+        $user->syncRoles($request->role);
+
+        return back()->with('success', 'Rol actualizado correctamente.');
     }
 
     public function show(User $user)
@@ -54,7 +66,7 @@ class UserManagementController extends Controller
         $favorites = $request->user()->favorites()->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Profile/Favorites', [
-            'favorites' => $favorites
+            'favorites' => \App\Http\Resources\BibleFavoriteResource::collection($favorites)
         ]);
     }
 }

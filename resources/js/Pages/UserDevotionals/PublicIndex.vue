@@ -2,6 +2,7 @@
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import BibleHeader from '@/Components/BibleHeader.vue';
+import BibleFooter from '@/Components/BibleFooter.vue';
 import AboutModal from '@/Components/AboutModal.vue';
 import Editor from '@/Components/Editor.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -83,7 +84,7 @@ onMounted(() => {
 <template>
     <Head title="Mi Diario Espiritual" />
 
-    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans pb-20">
+    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans">
         <BibleHeader 
             :isDark="isDark"
             :showVersionSelector="false"
@@ -210,6 +211,8 @@ onMounted(() => {
                 </div>
             </div>
         </Transition>
+
+        <BibleFooter @openAboutModal="isAboutModalOpen = true" />
 
         <AboutModal 
             :isOpen="isAboutModalOpen"

@@ -2,6 +2,7 @@
 import { Head } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import BibleHeader from '@/Components/BibleHeader.vue';
+import BibleFooter from '@/Components/BibleFooter.vue';
 import AboutModal from '@/Components/AboutModal.vue';
 
 const props = defineProps({
@@ -40,7 +41,7 @@ onMounted(() => {
 <template>
     <Head title="Mi Perfil Espiritual" />
 
-    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans pb-20">
+    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans">
         <BibleHeader 
             :isDark="isDark"
             :showVersionSelector="false"
@@ -151,6 +152,8 @@ onMounted(() => {
                 </section>
             </div>
         </main>
+
+        <BibleFooter @openAboutModal="isAboutModalOpen = true" />
 
         <AboutModal 
             :isOpen="isAboutModalOpen"

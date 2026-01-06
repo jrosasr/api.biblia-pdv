@@ -1,15 +1,47 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref, onMounted, computed } from 'vue';
 import BibleHeader from '@/Components/BibleHeader.vue';
+import BibleFooter from '@/Components/BibleFooter.vue';
 import AboutModal from '@/Components/AboutModal.vue';
 
 const props = defineProps({
-    favorites: Array,
+    favorites: [Array, Object],
 });
 
 const isAboutModalOpen = ref(false);
 const isDark = ref(document.documentElement.classList.contains('dark'));
+const form = useForm({});
+
+const normalizedFavorites = computed(() => {
+    if (Array.isArray(props.favorites)) return props.favorites;
+    return props.favorites?.data || [];
+});
+
+const groupedFavorites = computed(() => {
+    const groups = {};
+    const singles = [];
+
+    normalizedFavorites.value.forEach(fav => {
+        if (fav.note && fav.note.trim() !== '') {
+            if (!groups[fav.note]) {
+                groups[fav.note] = {
+                    type: 'group',
+                    note: fav.note,
+                    items: []
+                };
+            }
+            groups[fav.note].items.push(fav);
+        } else {
+             singles.push({
+                 type: 'single',
+                 ...fav
+             });
+        }
+    });
+    
+    return [...Object.values(groups), ...singles];
+});
 
 function toggleTheme() {
     isDark.value = !isDark.value;
@@ -22,6 +54,14 @@ function toggleTheme() {
     }
 }
 
+function deleteFavorite(id) {
+    if (confirm('¿Estás seguro de eliminar este favorito?')) {
+        form.delete(route('favorites.destroy', id), {
+            preserveScroll: true,
+        });
+    }
+}
+
 onMounted(() => {
     if (isDark.value) document.documentElement.classList.add('dark');
 });
@@ -30,7 +70,7 @@ onMounted(() => {
 <template>
     <Head title="Mis Tesoros Guardados" />
 
-    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans pb-20">
+    <div class="min-h-screen transition-colors duration-300 bg-[#FFF8F0] dark:bg-[#111111] text-[#3A3026] dark:text-[#F5F0E6] font-sans">
         <BibleHeader 
             :isDark="isDark"
             :showVersionSelector="false"
@@ -46,7 +86,7 @@ onMounted(() => {
                 <div class="w-24 h-1.5 bg-[#8B6F47] dark:bg-[#E3C598] mx-auto mt-10 rounded-full"></div>
             </header>
 
-            <div v-if="favorites.length === 0" class="text-center py-32 bg-white/30 dark:bg-white/5 rounded-[3.5rem] border border-[#E0D5C9] dark:border-[#2E2A25] backdrop-blur-sm">
+            <div v-if="normalizedFavorites.length === 0" class="text-center py-32 bg-white/30 dark:bg-white/5 rounded-[3.5rem] border border-[#E0D5C9] dark:border-[#2E2A25] backdrop-blur-sm">
                 <div class="w-24 h-24 bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 rounded-full flex items-center justify-center mx-auto mb-6">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -56,44 +96,84 @@ onMounted(() => {
                 <p class="text-[#9B8D82] mt-3 max-w-md mx-auto font-medium">Comienza a guardar los versículos que te inspiran mientras exploras la Biblia.</p>
             </div>
 
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div v-for="fav in favorites" :key="fav.id" class="group bg-white/50 dark:bg-white/5 p-8 md:p-12 rounded-[3rem] border border-[#E0D5C9] dark:border-[#2E2A25] shadow-sm hover:shadow-2xl hover:border-[#8B6F47]/30 transition-all flex flex-col backdrop-blur-sm">
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-[#8B6F47] dark:bg-[#E3C598] rounded-full flex items-center justify-center text-white dark:text-[#111111] font-black text-xs shadow-lg">
-                                {{ fav.book_name.charAt(0) }}
+            <div v-else class="grid grid-cols-1 gap-8">
+                <!-- Iterate over grouped favorites -->
+                <div v-for="(item, index) in groupedFavorites" :key="index">
+                    
+                    <!-- Grouped by Note -->
+                    <div v-if="item.type === 'group'" class="bg-white/50 dark:bg-white/5 p-8 md:p-12 rounded-[3rem] border border-[#E0D5C9] dark:border-[#2E2A25] shadow-sm hover:shadow-2xl transition-all backdrop-blur-sm">
+                        
+                        <!-- Note Header -->
+                        <div class="bg-[#FFF8F0] dark:bg-[#1A1A1A] p-6 rounded-2xl border-l-4 border-[#8B6F47] dark:border-[#E3C598] mb-8">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-black uppercase tracking-widest text-[#8B6F47] dark:text-[#E3C598] mb-2 opacity-50">Nota del Grupo</p>
+                                    <p class="text-[#5A4D41] dark:text-[#D1C7BC] italic font-medium text-lg">"{{ item.note }}"</p>
+                                </div>
+                                <div class="bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 px-3 py-1 rounded-full text-[#8B6F47] dark:text-[#E3C598] text-xs font-black">
+                                    {{ item.items.length }} Versículos
+                                </div>
                             </div>
-                            <span class="text-xl font-black text-[#8B6F47] dark:text-[#E3C598]">
-                                {{ fav.book_name }} {{ fav.chapter }}:{{ fav.verse }}
-                            </span>
                         </div>
-                        <span class="px-4 py-1 bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 rounded-full text-[10px] font-black uppercase tracking-widest text-[#8B6F47] dark:text-[#E3C598]">
-                            {{ fav.version_id }}
-                        </span>
+
+                        <!-- Verses List -->
+                        <div class="space-y-6">
+                            <div v-for="fav in item.items" :key="fav.id" class="border-b border-[#E0D5C9]/50 dark:border-[#2E2A25]/50 last:border-0 pb-6 last:pb-0 relative group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="font-black text-[#8B6F47] dark:text-[#E3C598]">{{ fav.bookName }} {{ fav.chapter }}:{{ fav.verse }}</span>
+                                        <span class="px-2 py-0.5 bg-[#8B6F47]/5 dark:bg-[#E3C598]/5 rounded text-[9px] font-bold uppercase text-[#8B6F47] dark:text-[#E3C598] opacity-70">{{ fav.versionId }}</span>
+                                    </div>
+                                    <button 
+                                        @click="deleteFavorite(fav.id)"
+                                        class="p-2 text-[#9B8D82] hover:text-red-500 hover:bg-red-500/10 rounded-full transition-all"
+                                        title="Eliminar este versículo"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <p class="text-xl font-bold leading-relaxed text-[#3A3026] dark:text-[#F5F0E6]">"{{ fav.text }}"</p>
+                            </div>
+                        </div>
                     </div>
 
-                    <p class="text-2xl font-bold leading-relaxed text-[#3A3026] dark:text-[#F5F0E6] flex-1 mb-8">
-                        "{{ fav.text }}"
-                    </p>
-
-                    <div v-if="fav.note" class="bg-[#FFF8F0] dark:bg-[#1A1A1A] p-6 rounded-2xl border-l-4 border-[#8B6F47] dark:border-[#E3C598] mb-8">
-                        <p class="text-xs font-black uppercase tracking-widest text-[#8B6F47] dark:text-[#E3C598] mb-2 opacity-50">Tu Nota</p>
-                        <p class="text-[#5A4D41] dark:text-[#D1C7BC] italic font-medium">
-                            {{ fav.note }}
-                        </p>
-                    </div>
-
-                    <div class="flex justify-end pt-6 border-t border-[#E0D5C9] dark:border-[#2E2A25]">
-                        <button class="flex items-center gap-2 text-[#9B8D82] hover:text-red-500 font-bold transition-colors text-sm">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <!-- Single Item (No Note) -->
+                    <div v-else class="bg-white/50 dark:bg-white/5 p-8 md:p-10 rounded-[2.5rem] border border-[#E0D5C9] dark:border-[#2E2A25] shadow-sm hover:shadow-xl transition-all backdrop-blur-sm flex flex-col md:flex-row gap-6 md:items-center">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 bg-[#8B6F47] dark:bg-[#E3C598] rounded-full flex items-center justify-center text-white dark:text-[#111111] font-black text-[10px] shadow-md">
+                                    {{ item.bookName.charAt(0) }}
+                                </div>
+                                <span class="text-lg font-black text-[#8B6F47] dark:text-[#E3C598]">
+                                    {{ item.bookName }} {{ item.chapter }}:{{ item.verse }}
+                                </span>
+                                <span class="px-3 py-1 bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 rounded-full text-[10px] font-black uppercase tracking-widest text-[#8B6F47] dark:text-[#E3C598]">
+                                    {{ item.versionId }}
+                                </span>
+                            </div>
+                            <p class="text-xl font-bold leading-relaxed text-[#3A3026] dark:text-[#F5F0E6]">
+                                "{{ item.text }}"
+                            </p>
+                        </div>
+                        
+                        <button 
+                            @click="deleteFavorite(item.id)"
+                            class="self-start md:self-center p-3 text-[#9B8D82] hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all transform hover:scale-110"
+                            title="Eliminar de favoritos"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
-                            Quitar de favoritos
                         </button>
                     </div>
+
                 </div>
             </div>
         </main>
+
+        <BibleFooter @openAboutModal="isAboutModalOpen = true" />
 
         <AboutModal 
             :isOpen="isAboutModalOpen"

@@ -69,6 +69,10 @@ class BibleFavoriteController extends Controller
             $request->validated()['favorites']
         );
 
+        if ($request->header('X-Inertia')) {
+            return back()->with('success', 'Favoritos guardados exitosamente');
+        }
+
         return response()->json([
             'message' => 'Favoritos guardados exitosamente',
             'count' => $saved->count(),
@@ -89,6 +93,13 @@ class BibleFavoriteController extends Controller
     public function destroy($favoriteId)
     {
         $deleted = $this->favoriteService->deleteFavorite(Auth::user(), $favoriteId);
+
+        if (request()->header('X-Inertia')) {
+            if ($deleted) {
+                return back()->with('success', 'Favorito eliminado');
+            }
+            return back()->with('error', 'Favorito no encontrado');
+        }
 
         if ($deleted) {
             return response()->json(['message' => 'Favorito eliminado']);

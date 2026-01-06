@@ -16,9 +16,9 @@ class RolesAndPermissionsSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Create permissions
-        Permission::create(['name' => 'manage-users']);
-        Permission::create(['name' => 'manage-devotionals']);
-        Permission::create(['name' => 'access-dashboard']);
+        Permission::updateOrCreate(['name' => 'manage-users'], ['name' => 'manage-users']);
+        Permission::updateOrCreate(['name' => 'manage-devotionals'], ['name' => 'manage-devotionals']);
+        Permission::updateOrCreate(['name' => 'access-dashboard'], ['name' => 'access-dashboard']);
 
         // Create roles and assign created permissions
 

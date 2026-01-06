@@ -27,13 +27,13 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Nuevo Devocional</h2>
+            <h2 class="font-bold text-xl text-primary leading-tight">Nuevo Devocional</h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="bg-surface overflow-hidden shadow-sm sm:rounded-2xl border border-border">
+                    <div class="p-6 text-text">
                         <form @submit.prevent="submit" class="space-y-6">
                             
                             <!-- Title -->
@@ -66,13 +66,12 @@ const submit = () => {
                                 <select 
                                     id="status" 
                                     v-model="form.status"
-                                    class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                    class="mt-1 block w-full border-border bg-background text-text focus:border-primary focus:ring-primary rounded-xl shadow-sm transition-all"
                                 >
                                     <option value="draft">Borrador</option>
                                     <option value="published">Publicado</option>
                                 </select>
                                 <InputError class="mt-2" :message="form.errors.status" />
-
                             </div>
 
                             <!-- Published At -->
@@ -87,7 +86,7 @@ const submit = () => {
                                 <InputError class="mt-2" :message="form.errors.published_at" />
                             </div>
 
-                            <div class="flex items-center gap-4">
+                            <div class="flex items-center gap-4 pt-4">
                                 <PrimaryButton :disabled="form.processing">Publicar / Guardar</PrimaryButton>
                                 
                                 <Transition
@@ -96,15 +95,16 @@ const submit = () => {
                                     leave-active-class="transition ease-in-out"
                                     leave-to-class="opacity-0"
                                 >
-                                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Guardado.</p>
+                                    <p v-if="form.recentlySuccessful" class="text-sm text-green-600 font-medium">Guardado.</p>
                                 </Transition>
                                 
-                                <Link :href="route('devotionals.index')" class="text-gray-600 dark:text-gray-400 hover:text-gray-900">Cancelar</Link>
+                                <Link :href="route('devotionals.index')" class="text-sm font-bold text-text-tertiary hover:text-primary transition-colors">Cancelar</Link>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

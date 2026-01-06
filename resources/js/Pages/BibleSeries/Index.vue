@@ -21,7 +21,7 @@ const deleteSeries = (id) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Series Bíblicas</h2>
+                <h2 class="font-bold text-xl text-primary leading-tight">Series Bíblicas</h2>
                 <Link :href="route('bible-series.create')">
                     <PrimaryButton>
                         Nueva Serie
@@ -32,27 +32,29 @@ const deleteSeries = (id) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div v-if="series.length === 0" class="text-center py-4">
+                <div class="bg-surface overflow-hidden shadow-sm sm:rounded-2xl border border-border">
+                    <div class="p-6 text-text">
+                        <div v-if="series.length === 0" class="text-center py-8 text-text-tertiary">
                             No hay series registradas.
                         </div>
                         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div v-for="item in series" :key="item.id" class="bg-gray-50 dark:bg-gray-700 rounded-lg shadow overflow-hidden border border-gray-200 dark:border-gray-600">
-                                <img v-if="item.cover_image" :src="item.cover_image" class="w-full h-48 object-cover" :alt="item.title">
-                                <div v-else class="w-full h-48 bg-gray-200 dark:bg-gray-600 flex items-center justify-center">
-                                    <span class="text-gray-400">Sin imagen</span>
+                            <div v-for="item in series" :key="item.id" class="bg-background rounded-2xl shadow-sm overflow-hidden border border-border hover:border-primary/50 transition-colors group">
+                                <div class="relative">
+                                    <img v-if="item.cover_image" :src="item.cover_image" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" :alt="item.title">
+                                    <div v-else class="w-full h-48 bg-surface-alt flex items-center justify-center">
+                                        <span class="text-text-tertiary text-xs">Sin imagen</span>
+                                    </div>
                                 </div>
-                                <div class="p-4">
-                                    <h3 class="text-lg font-bold mb-2">{{ item.title }}</h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{{ item.description }}</p>
+                                <div class="p-5">
+                                    <h3 class="text-lg font-bold mb-2 text-text">{{ item.title }}</h3>
+                                    <p class="text-sm text-text-secondary mb-4 line-clamp-2 h-10">{{ item.description }}</p>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-xs font-semibold px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full">
+                                        <span class="text-[10px] font-bold px-3 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-wider">
                                             {{ item.stories_count }} historias
                                         </span>
-                                        <div class="flex space-x-2">
-                                            <Link :href="route('bible-series.edit', item.id)" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 text-sm font-medium">Editar</Link>
-                                            <button @click="deleteSeries(item.id)" class="text-red-600 hover:text-red-900 text-sm font-medium">Eliminar</button>
+                                        <div class="flex space-x-3">
+                                            <Link :href="route('bible-series.edit', item.id)" class="text-primary hover:opacity-80 transition-opacity text-sm font-bold">Editar</Link>
+                                            <button @click="deleteSeries(item.id)" class="text-red-500 hover:text-red-700 transition-colors text-sm font-bold">Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -62,5 +64,6 @@ const deleteSeries = (id) => {
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

@@ -61,63 +61,64 @@ const formatDate = (dateString) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dispositivos Registrados</h2>
+            <h2 class="font-bold text-xl text-primary leading-tight">Dispositivos Registrados</h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div v-if="$page.props.flash.success" class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded transition-all duration-500">
+                <div v-if="$page.props.flash.success" class="mb-4 p-4 bg-green-100/10 border border-green-500 text-green-600 rounded-xl transition-all duration-500 font-bold text-sm">
                     {{ $page.props.flash.success }}
                 </div>
-                <div v-if="$page.props.flash.error" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition-all duration-500">
+                <div v-if="$page.props.flash.error" class="mb-4 p-4 bg-red-100/10 border border-red-500 text-red-500 rounded-xl transition-all duration-500 font-bold text-sm">
                     {{ $page.props.flash.error }}
                 </div>
-                <div v-if="$page.props.errors.error" class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded transition-all duration-500">
+                <div v-if="$page.props.errors.error" class="mb-4 p-4 bg-red-100/10 border border-red-500 text-red-500 rounded-xl transition-all duration-500 font-bold text-sm">
                     {{ $page.props.errors.error }}
                 </div>
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div v-if="tokens.length === 0" class="text-center py-4">
+
+                <div class="bg-surface overflow-hidden shadow-sm sm:rounded-2xl border border-border">
+                    <div class="p-6 text-text">
+                        <div v-if="tokens.length === 0" class="text-center py-8 text-text-tertiary font-medium">
                             No hay dispositivos registrados.
                         </div>
                         <div v-else class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-border">
+                                <thead class="bg-surface-alt/50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Dispositivo</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Topics</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Plataforma</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Último uso</th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Dispositivo</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Usuario</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Topics</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Plataforma</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Último uso</th>
+                                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-text-tertiary uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr v-for="token in tokens" :key="token.id">
+                                <tbody class="bg-surface divide-y divide-border">
+                                    <tr v-for="token in tokens" :key="token.id" class="hover:bg-surface-alt/30 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm font-medium text-gray-900 dark:text-white">{{ token.device_name || 'Desconocido' }}</div>
-                                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">{{ token.device_id }}</div>
+                                            <div class="text-sm font-bold text-text">{{ token.device_name || 'Desconocido' }}</div>
+                                            <div class="text-[10px] text-text-tertiary font-medium truncate max-w-xs">{{ token.device_id }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary font-medium">
                                             {{ token.user ? token.user.name : 'Invitado' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <div class="flex flex-wrap gap-1">
-                                                <span v-for="topic in token.topics" :key="topic" class="px-2 py-0.5 bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 text-xs rounded-full">
+                                                <span v-for="topic in token.topics" :key="topic" class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full tracking-tighter">
                                                     {{ topic }}
                                                 </span>
-                                                <span v-if="!token.topics || token.topics.length === 0" class="text-gray-400 italic">Ninguno</span>
+                                                <span v-if="!token.topics || token.topics.length === 0" class="text-text-tertiary italic text-xs">Ninguno</span>
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary font-medium">
                                             {{ token.platform || 'N/A' }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary font-medium">
                                             {{ formatDate(token.last_used_at) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button @click="openNotificationModal(token)" class="text-blue-600 dark:text-blue-400 hover:text-blue-900 mr-4 font-bold">Enviar Msg</button>
-                                            <button @click="deleteToken(token.id)" class="text-red-600 hover:text-red-900">Eliminar</button>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
+                                            <button @click="openNotificationModal(token)" class="text-primary hover:opacity-80 transition-opacity mr-4">Enviar Msg</button>
+                                            <button @click="deleteToken(token.id)" class="text-red-500 hover:text-red-700 transition-colors">Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -129,50 +130,55 @@ const formatDate = (dateString) => {
         </div>
 
         <Modal :show="showingNotificationModal" @close="closeNotificationModal">
-            <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                    Enviar mensaje a {{ selectedToken?.device_name || 'dispositivo' }}
+            <div class="p-8 bg-surface text-text">
+                <h2 class="text-xl font-bold text-primary mb-2">
+                    Enviar mensaje
                 </h2>
+                <p class="text-sm text-text-secondary mb-6">
+                    A: <span class="font-bold text-text">{{ selectedToken?.device_name || 'dispositivo' }}</span>
+                </p>
 
-                <div class="mt-6">
-                    <InputLabel for="title" value="Título" />
-                    <TextInput
-                        id="title"
-                        v-model="form.title"
-                        type="text"
-                        class="mt-1 block w-full"
-                        placeholder="Título de la notificación"
-                        required
-                    />
-                    <InputError :message="form.errors.title" class="mt-2" />
+                <div class="space-y-4">
+                    <div>
+                        <InputLabel for="title" value="Título" />
+                        <TextInput
+                            id="title"
+                            v-model="form.title"
+                            type="text"
+                            class="mt-1 block w-full"
+                            placeholder="Título de la notificación"
+                            required
+                        />
+                        <InputError :message="form.errors.title" class="mt-2" />
+                    </div>
+
+                    <div>
+                        <InputLabel for="body" value="Mensaje" />
+                        <textarea
+                            id="body"
+                            v-model="form.body"
+                            class="mt-1 block w-full border-border bg-background text-text focus:border-primary focus:ring-primary rounded-xl shadow-sm transition-all"
+                            rows="3"
+                            placeholder="Contenido del mensaje"
+                            required
+                        ></textarea>
+                        <InputError :message="form.errors.body" class="mt-2" />
+                    </div>
                 </div>
 
-                <div class="mt-4">
-                    <InputLabel for="body" value="Mensaje" />
-                    <textarea
-                        id="body"
-                        v-model="form.body"
-                        class="mt-1 block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                        rows="3"
-                        placeholder="Contenido del mensaje"
-                        required
-                    ></textarea>
-                    <InputError :message="form.errors.body" class="mt-2" />
-                </div>
-
-                <div class="mt-6 flex justify-end">
+                <div class="mt-8 flex justify-end gap-3 font-bold">
                     <SecondaryButton @click="closeNotificationModal"> Cancelar </SecondaryButton>
 
                     <PrimaryButton
-                        class="ms-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
                         @click="sendNotification"
                     >
-                        Enviar
+                        Enviar Notificación
                     </PrimaryButton>
                 </div>
             </div>
         </Modal>
+
     </AuthenticatedLayout>
 </template>

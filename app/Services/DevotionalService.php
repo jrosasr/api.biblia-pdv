@@ -51,6 +51,17 @@ class DevotionalService
     }
 
     /**
+     * Get the latest published devotionals.
+     */
+    public function getLatestDevotionals(int $count = 4): Collection
+    {
+        return Devotional::where('status', 'published')
+            ->orderBy('published_at', 'desc')
+            ->limit($count)
+            ->get();
+    }
+
+    /**
      * Increment readings count.
      */
     public function incrementReadings(Devotional $devotional): void

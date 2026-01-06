@@ -113,6 +113,14 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
 
+        'bible' => [
+            'driver' => 'sqlite',
+            'database' => '', // Will be set dynamically
+            'prefix' => '',
+            'foreign_key_constraints' => true,
+        ],
+
+
     ],
 
     /*

@@ -23,15 +23,38 @@ class UserManagementController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified user details, including favorites and streaks.
-     */
     public function show(User $user)
     {
         return Inertia::render('Users/Show', [
             'userDetail' => $user->load(['readingStreak', 'favorites', 'bibleChapterReadings', 'readingLogs' => function($query) {
                 $query->orderBy('read_date', 'desc')->take(30);
             }]),
+        ]);
+    }
+
+    /**
+     * Display the authenticated user's profile in a public aesthetic view.
+     */
+    public function profile(Request $request)
+    {
+        $user = $request->user()->load(['readingStreak', 'favorites', 'bibleChapterReadings', 'readingLogs' => function($query) {
+            $query->orderBy('read_date', 'desc')->take(30);
+        }]);
+
+        return Inertia::render('Profile/PublicShow', [
+            'userDetail' => $user
+        ]);
+    }
+
+    /**
+     * Display the authenticated user's favorite verses in a public aesthetic view.
+     */
+    public function favorites(Request $request)
+    {
+        $favorites = $request->user()->favorites()->orderBy('created_at', 'desc')->get();
+
+        return Inertia::render('Profile/Favorites', [
+            'favorites' => $favorites
         ]);
     }
 }

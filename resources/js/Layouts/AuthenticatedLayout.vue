@@ -8,21 +8,31 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
+
+const isDark = ref(document.documentElement.classList.contains('dark'));
+function toggleTheme() {
+    isDark.value = !isDark.value;
+    if (isDark.value) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+    }
+}
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav
-                class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800"
-            >
+    <div class="min-h-screen bg-background text-text transition-colors duration-300">
+        <nav class="border-b border-border bg-surface">
+
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('home')">
                                     <ApplicationLogo />
                                 </Link>
                             </div>
@@ -38,10 +48,16 @@ const showingNavigationDropdown = ref(false);
                                     Dashboard
                                 </NavLink>
                                 <NavLink
+                                    :href="route('user-devotionals.public-index')"
+                                    :active="route().current('user-devotionals.*')"
+                                >
+                                    Mis Devocionales
+                                </NavLink>
+                                <NavLink
                                     :href="route('devotionals.index')"
                                     :active="route().current('devotionals.*')"
                                 >
-                                    Devocionales
+                                    Admin Devocionales
                                 </NavLink>
                                 <NavLink
                                     :href="route('device-tokens.index')"
@@ -70,15 +86,25 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="hidden sm:ms-6 sm:flex sm:items-center gap-4">
+                            <!-- Theme Toggle -->
+                            <button @click="toggleTheme" class="p-2 rounded-full hover:bg-surface-alt transition-colors text-text-secondary">
+                                <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M16.243 17.657l.707.707M7.757 7.757l.707-.707M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </button>
+
                             <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
+                            <div class="relative">
                                 <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:text-gray-400 dark:hover:text-gray-300"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-surface px-3 py-2 text-sm font-medium leading-4 text-text-secondary transition duration-150 ease-in-out hover:text-text focus:outline-none"
                                             >
                                                 {{ $page.props.auth.user.name }}
 
@@ -102,14 +128,14 @@ const showingNavigationDropdown = ref(false);
                                         <DropdownLink
                                             :href="route('profile.edit')"
                                         >
-                                            Profile
+                                            Perfil
                                         </DropdownLink>
                                         <DropdownLink
                                             :href="route('logout')"
                                             method="post"
                                             as="button"
                                         >
-                                            Log Out
+                                            Cerrar sesión
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
@@ -169,10 +195,16 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="space-y-1 pb-3 pt-2">
                         <ResponsiveNavLink
+                            :href="route('user-devotionals.index')"
+                            :active="route().current('user-devotionals.*')"
+                        >
+                            Mis Devocionales
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
                             :href="route('devotionals.index')"
                             :active="route().current('devotionals.*')"
                         >
-                            Devocionales
+                            Admin Devocionales
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             :href="route('device-tokens.index')"
@@ -233,7 +265,7 @@ const showingNavigationDropdown = ref(false);
 
             <!-- Page Heading -->
             <header
-                class="bg-white shadow dark:bg-gray-800"
+                class="bg-surface shadow"
                 v-if="$slots.header"
             >
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -246,5 +278,5 @@ const showingNavigationDropdown = ref(false);
                 <slot />
             </main>
         </div>
-    </div>
 </template>
+

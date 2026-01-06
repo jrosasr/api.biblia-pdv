@@ -92,4 +92,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(BibleChapterReading::class);
     }
+
+    /**
+     * Get the user devotionals for the user.
+     */
+    public function userDevotionals(): HasMany
+    {
+        return $this->hasMany(UserDevotional::class);
+    }
 }

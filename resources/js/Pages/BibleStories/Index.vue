@@ -20,7 +20,7 @@ const deleteStory = (id) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Historias Bíblicas</h2>
+                <h2 class="font-bold text-xl text-primary leading-tight">Historias Bíblicas</h2>
                 <Link :href="route('bible-stories.create')">
                     <PrimaryButton>
                         Nueva Historia
@@ -31,37 +31,39 @@ const deleteStory = (id) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div v-if="stories.length === 0" class="text-center py-4">
+                <div class="bg-surface overflow-hidden shadow-sm sm:rounded-2xl border border-border">
+                    <div class="p-6 text-text">
+                        <div v-if="stories.length === 0" class="text-center py-8 text-text-tertiary">
                             No hay historias registradas.
                         </div>
                         <div v-else class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-border">
+                                <thead class="bg-surface-alt/50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Título</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Serie</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Cita</th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Título</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Serie</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Cita</th>
+                                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-text-tertiary uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr v-for="story in stories" :key="story.id">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                <tbody class="bg-surface divide-y divide-border">
+                                    <tr v-for="story in stories" :key="story.id" class="hover:bg-surface-alt/30 transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-text">
                                             {{ story.title }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                                            {{ story.series?.title }}
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
+                                            <span class="px-2 py-0.5 bg-primary/5 text-primary rounded-md text-[11px] font-bold uppercase tracking-tight">
+                                                {{ story.series?.title }}
+                                            </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                                             {{ story.book }} {{ story.chapter_start }}:{{ story.verse_start }}
                                             <span v-if="story.chapter_end"> - {{ story.chapter_end }}:{{ story.verse_end }}</span>
                                             <span v-else-if="story.verse_end"> - {{ story.verse_end }}</span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link :href="route('bible-stories.edit', story.id)" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 mr-4">Editar</Link>
-                                            <button @click="deleteStory(story.id)" class="text-red-600 hover:text-red-900 font-medium">Eliminar</button>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
+                                            <Link :href="route('bible-stories.edit', story.id)" class="text-primary hover:opacity-80 transition-opacity mr-4">Editar</Link>
+                                            <button @click="deleteStory(story.id)" class="text-red-500 hover:text-red-700 transition-colors">Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -71,5 +73,6 @@ const deleteStory = (id) => {
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

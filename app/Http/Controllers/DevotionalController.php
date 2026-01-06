@@ -145,13 +145,28 @@ class DevotionalController extends Controller
      *   }
      * }
      */
-    public function dailyDevotionals()
+    public function dailyDevotionals(Request $request)
     {
+        $count = $request->input('count');
+
+        if ($count) {
+            $devotionals = $this->devotionalService->getLatestDevotionals((int)$count);
+            return DevotionalResource::collection($devotionals);
+        }
+
         $devotional = $this->devotionalService->getDailyDevotional();
         if (!$devotional) {
              return response()->json(['message' => 'No published devotional found'], 404);
         }
         return new DevotionalResource($devotional);
+    }
+
+    public function publicShow()
+    {
+        $devotionals = $this->devotionalService->getLatestDevotionals(4);
+        return Inertia::render('Devotionals/PublicShow', [
+            'devotionals' => DevotionalResource::collection($devotionals)->resolve()
+        ]);
     }
 
     /**

@@ -48,32 +48,32 @@ const submit = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+            <h2 class="font-bold text-xl text-primary leading-tight">
                 Nueva Historia Bíblica
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700">
+                <div class="bg-surface overflow-hidden shadow-xl sm:rounded-2xl border border-border">
                     <div class="p-8">
                         <form @submit.prevent="submit" class="space-y-8">
                             
                             <!-- Sección: Información Básica -->
                             <section>
-                                <div class="mb-6 pb-2 border-b border-gray-100 dark:border-gray-700">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Información General</h3>
-                                    <p class="text-sm text-gray-500">Detalles principales de la historia.</p>
+                                <div class="mb-6 pb-2 border-b border-border font-bold">
+                                    <h3 class="text-lg text-text">Información General</h3>
+                                    <p class="text-sm text-text-tertiary font-normal">Detalles principales de la historia.</p>
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                     <div class="space-y-6">
                                         <div>
-                                            <InputLabel for="series_id" value="Serie / Categoría" class="font-medium" />
-                                            <div class="mt-2">
+                                            <InputLabel for="series_id" value="Serie / Categoría" />
+                                            <div class="mt-1">
                                                 <select
                                                     id="series_id"
                                                     v-model="form.series_id"
-                                                    class="block w-full text-base rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 py-3"
+                                                    class="block w-full text-text bg-background border-border rounded-xl shadow-sm focus:border-primary focus:ring-primary transition-all py-3 px-4"
                                                     required
                                                 >
                                                     <option value="" disabled>Seleccionar Serie</option>
@@ -84,11 +84,11 @@ const submit = () => {
                                         </div>
 
                                         <div>
-                                            <InputLabel for="title" value="Título de la Historia" class="font-medium" />
+                                            <InputLabel for="title" value="Título de la Historia" />
                                             <TextInput
                                                 id="title"
                                                 type="text"
-                                                class="mt-2 block w-full text-base py-3 rounded-lg"
+                                                class="mt-1 block w-full"
                                                 v-model="form.title"
                                                 required
                                                 placeholder="Ej: David y Goliat"
@@ -97,10 +97,10 @@ const submit = () => {
                                         </div>
 
                                         <div>
-                                            <InputLabel for="description" value="Descripción (Opcional)" class="font-medium" />
+                                            <InputLabel for="description" value="Descripción (Opcional)" />
                                             <TextArea
                                                 id="description"
-                                                class="mt-2 block w-full text-base rounded-lg"
+                                                class="mt-1 block w-full"
                                                 v-model="form.description"
                                                 rows="4"
                                                 placeholder="Resumen breve..."
@@ -111,18 +111,18 @@ const submit = () => {
 
                                     <!-- Columna Derecha: Imagen -->
                                     <div>
-                                        <InputLabel for="cover_image" value="Imagen de Portada" class="font-medium" />
-                                        <div class="mt-2 h-full min-h-[250px] flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative group items-center">
+                                        <InputLabel for="cover_image" value="Imagen de Portada" />
+                                        <div class="mt-2 h-full min-h-[250px] flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-xl hover:bg-surface-alt transition-colors cursor-pointer relative group items-center">
                                             <div class="space-y-1 text-center w-full">
                                                 <div v-if="form.cover_image" class="mb-4">
-                                                    <p class="text-sm text-green-600 font-semibold truncate">{{ form.cover_image.name }}</p>
+                                                    <p class="text-sm text-primary font-bold truncate">{{ form.cover_image.name }}</p>
                                                 </div>
-                                                <svg v-else class="mx-auto h-16 w-16 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <svg v-else class="mx-auto h-16 w-16 text-text-tertiary" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                                 </svg>
                                                 
-                                                <label for="cover_image" class="relative cursor-pointer bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none">
-                                                    <span>Seleccionar Imagen</span>
+                                                <label for="cover_image" class="relative cursor-pointer bg-background rounded-md px-4 py-2 font-bold text-primary hover:opacity-80 transition-opacity focus-within:outline-none ring-1 ring-border mt-2 inline-block">
+                                                    <span>{{ form.cover_image ? 'Cambiar Imagen' : 'Seleccionar Imagen' }}</span>
                                                     <input id="cover_image" type="file" class="sr-only" @input="form.cover_image = $event.target.files[0]" accept="image/*" />
                                                 </label>
                                             </div>
@@ -133,20 +133,20 @@ const submit = () => {
                             </section>
 
                             <!-- Sección: Referencia Bíblica -->
-                            <section class="bg-gray-50 dark:bg-gray-700/30 p-6 rounded-xl">
-                                <div class="mb-6 pb-2 border-b border-gray-200 dark:border-gray-600">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Referencia Bíblica</h3>
-                                    <p class="text-sm text-gray-500">Defina el pasaje bíblico que cubre la historia.</p>
+                            <section class="bg-surface-alt/50 p-6 rounded-2xl border border-border">
+                                <div class="mb-6 pb-2 border-b border-border font-bold">
+                                    <h3 class="text-lg text-text">Referencia Bíblica</h3>
+                                    <p class="text-sm text-text-tertiary font-normal">Defina el pasaje bíblico que cubre la historia.</p>
                                 </div>
                                 
                                 <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
                                     <div class="lg:col-span-1">
                                         <InputLabel for="book" value="Libro" />
-                                        <div class="mt-2">
+                                        <div class="mt-1">
                                             <select
                                                 id="book"
                                                 v-model="form.book"
-                                                class="block w-full text-base rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 py-2.5"
+                                                class="block w-full text-text bg-background border-border rounded-xl shadow-sm focus:border-primary focus:ring-primary transition-all py-2.5 px-3"
                                                 required
                                             >
                                                 <option value="" disabled>Seleccionar Libro</option>
@@ -162,7 +162,7 @@ const submit = () => {
                                             <TextInput
                                                 id="chapter_start"
                                                 type="number"
-                                                class="mt-2 block w-full text-center"
+                                                class="mt-1 block w-full text-center"
                                                 v-model="form.chapter_start"
                                                 required
                                             />
@@ -173,7 +173,7 @@ const submit = () => {
                                             <TextInput
                                                 id="verse_start"
                                                 type="number"
-                                                class="mt-2 block w-full text-center"
+                                                class="mt-1 block w-full text-center"
                                                 v-model="form.verse_start"
                                                 required
                                             />
@@ -184,7 +184,7 @@ const submit = () => {
                                             <TextInput
                                                 id="chapter_end"
                                                 type="number"
-                                                class="mt-2 block w-full text-center"
+                                                class="mt-1 block w-full text-center"
                                                 v-model="form.chapter_end"
                                                 placeholder="-"
                                             />
@@ -194,7 +194,7 @@ const submit = () => {
                                             <TextInput
                                                 id="verse_end"
                                                 type="number"
-                                                class="mt-2 block w-full text-center"
+                                                class="mt-1 block w-full text-center"
                                                 v-model="form.verse_end"
                                                 placeholder="-"
                                             />
@@ -204,10 +204,10 @@ const submit = () => {
                             </section>
 
                             <div class="flex items-center justify-end gap-5 pt-4">
-                                <Link :href="route('bible-stories.index')" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
+                                <Link :href="route('bible-stories.index')" class="text-sm font-bold text-text-tertiary hover:text-primary transition-colors">
                                     Cancelar
                                 </Link>
-                                <PrimaryButton :disabled="form.processing" class="px-8 py-3 text-base shadow-lg hover:shadow-indigo-500/30 transition-shadow">
+                                <PrimaryButton :disabled="form.processing" class="shadow-lg">
                                     Guardar Historia
                                 </PrimaryButton>
                             </div>
@@ -216,5 +216,6 @@ const submit = () => {
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

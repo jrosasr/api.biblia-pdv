@@ -40,8 +40,8 @@ const formatDate = (dateString) => {
     <AuthenticatedLayout>
         <template #header>
             <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Devocionales</h2>
-                <div class="flex space-x-2">
+                <h2 class="font-bold text-xl text-primary leading-tight">Devocionales</h2>
+                <div class="flex space-x-3">
                     <SecondaryButton @click="notifyNewDevotional">
                         Notificar sobre nuevo devocional
                     </SecondaryButton>
@@ -56,47 +56,47 @@ const formatDate = (dateString) => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
-                        <div v-if="devotionals.data.length === 0" class="text-center py-4">
+                <div class="bg-surface overflow-hidden shadow-sm sm:rounded-2xl border border-border">
+                    <div class="p-6 text-text">
+                        <div v-if="devotionals.data.length === 0" class="text-center py-8 text-text-tertiary">
                             No hay devocionales registrados.
                         </div>
                         <div v-else class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
+                            <table class="min-w-full divide-y divide-border">
+                                <thead class="bg-surface-alt/50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Título</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estado</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Lecturas</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha de publicación</th>
-                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Título</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Estado</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Lecturas</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Fecha de publicación</th>
+                                        <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-text-tertiary uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    <tr v-for="devotional in devotionals.data" :key="devotional.id">
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                                <tbody class="bg-surface divide-y divide-border">
+                                    <tr v-for="devotional in devotionals.data" :key="devotional.id" class="hover:bg-surface-alt/30 transition-colors">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-text">
                                             {{ devotional.title }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             <span 
-                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                                                class="px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full"
                                                 :class="{
-                                                    'bg-green-100 text-green-800': devotional.status === 'published',
-                                                    'bg-gray-100 text-gray-800': devotional.status !== 'published'
+                                                    'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400': devotional.status === 'published',
+                                                    'bg-surface-alt text-text-secondary': devotional.status !== 'published'
                                                 }"
                                             >
                                                 {{ devotional.status === 'published' ? 'Publicado' : 'Borrador' }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-text-secondary">
                                             {{ devotional.readings }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-secondary">
                                             {{ formatDate(devotional.published_at) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link :href="route('devotionals.edit', devotional.id)" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 mr-4">Editar</Link>
-                                            <button @click="deleteDevotional(devotional.id)" class="text-red-600 hover:text-red-900">Eliminar</button>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
+                                            <Link :href="route('devotionals.edit', devotional.id)" class="text-primary hover:opacity-80 transition-opacity mr-4">Editar</Link>
+                                            <button @click="deleteDevotional(devotional.id)" class="text-red-500 hover:text-red-700 transition-colors">Eliminar</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -106,5 +106,6 @@ const formatDate = (dateString) => {
                 </div>
             </div>
         </div>
+
     </AuthenticatedLayout>
 </template>

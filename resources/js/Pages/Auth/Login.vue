@@ -72,29 +72,37 @@ const submit = () => {
             <div class="mt-4 block">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600 dark:text-gray-400"
-                        >Remember me</span
-                    >
+                    <span class="ms-2 text-sm text-text-secondary">Recordarme</span>
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                >
-                    Forgot your password?
-                </Link>
-
+            <div class="mt-4 flex flex-col gap-4">
                 <PrimaryButton
-                    class="ms-4"
+                    class="w-full justify-center"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Log in
+                    Iniciar Sesión
                 </PrimaryButton>
+
+                <div class="flex items-center justify-between">
+                    <Link
+                        v-if="canResetPassword"
+                        :href="route('password.request')"
+                        class="text-sm text-text-tertiary underline hover:text-primary focus:outline-none transition-colors"
+                    >
+                        ¿Olvidaste tu contraseña?
+                    </Link>
+
+                    <Link
+                        :href="route('register')"
+                        class="text-sm text-primary font-bold hover:underline"
+                    >
+                        Crear cuenta
+                    </Link>
+                </div>
             </div>
+
         </form>
     </GuestLayout>
 </template>

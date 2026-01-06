@@ -50,7 +50,7 @@ onMounted(() => {
             @openAboutModal="isAboutModalOpen = true"
         />
 
-        <main v-if="currentDevotional" class="max-w-4xl mx-auto px-4 py-12">
+        <main v-if="currentDevotional" class="max-w-7xl mx-auto px-4 py-12">
             <!-- Main Content -->
             <div class="text-center mb-16">
                 <span class="text-[#8B6F47] dark:text-[#E3C598] font-bold tracking-widest uppercase text-sm">
@@ -61,7 +61,7 @@ onMounted(() => {
                 </h2>
             </div>
 
-            <article class="prose prose-base sm:prose-xl dark:prose-invert max-w-none mx-auto bg-white dark:bg-[#1C1C1C] p-8 md:p-16 rounded-[2rem] shadow-xl border border-[#E0D5C9] dark:border-[#2E2A25]">
+            <article class="prose prose-base sm:prose-xl dark:prose-invert max-w-7xl mx-auto bg-white dark:bg-[#1C1C1C] p-8 md:p-16 rounded-[2rem] shadow-xl border border-[#E0D5C9] dark:border-[#2E2A25]">
                 <div v-for="block in currentDevotional.content.blocks" :key="block.id" class="mb-8">
                     <h2 v-if="block.type === 'header' && block.data.level === 2" class="text-3xl font-bold mb-6 text-[#8B6F47] dark:text-[#E3C598]" v-html="block.data.text"></h2>
                     <h3 v-else-if="block.type === 'header' && block.data.level === 3" class="text-2xl font-bold mb-4" v-html="block.data.text"></h3>

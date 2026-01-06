@@ -26,6 +26,7 @@ class BibleReaderController extends Controller
         $versions = $this->bibleService->getVersions();
         $books = $this->bibleService->getBooks($version);
         $verses = $this->bibleService->getVerses($version, $bookId, $chapter);
+        $chapters = $this->bibleService->getChapters($version, $bookId);
 
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
@@ -34,6 +35,7 @@ class BibleReaderController extends Controller
             'phpVersion' => PHP_VERSION,
             'versions' => $versions,
             'books' => $books,
+            'initialChapters' => $chapters,
             'initialVerses' => $verses,
             'initialVersion' => $version,
             'initialBook' => (int)$bookId,

@@ -1,47 +1,41 @@
 <script setup>
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import BibleHeader from '@/Components/BibleHeader.vue';
 import BibleFooter from '@/Components/BibleFooter.vue';
 import AboutModal from '@/Components/AboutModal.vue';
 
 const props = defineProps({
-    canLogin: {
-        type: Boolean,
-    },
-    canRegister: {
-        type: Boolean,
-    },
-    laravelVersion: {
-        type: String,
-        required: true,
-    },
-    phpVersion: {
-        type: String,
-        required: true,
-    },
-    versions: Array, // Keep this as it's used in the script
+    canLogin: Boolean,
+    canRegister: Boolean,
+    laravelVersion: String,
+    phpVersion: String,
+    versions: Array,
     books: Array,
-    initialVerses: Array, // Keep this as it's used in the script
-    initialVersion: String, // Keep this as it's used in the script
-    initialBook: Number, // Keep this as it's used in the script
-    initialChapter: Number, // Keep this as it's used in the script
+    initialChapters: Array,
+    initialVerses: Array,
+    initialVersion: String,
+    initialBook: Number,
+    initialChapter: Number,
 });
 
-// State
-const selectedVersion = ref(props.initialVersion);
-const selectedBook = ref(props.books.find(b => b.id === props.initialBook) || props.books[0]);
-const selectedChapter = ref(props.initialChapter);
-const verses = ref(props.initialVerses);
-const booksList = ref(props.books);
-const chaptersList = ref([]);
+// State derived from props
+const selectedVersion = computed(() => props.initialVersion);
+const selectedBook = computed(() => props.books.find(b => b.id === props.initialBook) || props.books[0]);
+const selectedChapter = computed(() => props.initialChapter);
+const verses = computed(() => props.initialVerses);
+const booksList = computed(() => props.books);
+const chaptersList = computed(() => props.initialChapters);
+
+// Modal state
+const expandedBookId = ref(null);
+const expandedBookChapters = ref([]);
+
 const isLoading = ref(false);
 const isBookModalOpen = ref(false);
 const isVersionModalOpen = ref(false);
-const testamentFilter = ref(1); // 1: Old, 2: New
-// Search is now handled by BibleHeader
-// We only need to handle the navigation when a result is selected
+const testamentFilter = ref(1);
 const isAboutModalOpen = ref(false);
 const selectedVerses = ref([]);
 const isNoteModalOpen = ref(false);
@@ -50,11 +44,7 @@ const noteForm = useForm({
     note: '',
 });
 
-// watch removed
-
 const isDark = ref(document.documentElement.classList.contains('dark'));
-
-// Theme toggle
 function toggleTheme() {
     isDark.value = !isDark.value;
     if (isDark.value) {
@@ -66,115 +56,92 @@ function toggleTheme() {
     }
 }
 
+// Navigation Helpers (Inertia)
+const visit = (params) => {
+    isLoading.value = true;
+    router.get('/', params, {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['books', 'initialChapters', 'initialVerses', 'initialVersion', 'initialBook', 'initialChapter'],
+        onFinish: () => { isLoading.value = false; isBookModalOpen.value = false; isVersionModalOpen.value = false; }
+    });
+};
 
-// Data loading
-async function fetchChapters() {
-    if (!selectedBook.value) return;
-    const response = await axios.get(`/api/bible/chapters/${selectedVersion.value}/${selectedBook.value.id}`);
-    chaptersList.value = response.data;
+function handleVersionChange(version) {
+    visit({ 
+        version: version,
+        book: selectedBook.value.id,
+        chapter: 1 
+    });
 }
 
-async function fetchVerses() {
-    isLoading.value = true;
+// Just expands the book in the modal, does not navigate
+async function expandBook(book) {
+    if (expandedBookId.value === book.id) {
+        expandedBookId.value = null;
+        return;
+    }
+    expandedBookId.value = book.id;
+    expandedBookChapters.value = []; 
+    // Fetch chapters for this book to show in modal
     try {
-        const response = await axios.get(`/api/bible/verses/${selectedVersion.value}/${selectedBook.value.id}/${selectedChapter.value}`);
-        verses.value = response.data;
-        // Scroll to top
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } finally {
-        isLoading.value = false;
+        const response = await axios.get(`/api/bible/chapters/${selectedVersion.value}/${book.id}`);
+        expandedBookChapters.value = response.data;
+    } catch (e) {
+        console.error("Failed to fetch chapters for modal", e);
     }
 }
 
-async function handleVersionChange(version) {
-    selectedVersion.value = version;
-    isVersionModalOpen.value = false;
-    isLoading.value = true;
-    try {
-        const response = await axios.get(`/api/bible/books/${version}`);
-        booksList.value = response.data;
-        // Keep same book if it exists in new version, else reset to Genesis
-        const newBook = booksList.value.find(b => b.name === selectedBook.value.name) || booksList.value[0];
-        selectedBook.value = newBook;
-        await fetchChapters();
-        selectedChapter.value = 1;
-        await fetchVerses();
-    } finally {
-        isLoading.value = false;
-    }
+// Navigates to a specific chapter of a specific book
+function navigateToChapter(bookId, chapter) {
+    visit({ 
+        version: selectedVersion.value,
+        book: bookId,
+        chapter: chapter
+    });
 }
 
-async function selectBook(book) {
-    if (selectedBook.value?.id === book.id) return;
-    selectedBook.value = book;
-    await fetchChapters();
+function selectChapter(chapter) {
+    navigateToChapter(selectedBook.value.id, chapter);
 }
 
-async function selectChapter(chapter) {
-    selectedChapter.value = chapter;
-    isBookModalOpen.value = false;
-    await fetchVerses();
+function navigateToSearchResult(result) {
+    visit({
+        version: selectedVersion.value,
+        book: result.book_id,
+        chapter: result.chapter,
+        verse: result.verse
+    });
 }
 
-// handleSearch removed
-
-async function navigateToSearchResult(result) {
-    isLoading.value = true;
-    try {
-        // Update selected book and chapter
-        const book = booksList.value.find(b => b.id === result.book_id);
-        if (book) {
-            selectedBook.value = book;
-            await fetchChapters();
-            selectedChapter.value = result.chapter;
-            await fetchVerses();
-            
-            // Highlight the specific verse if it was part of a reference
-            setTimeout(() => {
-                const element = document.getElementById(`verse-${result.verse}`);
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    element.classList.add('bg-[#8B6F47]/10', 'dark:bg-[#E3C598]/10');
-                    setTimeout(() => {
-                        element.classList.remove('bg-[#8B6F47]/10', 'dark:bg-[#E3C598]/10');
-                    }, 3000);
-                }
-            }, 500);
-        }
-    } finally {
-        isLoading.value = false;
-    }
-}
-
-
-async function prevChapter() {
+function prevChapter() {
     if (selectedChapter.value > 1) {
-        selectedChapter.value--;
-        await fetchVerses();
+        selectChapter(selectedChapter.value - 1);
     } else {
-        // Go to prev book last chapter
         const prevBookIndex = booksList.value.findIndex(b => b.id === selectedBook.value.id) - 1;
         if (prevBookIndex >= 0) {
-            selectedBook.value = booksList.value[prevBookIndex];
-            await fetchChapters();
-            selectedChapter.value = chaptersList.value[chaptersList.value.length - 1];
-            await fetchVerses();
+            const prevBook = booksList.value[prevBookIndex];
+            visit({
+                version: selectedVersion.value,
+                book: prevBook.id,
+                chapter: 1
+            });
         }
     }
 }
 
-async function nextChapter() {
-    if (selectedChapter.value < chaptersList.value[chaptersList.value.length - 1]) {
-        selectedChapter.value++;
-        await fetchVerses();
+function nextChapter() {
+    const maxChapter = chaptersList.value[chaptersList.value.length - 1]; 
+    if (selectedChapter.value < maxChapter) {
+        selectChapter(selectedChapter.value + 1);
     } else {
-        // Go to next book chapter 1
         const nextBookIndex = booksList.value.findIndex(b => b.id === selectedBook.value.id) + 1;
         if (nextBookIndex < booksList.value.length) {
-            selectedBook.value = booksList.value[nextBookIndex];
-            await fetchChapters();
-            selectedChapter.value = 1;
-            await fetchVerses();
+            visit({
+                version: selectedVersion.value,
+                book: booksList.value[nextBookIndex].id,
+                chapter: 1
+            });
         }
     }
 }
@@ -183,15 +150,13 @@ const filteredBooks = computed(() => {
     return booksList.value.filter(b => {
         if (testamentFilter.value === 1) {
             // Old Testament
-            return b.testament_id === 1 && b.id <= 39;
+            return b.testament_id === 1 || b.id <= 39;
         } else {
             // New Testament
-            return b.testament_id === 2 || (b.testament_id === 1 && b.id >= 40);
+            return b.testament_id === 2 || b.id >= 40;
         }
     });
 });
-
-
 
 function toggleSelection(verse) {
     const index = selectedVerses.value.findIndex(v => v.id === verse.id);
@@ -226,7 +191,6 @@ function saveFavorites() {
         onSuccess: () => {
             selectedVerses.value = [];
             isNoteModalOpen.value = false;
-            // Optionally show success toast
         },
         onError: (errors) => {
             console.error(errors);
@@ -234,11 +198,13 @@ function saveFavorites() {
     });
 }
 
-onMounted(async () => {
+onMounted(() => {
     if (isDark.value) document.documentElement.classList.add('dark');
-    await fetchChapters();
     
-    // Handle initial navigation if params exist
+    // Initialize modal state to current book
+    expandedBookId.value = props.initialBook;
+    expandedBookChapters.value = props.initialChapters;
+
     const urlParams = new URLSearchParams(window.location.search);
     const verse = urlParams.get('verse');
     if (verse) {
@@ -247,9 +213,7 @@ onMounted(async () => {
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 element.classList.add('bg-[#8B6F47]/10', 'dark:bg-[#E3C598]/10');
-                setTimeout(() => {
-                    element.classList.remove('bg-[#8B6F47]/10', 'dark:bg-[#E3C598]/10');
-                }, 3000);
+                setTimeout(() => element.classList.remove('bg-[#8B6F47]/10', 'dark:bg-[#E3C598]/10'), 3000);
             }
         }, 800);
     }
@@ -409,23 +373,26 @@ onMounted(async () => {
                     
                     <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div v-for="book in filteredBooks" :key="book.id" class="space-y-4">
-                            <button @click="selectBook(book)" 
-                                :class="selectedBook?.id === book.id ? 'bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 border-[#8B6F47] dark:border-[#E3C598]' : 'border-transparent hover:bg-[#F5EBE0] dark:hover:bg-[#222222]'"
+                            <button @click="expandBook(book)" 
+                                :class="expandedBookId === book.id ? 'bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 border-[#8B6F47] dark:border-[#E3C598]' : 'border-transparent hover:bg-[#F5EBE0] dark:hover:bg-[#222222]'"
                                 class="w-full text-left p-4 rounded-2xl border transition-all group"
                             >
                                 <div class="flex justify-between items-center">
-                                    <span class="font-bold text-lg" :class="selectedBook?.id === book.id ? 'text-[#8B6F47] dark:text-[#E3C598]' : ''">{{ book.name }}</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 opacity-0 group-hover:opacity-100 transition-opacity text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    <span class="font-bold text-lg" :class="expandedBookId === book.id ? 'text-[#8B6F47] dark:text-[#E3C598]' : ''">{{ book.name }}</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         class="w-5 h-5 transition-transform text-[#8B6F47] dark:text-[#E3C598]" 
+                                         :class="expandedBookId === book.id ? 'rotate-180 opacity-100' : 'opacity-0 group-hover:opacity-100'"
+                                         fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                             </button>
                             
-                            <!-- Chapter mini-grid if book is selected -->
-                            <div v-if="selectedBook?.id === book.id" class="grid grid-cols-5 sm:grid-cols-8 gap-2 px-1 pb-4">
-                                <button v-for="ch in chaptersList" :key="ch" 
-                                    @click="selectChapter(ch)"
-                                    :class="selectedChapter === ch ? 'bg-[#8B6F47] text-white dark:bg-[#E3C598] dark:text-[#111111]' : 'bg-[#F5EBE0] dark:bg-[#222222] hover:bg-[#8B6F47]/20 dark:hover:bg-[#E3C598]/20'"
+                            <!-- Chapter mini-grid if book is expanded -->
+                            <div v-if="expandedBookId === book.id" class="grid grid-cols-5 sm:grid-cols-8 gap-2 px-1 pb-4">
+                                <button v-for="ch in expandedBookChapters" :key="ch" 
+                                    @click="navigateToChapter(book.id, ch)"
+                                    :class="(selectedBook.id === book.id && selectedChapter === ch) ? 'bg-[#8B6F47] text-white dark:bg-[#E3C598] dark:text-[#111111]' : 'bg-[#F5EBE0] dark:bg-[#222222] hover:bg-[#8B6F47]/20 dark:hover:bg-[#E3C598]/20'"
                                     class="h-10 rounded-lg text-sm font-bold transition-all"
                                 >{{ ch }}</button>
                             </div>
@@ -459,8 +426,6 @@ onMounted(async () => {
             </div>
         </Transition>
         
-        <!-- Search Modal removed -->
-
         <BibleFooter @openAboutModal="isAboutModalOpen = true" />
 
         <AboutModal 

@@ -23,18 +23,18 @@ class RolesAndPermissionsSeeder extends Seeder
         // Create roles and assign created permissions
 
         // Admin role
-        $adminRole = Role::create(['name' => 'admin']);
+        $adminRole = Role::updateOrCreate(['name' => 'admin'], ['name' => 'admin']);
         $adminRole->givePermissionTo(Permission::all());
 
         // Writer role
-        $writerRole = Role::create(['name' => 'writer']);
+        $writerRole = Role::updateOrCreate(['name' => 'writer'], ['name' => 'writer']);
         $writerRole->givePermissionTo(['access-dashboard', 'manage-devotionals']);
 
         // User role
-        $userRole = Role::create(['name' => 'user']);
+        $userRole = Role::updateOrCreate(['name' => 'user'], ['name' => 'user']);
 
         // Create a default admin user if it doesn't exist
-        $admin = User::firstOrCreate(
+        $admin = User::updateOrCreate(
             ['email' => 'admin@elyon.com'],
             [
                 'name' => 'Admin Elyon',
@@ -44,7 +44,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $admin->assignRole($adminRole);
 
         // Create a default writer user if it doesn't exist
-        $writer = User::firstOrCreate(
+        $writer = User::updateOrCreate(
             ['email' => 'writer@elyon.com'],
             [
                 'name' => 'Escritor Elyon',

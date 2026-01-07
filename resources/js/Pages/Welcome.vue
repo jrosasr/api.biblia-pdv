@@ -173,6 +173,8 @@ function openNoteModal() {
     isNoteModalOpen.value = true;
 }
 
+const isCopied = ref(false);
+
 function saveFavorites() {
     const favorites = selectedVerses.value.map(verse => ({
         id: `${selectedVersion.value}-${selectedBook.value.id}-${selectedChapter.value}-${verse.verse}`,
@@ -195,6 +197,39 @@ function saveFavorites() {
         onError: (errors) => {
             console.error(errors);
         }
+    });
+}
+
+function copyVerses() {
+    if (selectedVerses.value.length === 0) return;
+
+    // Ordenar por número de versículo
+    const sortedVerses = [...selectedVerses.value].sort((a, b) => a.verse - b.verse);
+
+    const versesText = sortedVerses.map(v => `${v.verse}. ${v.text}`).join('\n');
+    const verseNumbers = sortedVerses.map(v => v.verse).join(', ');
+    
+    // Construir la referencia y el mensaje final
+    const reference = `${selectedBook.value.name} ${selectedChapter.value}:${verseNumbers}`;
+    
+    // Create params for the URL
+    const params = new URLSearchParams({
+        version: selectedVersion.value,
+        book: selectedBook.value.id,
+        chapter: selectedChapter.value
+    });
+
+    const url = `https://biblia-palabradevida.com/?${params.toString()}`;
+    
+    const finalContent = `${reference}\n${versesText}\n\nCompartido desde ${url}`;
+
+    navigator.clipboard.writeText(finalContent).then(() => {
+        isCopied.value = true;
+        setTimeout(() => {
+            isCopied.value = false;
+        }, 2000);
+    }).catch(err => {
+        console.error('Error al copiar: ', err);
     });
 }
 
@@ -301,6 +336,17 @@ onMounted(() => {
                 <div v-if="selectedVerses.length > 0" class="fixed bottom-8 left-0 right-0 z-40 px-4 flex justify-center">
                     <div class="bg-[#3A3026] dark:bg-[#E3C598] text-[#F5F0E6] dark:text-[#3A3026] rounded-full shadow-2xl px-6 py-3 flex items-center gap-6">
                         <span class="font-bold text-sm">{{ selectedVerses.length }} seleccionado{{ selectedVerses.length > 1 ? 's' : '' }}</span>
+                        <div class="h-6 w-px bg-white/20 dark:bg-black/20"></div>
+                        
+                        <button @click="copyVerses" class="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
+                            <svg v-if="!isCopied" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 012-2v-8a2 2 0 01-2-2h-8a2 2 0 01-2 2v8a2 2 0 012 2z" />
+                            </svg>
+                            <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span :class="{'text-green-400': isCopied}">{{ isCopied ? 'Copiado' : 'Copiar' }}</span>
+                        </button>
                         <div class="h-6 w-px bg-white/20 dark:bg-black/20"></div>
                         <button @click="openNoteModal" class="flex items-center gap-2 font-bold hover:opacity-80 transition-opacity">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

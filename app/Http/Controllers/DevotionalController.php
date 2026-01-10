@@ -178,9 +178,14 @@ class DevotionalController extends Controller
      * @unauthenticated
      * @urlParam devotional integer required The ID of the devotional. Example: 1
      */
-    public function incrementReadings(Devotional $devotional)
+    public function incrementReadings()
     {
-        $this->devotionalService->incrementReadings($devotional);
+        $devotional = $this->devotionalService->getDailyDevotional();
+
+        if ($devotional) {
+            $this->devotionalService->incrementReadings($devotional);
+        }
+
         return response()->noContent();
     }
 }

@@ -22,6 +22,7 @@ class BibleSeriesService
      */
     public function createSeries(array $data, ?UploadedFile $image = null): BibleSeries
     {
+        unset($data['cover_image']);
         if ($image) {
             $data['cover_image'] = $image->store('series', 'public');
         }
@@ -34,6 +35,7 @@ class BibleSeriesService
      */
     public function updateSeries(BibleSeries $series, array $data, ?UploadedFile $image = null): BibleSeries
     {
+        unset($data['cover_image']);
         if ($image) {
             // Delete old image
             if ($series->cover_image) {

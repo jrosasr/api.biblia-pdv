@@ -19,6 +19,7 @@ class BibleStory extends Model
         'series_id',
         'title',
         'description',
+        'difficulty_level',
         'cover_image',
         'book',
         'chapter_start',

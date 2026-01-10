@@ -43,6 +43,7 @@ const deleteStory = (id) => {
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Título</th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Serie</th>
                                         <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Cita</th>
+                                        <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-text-tertiary uppercase tracking-wider">Dificultad</th>
                                         <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-text-tertiary uppercase tracking-wider">Acciones</th>
                                     </tr>
                                 </thead>
@@ -60,6 +61,18 @@ const deleteStory = (id) => {
                                             {{ story.book }} {{ story.chapter_start }}:{{ story.verse_start }}
                                             <span v-if="story.chapter_end"> - {{ story.chapter_end }}:{{ story.verse_end }}</span>
                                             <span v-else-if="story.verse_end"> - {{ story.verse_end }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span 
+                                                class="px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-tight"
+                                                :class="{
+                                                    'bg-blue-100 text-blue-700': story.difficulty_level === 1,
+                                                    'bg-orange-100 text-orange-700': story.difficulty_level === 2,
+                                                    'bg-red-100 text-red-700': story.difficulty_level === 3,
+                                                }"
+                                            >
+                                                {{ story.difficulty_level === 1 ? 'Historias cortas' : story.difficulty_level === 2 ? 'Historias largas' : 'Historias más difíciles' }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
                                             <Link :href="route('bible-stories.edit', story.id)" class="text-primary hover:opacity-80 transition-opacity mr-4">Editar</Link>

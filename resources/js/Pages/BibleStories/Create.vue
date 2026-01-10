@@ -15,6 +15,7 @@ const form = useForm({
     series_id: '',
     title: '',
     description: '',
+    difficulty_level: 1,
     cover_image: null,
     book: '',
     chapter_start: '',
@@ -106,6 +107,21 @@ const submit = () => {
                                                 placeholder="Resumen breve..."
                                             />
                                             <InputError class="mt-2" :message="form.errors.description" />
+                                        </div>
+
+                                        <div>
+                                            <InputLabel for="difficulty_level" value="Nivel de Dificultad" />
+                                            <select
+                                                id="difficulty_level"
+                                                v-model="form.difficulty_level"
+                                                class="block w-full text-text bg-background border-border rounded-xl shadow-sm focus:border-primary focus:ring-primary transition-all py-3 px-4"
+                                                required
+                                            >
+                                                <option value="1">Historias cortas</option>
+                                                <option value="2">Historias largas</option>
+                                                <option value="3">Historias más difíciles</option>
+                                            </select>
+                                            <InputError class="mt-2" :message="form.errors.difficulty_level" />
                                         </div>
                                     </div>
 

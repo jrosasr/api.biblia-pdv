@@ -16,6 +16,7 @@ const form = useForm({
     series_id: props.story.series_id,
     title: props.story.title,
     description: props.story.description || '',
+    difficulty_level: props.story.difficulty_level || 1,
     cover_image: null,
     book: props.story.book,
     chapter_start: props.story.chapter_start,
@@ -103,6 +104,23 @@ const submit = () => {
                                                 rows="4"
                                             />
                                             <InputError class="mt-2" :message="form.errors.description" />
+                                        </div>
+
+                                        <div>
+                                            <InputLabel for="difficulty_level" value="Nivel de Dificultad" class="font-medium" />
+                                            <div class="mt-2">
+                                                <select
+                                                    id="difficulty_level"
+                                                    v-model="form.difficulty_level"
+                                                    class="block w-full text-base rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 py-3"
+                                                    required
+                                                >
+                                                    <option value="1">Historias cortas</option>
+                                                    <option value="2">Historias largas</option>
+                                                    <option value="3">Historias más difíciles</option>
+                                                </select>
+                                            </div>
+                                            <InputError class="mt-2" :message="form.errors.difficulty_level" />
                                         </div>
                                     </div>
 

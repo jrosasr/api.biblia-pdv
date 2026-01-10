@@ -59,7 +59,7 @@ class BibleStoryController extends Controller
     public function index()
     {
         return Inertia::render('BibleStories/Index', [
-            'stories' => $this->storyService->getAllStories()
+            'stories' => BibleStoryResource::collection($this->storyService->getAllStories())->resolve()
         ]);
     }
 
@@ -93,7 +93,7 @@ class BibleStoryController extends Controller
     public function show(BibleStory $bibleStory)
     {
         return Inertia::render('BibleStories/Show', [
-            'story' => $bibleStory->load('series')
+            'story' => (new BibleStoryResource($bibleStory->load('series')))->resolve()
         ]);
     }
 
@@ -103,7 +103,7 @@ class BibleStoryController extends Controller
     public function edit(BibleStory $bibleStory)
     {
         return Inertia::render('BibleStories/Edit', [
-            'story' => $bibleStory,
+            'story' => (new BibleStoryResource($bibleStory))->resolve(),
             'series' => BibleSeries::all()
         ]);
     }

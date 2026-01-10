@@ -24,6 +24,7 @@ class StoreBibleSeriesRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'difficulty_level' => 'required|integer|min:1|max:3',
             'cover_image' => 'nullable|image|max:2048',
         ];
     }

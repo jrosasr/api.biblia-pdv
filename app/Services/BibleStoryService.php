@@ -33,6 +33,7 @@ class BibleStoryService
      */
     public function createStory(array $data, ?UploadedFile $image = null): BibleStory
     {
+        unset($data['cover_image']);
         if ($image) {
             $data['cover_image'] = $image->store('stories', 'public');
         }
@@ -45,6 +46,7 @@ class BibleStoryService
      */
     public function updateStory(BibleStory $story, array $data, ?UploadedFile $image = null): BibleStory
     {
+        unset($data['cover_image']);
         if ($image) {
             // Delete old image
             if ($story->cover_image) {

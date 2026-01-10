@@ -75,7 +75,7 @@ class BibleSeriesController extends Controller
     public function show(BibleSeries $bibleSeries)
     {
         return Inertia::render('BibleSeries/Show', [
-            'series' => $bibleSeries->load('stories')
+            'series' => (new BibleSeriesResource($bibleSeries->load('stories')))->resolve()
         ]);
     }
 
@@ -85,7 +85,7 @@ class BibleSeriesController extends Controller
     public function edit(BibleSeries $bibleSeries)
     {
         return Inertia::render('BibleSeries/Edit', [
-            'series' => $bibleSeries
+            'series' => (new BibleSeriesResource($bibleSeries))->resolve()
         ]);
     }
 

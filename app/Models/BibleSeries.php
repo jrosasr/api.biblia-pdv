@@ -19,6 +19,7 @@ class BibleSeries extends Model
         'title',
         'description',
         'cover_image',
+        'difficulty_level',
     ];
 
     public function stories(): HasMany

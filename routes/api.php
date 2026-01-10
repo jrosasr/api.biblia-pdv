@@ -21,7 +21,7 @@ Route::prefix('v1')->group(function () {
     Route::get('storage/{path}', [\App\Http\Controllers\Api\StorageController::class, 'show'])->where('path', '.*');
     
     // Increment readings
-    Route::get('incrementReadings/{id}', [DevotionalController::class, 'incrementReadings']);
+    Route::get('incrementReadings/{id?}', [DevotionalController::class, 'incrementReadings']);
     
     // Endpoint return array with version of api
     Route::get('/version', function () {

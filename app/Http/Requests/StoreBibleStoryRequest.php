@@ -25,6 +25,7 @@ class StoreBibleStoryRequest extends FormRequest
             'series_id' => 'required|exists:bible_series,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'difficulty_level' => 'required|integer|min:1|max:3',
             'cover_image' => 'nullable|image|max:2048',
             'book' => 'required|string',
             'chapter_start' => 'required|integer',

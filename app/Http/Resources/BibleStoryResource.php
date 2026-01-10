@@ -16,9 +16,10 @@ class BibleStoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'bible_series_id' => $this->bible_series_id,
+            'series_id' => $this->series_id,
             'title' => $this->title,
             'description' => $this->description,
+            'difficulty_level' => $this->difficulty_level,
             'cover_image' => $this->cover_image ? url("api/v1/storage/" . preg_replace('/^(\/?storage\/|\/)/', '', $this->cover_image)) : null,
             'book' => $this->book,
             'chapter_start' => $this->chapter_start,

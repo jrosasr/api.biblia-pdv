@@ -48,14 +48,17 @@ const deleteSeries = (id) => {
                                 <div class="p-5">
                                     <h3 class="text-lg font-bold mb-2 text-text">{{ item.title }}</h3>
                                     <p class="text-sm text-text-secondary mb-4 line-clamp-2 h-10">{{ item.description }}</p>
-                                    <div class="flex justify-between items-center">
+                                    <div class="flex flex-wrap gap-2 items-center mb-4">
                                         <span class="text-[10px] font-bold px-3 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-wider">
                                             {{ item.stories_count }} historias
                                         </span>
-                                        <div class="flex space-x-3">
-                                            <Link :href="route('bible-series.edit', item.id)" class="text-primary hover:opacity-80 transition-opacity text-sm font-bold">Editar</Link>
-                                            <button @click="deleteSeries(item.id)" class="text-red-500 hover:text-red-700 transition-colors text-sm font-bold">Eliminar</button>
-                                        </div>
+                                        <span v-if="item.difficulty_level" class="text-[10px] font-bold px-3 py-1 bg-accent/10 text-accent rounded-full uppercase tracking-wider">
+                                            {{ item.difficulty_level === 1 ? 'Historias cortas' : item.difficulty_level === 2 ? 'Historias largas' : 'Historias más difíciles' }}
+                                        </span>
+                                    </div>
+                                    <div class="flex justify-end items-center space-x-4 border-t border-border pt-4">
+                                        <Link :href="route('bible-series.edit', item.id)" class="text-primary hover:opacity-80 transition-opacity text-sm font-bold">Editar</Link>
+                                        <button @click="deleteSeries(item.id)" class="text-red-500 hover:text-red-700 transition-colors text-sm font-bold">Eliminar</button>
                                     </div>
                                 </div>
                             </div>

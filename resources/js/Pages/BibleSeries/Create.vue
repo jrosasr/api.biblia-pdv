@@ -10,6 +10,7 @@ import TextArea from '@/Components/TextArea.vue';
 const form = useForm({
     title: '',
     description: '',
+    difficulty_level: 1,
     cover_image: null,
 });
 
@@ -66,6 +67,21 @@ const submit = () => {
                                     placeholder="De qué trata esta serie de historias..."
                                 />
                                 <InputError class="mt-2" :message="form.errors.description" />
+                            </div>
+
+                            <div>
+                                <InputLabel for="difficulty_level" value="Nivel de Dificultad" />
+                                <select
+                                    id="difficulty_level"
+                                    class="mt-1 block w-full border-border bg-surface text-text focus:border-primary focus:ring-primary rounded-xl shadow-sm"
+                                    v-model="form.difficulty_level"
+                                    required
+                                >
+                                    <option value="1">Historias cortas</option>
+                                    <option value="2">Historias largas</option>
+                                    <option value="3">Historias más difíciles</option>
+                                </select>
+                                <InputError class="mt-2" :message="form.errors.difficulty_level" />
                             </div>
 
                             <div>

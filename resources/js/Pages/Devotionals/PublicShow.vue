@@ -73,7 +73,7 @@ onMounted(() => {
                     <ul v-else-if="block.type === 'list'" class="space-y-4 mb-8">
                         <li v-for="(item, i) in block.data.items" :key="i" class="flex gap-4 items-start">
                             <span class="w-2 h-2 rounded-full bg-[#8B6F47] mt-3 flex-shrink-0"></span>
-                            <span class="text-lg md:text-xl" v-html="item"></span>
+                            <span class="text-lg md:text-xl" v-html="typeof item === 'string' ? item : item.content"></span>
                         </li>
                     </ul>
                 </div>
@@ -118,7 +118,7 @@ onMounted(() => {
                     <h3 class="text-xl font-bold text-[#3A3026] dark:text-[#F5F0E6]">No hay devocionales disponibles</h3>
                     <p class="text-[#9B8D82] mt-2 text-sm">Vuelve más tarde para ver nuevas lecturas.</p>
                 </div>
-                <Link href="/" class="mt-4 px-6 py-2 bg-[#8B6F47] text-white rounded-full text-sm font-bold">Volver al inicio</Link>
+                <Link :href="route('home')" class="mt-4 px-6 py-2 bg-[#8B6F47] text-white rounded-full text-sm font-bold">Volver al inicio</Link>
             </template>
             <template v-else>
                 <div class="animate-spin rounded-full h-12 w-12 border-4 border-[#8B6F47] border-t-transparent dark:border-[#E3C598]"></div>

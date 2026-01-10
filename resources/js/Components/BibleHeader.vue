@@ -45,7 +45,7 @@ async function handleSearch() {
     if (!searchQuery.value.trim()) return;
     isSearching.value = true;
     try {
-        const response = await axios.get('/api/bible/search', {
+        const response = await axios.get('/es/api/bible/search', {
             params: {
                 version: props.selectedVersion,
                 query: searchQuery.value
@@ -109,7 +109,7 @@ function navigateToResult(result) {
             </button>
 
             <!-- Back to Bible (Mobile/Tablet only, hidden if version selector is shown) -->
-            <Link v-if="!showVersionSelector" href="/" class="p-2 rounded-full hover:bg-[#F5EBE0] dark:hover:bg-[#222222] transition-colors text-[#8B6F47] dark:text-[#E3C598] lg:hidden">
+            <Link v-if="!showVersionSelector" :href="route('home')" class="p-2 rounded-full hover:bg-[#F5EBE0] dark:hover:bg-[#222222] transition-colors text-[#8B6F47] dark:text-[#E3C598] lg:hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
@@ -220,12 +220,8 @@ function navigateToResult(result) {
                         <!-- Modal Header -->
                         <div class="flex-shrink-0 p-6 border-b border-[#E0D5C9] dark:border-[#2E2A25] flex justify-between items-center bg-[#FFF8F0]/80 dark:bg-[#111111]/80 backdrop-blur-md sticky top-0 z-10">
                             <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-[#8B6F47] dark:bg-[#E3C598] rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white dark:text-[#111111]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                                    </svg>
-                                </div>
-                                <span class="font-black text-xl text-[#3A3026] dark:text-[#F5F0E6]">Opciones</span>
+                                <img src="/icon.webp" alt="Logo" class="w-16 h-16">
+                                <span class="font-black text-xl text-[#3A3026] dark:text-[#F5F0E6]">Biblia: Palabra de Vida</span>
                             </div>
                             <button @click="isMenuModalOpen = false" class="p-2 rounded-full hover:bg-[#8B6F47]/10 dark:hover:bg-[#E3C598]/10 text-[#8B6F47] dark:text-[#E3C598] transition-colors">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -334,6 +330,23 @@ function navigateToResult(result) {
                                     Iniciar Sesión
                                 </Link>
                             </template>
+                            
+                            <!-- Google Play Badge -->
+                            <div class="mt-6 pt-6 border-t border-[#E0D5C9] dark:border-[#2E2A25]">
+                                <p class="text-center text-sm font-bold text-[#3A3026] dark:text-[#F5F0E6] mb-3">Descarga nuestra app</p>
+                                <a 
+                                    href="https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida" 
+                                    target="_blank"
+                                    @click="isMenuModalOpen = false"
+                                    class="block hover:scale-105 transition-transform duration-300"
+                                >
+                                    <img 
+                                        src="/disponible-en-google-play-badge.webp" 
+                                        alt="Disponible en Google Play" 
+                                        class="w-3/4 h-16 max-w-[100px] mx-auto"
+                                    >
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

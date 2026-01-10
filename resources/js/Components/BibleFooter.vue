@@ -59,6 +59,23 @@ const currentYear = new Date().getFullYear();
                 </div>
             </div>
 
+
+            <!-- Google Play Badge Section -->
+            <div class="mt-12 pt-8 border-t border-[#E0D5C9] dark:border-[#2E2A25] flex flex-col items-left gap-4">
+                <h4 class="text-[#3A3026] dark:text-[#F5F0E6] font-black text-lg">Descarga nuestra app</h4>
+                <a 
+                    href="https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida" 
+                    target="_blank"
+                    class="block hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"
+                >
+                    <img 
+                        src="/disponible-en-google-play-badge.webp" 
+                        alt="Disponible en Google Play" 
+                        class="h-14 w-auto"
+                    >
+                </a>
+            </div>
+
             <!-- Bottom Section -->
             <div class="mt-12 pt-8 border-t border-[#E0D5C9] dark:border-[#2E2A25] flex flex-col md:flex-row justify-between items-center gap-6">
                 <p class="text-[#8B6F47] dark:text-[#9B8D82] font-medium text-center md:text-left">

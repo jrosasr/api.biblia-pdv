@@ -36,14 +36,52 @@ onMounted(() => {
         initialData = {};
     }
 
+    // Migration & Cleanup: Ensure list data matches exactly what the plugin expects (Nested format v2)
+    // This removes extra properties like 'meta' that cause validation errors
+    if (initialData.blocks) {
+        initialData.blocks = initialData.blocks.map(block => {
+            if (block.type === 'list' && block.data) {
+                const cleanListItems = (items) => {
+                    return (items || []).map(item => {
+                        if (typeof item === 'string') {
+                            return { content: item, items: [] };
+                        }
+                        if (typeof item === 'object' && item !== null) {
+                            return {
+                                content: item.content || '',
+                                items: Array.isArray(item.items) ? cleanListItems(item.items) : []
+                            };
+                        }
+                        return { content: String(item), items: [] };
+                    });
+                };
+
+                block.data = {
+                    style: block.data.style || 'unordered',
+                    items: cleanListItems(block.data.items)
+                };
+            }
+            return block;
+        });
+    }
+
     editor.value = new EditorJS({
         holder: 'editorjs',
         placeholder: props.placeholder,
         readOnly: props.readOnly,
         data: initialData,
         tools: {
-            header: Header,
-            list: List,
+            header: {
+                class: Header,
+                inlineToolbar: true,
+            },
+            list: {
+                class: List,
+                inlineToolbar: true,
+                config: {
+                    defaultStyle: 'unordered'
+                }
+            },
         },
         onChange: async (api, event) => {
              const data = await api.saver.save();

@@ -13,6 +13,8 @@ Route::get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     // Daily devotionals
     Route::get('daily-devotionals', [DevotionalController::class, 'dailyDevotionals']);
+    Route::get('devotionals', [DevotionalController::class, 'index']);
+    Route::get('devotionals/{devotional}', [DevotionalController::class, 'show']);
     
     // Bible Series & Stories
     Route::get('bible-series', [\App\Http\Controllers\BibleSeriesController::class, 'list']);

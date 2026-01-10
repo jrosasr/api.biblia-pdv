@@ -154,10 +154,16 @@ class DevotionalController extends Controller
             return DevotionalResource::collection($devotionals);
         }
 
-        $devotional = $this->devotionalService->getDailyDevotional();
+        // Cache daily devotional for 1 hour (3600 seconds)
+        $devotional = \Illuminate\Support\Facades\Cache::remember('daily_devotional', 3600, function () {
+            return $this->devotionalService->getDailyDevotional();
+        });
+
         if (!$devotional) {
-             return response()->json(['message' => 'No published devotional found'], 404);
+            \Illuminate\Support\Facades\Cache::forget('daily_devotional');
+            return response()->json(['message' => 'No published devotional found'], 404);
         }
+
         return new DevotionalResource($devotional);
     }
 

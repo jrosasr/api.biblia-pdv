@@ -16,7 +16,7 @@ const deleteSeries = (id) => {
 </script>
 
 <template>
-    <Head title="Series Bíblicas" />
+    <Head title="Biblia de Corazón" />
 
     <AuthenticatedLayout>
         <template #header>

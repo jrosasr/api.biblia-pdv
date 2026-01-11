@@ -562,7 +562,7 @@ function openPlayStore() {
                         <!-- App Icon -->
                         <div class="mb-6 flex justify-center">
                             <div class="w-24 h-24 bg-gradient-to-br from-[#8B6F47] to-[#6B5D52] dark:from-[#E3C598] dark:to-[#CFC6B8] rounded-3xl shadow-2xl flex items-center justify-center transform rotate-6 hover:rotate-0 transition-transform duration-300">
-                                <img src="/icon.webp" alt="Logo" class="w-36 h-36">
+                                <img src="/icon.webp" alt="Logo" class="w-24 h-24">
                             </div>
                         </div>
 
@@ -612,7 +612,7 @@ function openPlayStore() {
                             <img 
                                 src="/disponible-en-google-play-badge.webp" 
                                 alt="Disponible en Google Play" 
-                                class="w-3/4 h-20 max-w-[150px] mx-auto transform group-hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"
+                                class="w-3/4 h-12 max-w-[150px] mx-auto transform group-hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"
                             >
                         </button>
 

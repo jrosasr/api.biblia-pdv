@@ -343,7 +343,7 @@ function navigateToResult(result) {
                                     <img 
                                         src="/disponible-en-google-play-badge.webp" 
                                         alt="Disponible en Google Play" 
-                                        class="w-3/4 h-16 max-w-[100px] mx-auto"
+                                        class="w-auto h-12 max-w-[150px] mx-auto"
                                     >
                                 </a>
                             </div>

@@ -35,6 +35,7 @@ class StoreBibleFavoriteRequest extends FormRequest
             'favorites.*.verse' => 'required|integer',
             'favorites.*.text' => 'required|string',
             'favorites.*.note' => 'nullable|string',
+            'favorites.*.color' => 'nullable|string|max:20',
             'favorites.*.verses' => 'nullable|array',
         ];
     }

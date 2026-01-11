@@ -39,6 +39,7 @@ class BibleFavoriteService
                     'verse' => $item['verse'],
                     'text' => $item['text'],
                     'note' => $item['note'] ?? null,
+                    'color' => $item['color'] ?? null,
                     'verses' => $item['verses'] ?? null,
                 ]
             );

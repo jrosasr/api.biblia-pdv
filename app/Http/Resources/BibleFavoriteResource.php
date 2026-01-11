@@ -34,6 +34,7 @@ class BibleFavoriteResource extends JsonResource
             'verse' => $this->verse,
             'text' => $this->text,
             'note' => $this->note,
+            'color' => $this->color,
             'verses' => $this->verses,
             'createdAt' => $this->created_at,
         ];

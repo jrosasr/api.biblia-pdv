@@ -19,6 +19,7 @@ class BibleFavorite extends Model
         'verse',
         'text',
         'note',
+        'color',
         'verses',
     ];
 

@@ -28,6 +28,10 @@ class BibleReaderController extends Controller
         $verses = $this->bibleService->getVerses($version, $bookId, $chapter);
         $chapters = $this->bibleService->getChapters($version, $bookId);
 
+        $currentBook = $books->firstWhere('id', (int)$bookId);
+        $title = $currentBook ? "{$currentBook->name} {$chapter} {$version} - Biblia Palabra de Vida" : "Biblia Palabra de Vida";
+        $description = $verses->take(3)->pluck('text')->implode(' ');
+
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
@@ -40,6 +44,44 @@ class BibleReaderController extends Controller
             'initialVersion' => $version,
             'initialBook' => (int)$bookId,
             'initialChapter' => (int)$chapter,
+            'seo' => [
+                'title' => $title,
+                'description' => mb_substr($description, 0, 160) . '...',
+            ]
+        ]);
+    }
+
+    public function show(Request $request, $bookName, $chapter = 1)
+    {
+        $version = $request->input('version', 'RV1960');
+        $book = $this->bibleService->getBookByName($version, $bookName);
+
+        if (!$book) {
+            return redirect()->route('home');
+        }
+
+        $versions = $this->bibleService->getVersions();
+        $books = $this->bibleService->getBooks($version);
+        $verses = $this->bibleService->getVerses($version, $book->id, $chapter);
+        $chapters = $this->bibleService->getChapters($version, $book->id);
+
+        $title = "{$book->name} {$chapter} {$version} - Biblia Palabra de Vida";
+        $description = $verses->take(3)->pluck('text')->implode(' ');
+
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'versions' => $versions,
+            'books' => $books,
+            'initialChapters' => $chapters,
+            'initialVerses' => $verses,
+            'initialVersion' => $version,
+            'initialBook' => (int)$book->id,
+            'initialChapter' => (int)$chapter,
+            'seo' => [
+                'title' => $title,
+                'description' => mb_substr($description, 0, 160) . '...',
+            ]
         ]);
     }
 

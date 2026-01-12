@@ -54,6 +54,32 @@ class BibleReaderService
             ->get();
     }
 
+    public function getBookByName($version, $name)
+    {
+        $books = $this->getBooks($version);
+        $nameWithoutAccents = $this->removeAccents(mb_strtolower(str_replace(['-', '_'], ' ', $name)));
+        
+        foreach ($books as $book) {
+            $bookNameWithoutAccents = $this->removeAccents(mb_strtolower($book->name));
+            $bookAbbrWithoutAccents = $this->removeAccents(mb_strtolower($book->abbreviation));
+            
+            if ($bookNameWithoutAccents === $nameWithoutAccents || $bookAbbrWithoutAccents === $nameWithoutAccents) {
+                return $book;
+            }
+        }
+        return null;
+    }
+
+    private function removeAccents($string)
+    {
+        $accents = [
+            'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o', 'ú' => 'u',
+            'Á' => 'a', 'É' => 'e', 'Í' => 'i', 'Ó' => 'o', 'Ú' => 'u',
+            'ñ' => 'n', 'Ñ' => 'n'
+        ];
+        return strtr($string, $accents);
+    }
+
     public function getChapters($version, $bookId)
     {
         $conn = $this->setConnection($version);

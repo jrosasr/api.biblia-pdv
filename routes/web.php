@@ -8,21 +8,20 @@ use Inertia\Inertia;
 use App\Http\Controllers\DevotionalController;
 use App\Http\Controllers\UserDevotionalController;
 
-Route::get('/', function () {
-    return redirect()->permanent('/es');
-});
+Route::permanentRedirect('/', '/es');
 
 // Redirects for indexing fixes
-Route::get('/contacto', fn() => redirect()->permanent('/es/contacto'));
-Route::get('/privacidad', fn() => redirect()->permanent('/es/privacidad'));
-Route::get('/terminos', fn() => redirect()->permanent('/es/terminos'));
-Route::get('/devocional-diario', fn() => redirect()->permanent('/es/devocional-diario'));
-Route::get('/login', fn() => redirect()->permanent('/es/login'));
-Route::get('/register', fn() => redirect()->permanent('/es/register'));
+Route::permanentRedirect('/contacto', '/es/contacto');
+Route::permanentRedirect('/privacidad', '/es/privacidad');
+Route::permanentRedirect('/terminos', '/es/terminos');
+Route::permanentRedirect('/devocional-diario', '/es/devocional-diario');
+Route::permanentRedirect('/login', '/es/login');
+Route::permanentRedirect('/register', '/es/register');
 
 
 Route::prefix('es')->group(function () {
     Route::get('/', [\App\Http\Controllers\BibleReaderController::class, 'index'])->name('home');
+    Route::get('/leer/{book}/{chapter?}', [\App\Http\Controllers\BibleReaderController::class, 'show'])->name('bible.show');
     Route::get('/api/bible/books/{version}', [\App\Http\Controllers\BibleReaderController::class, 'getBooks']);
     Route::get('/api/bible/chapters/{version}/{bookId}', [\App\Http\Controllers\BibleReaderController::class, 'getChapters']);
     Route::get('/api/bible/verses/{version}/{bookId}/{chapter}', [\App\Http\Controllers\BibleReaderController::class, 'getVerses']);

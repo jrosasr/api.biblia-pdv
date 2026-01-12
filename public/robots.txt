@@ -1,2 +1,8 @@
 User-agent: *
-Disallow:
+Disallow: /es/dashboard
+Disallow: /es/profile
+Disallow: /es/account
+Disallow: /es/mi-perfil
+Disallow: /es/mis-favoritos
+
+Sitemap: https://biblia-palabradevida.com/sitemap.xml

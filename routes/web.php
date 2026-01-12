@@ -9,8 +9,17 @@ use App\Http\Controllers\DevotionalController;
 use App\Http\Controllers\UserDevotionalController;
 
 Route::get('/', function () {
-    return redirect('/es');
+    return redirect()->permanent('/es');
 });
+
+// Redirects for indexing fixes
+Route::get('/contacto', fn() => redirect()->permanent('/es/contacto'));
+Route::get('/privacidad', fn() => redirect()->permanent('/es/privacidad'));
+Route::get('/terminos', fn() => redirect()->permanent('/es/terminos'));
+Route::get('/devocional-diario', fn() => redirect()->permanent('/es/devocional-diario'));
+Route::get('/login', fn() => redirect()->permanent('/es/login'));
+Route::get('/register', fn() => redirect()->permanent('/es/register'));
+
 
 Route::prefix('es')->group(function () {
     Route::get('/', [\App\Http\Controllers\BibleReaderController::class, 'index'])->name('home');

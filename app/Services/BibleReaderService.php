@@ -90,14 +90,50 @@ class BibleReaderService
             ->sort();
     }
 
+    public function setHeadingsConnection()
+    {
+        $path = database_path('biblias/_headings.sqlite');
+        if (!File::exists($path)) {
+            return null;
+        }
+
+        config([
+            'database.connections.headings' => [
+                'driver' => 'sqlite',
+                'database' => $path,
+                'prefix' => '',
+            ]
+        ]);
+
+        DB::purge('headings');
+        return DB::connection('headings');
+    }
+
     public function getVerses($version, $bookId, $chapter)
     {
         $conn = $this->setConnection($version);
-        return $conn->table('verse')
+        $verses = $conn->table('verse')
             ->where('book_id', $bookId)
             ->where('chapter', $chapter)
             ->orderBy('verse')
             ->get();
+
+        $hConn = $this->setHeadingsConnection();
+        if ($hConn) {
+            $headings = $hConn->table('headings')
+                ->where('book_id', $bookId)
+                ->where('chapter', $chapter)
+                ->get();
+
+            foreach ($verses as $verse) {
+                $heading = $headings->firstWhere('verse', $verse->verse);
+                if ($heading) {
+                    $verse->title = $heading->title;
+                }
+            }
+        }
+
+        return $verses;
     }
 
     public function search($version, $query)

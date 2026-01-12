@@ -120,6 +120,13 @@ return [
             'foreign_key_constraints' => true,
         ],
 
+        'headings' => [
+            'driver' => 'sqlite',
+            'database' => database_path('biblias/_headings.sqlite'),
+            'prefix' => '',
+            'foreign_key_constraints' => true,
+        ],
+
 
     ],
 

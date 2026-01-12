@@ -15,28 +15,33 @@ defineEmits(['toggleSelection']);
             <span class="text-[#9B8D82] animate-pulse">Cargando Palabra de Vida...</span>
         </div>
         <template v-else>
-            <div 
-                v-for="v in verses" 
-                :key="v.id" 
-                :id="`verse-${v.verse}`" 
-                @click="$emit('toggleSelection', v)"
-                :class="[
-                    'group flex gap-5 items-start p-3 rounded-xl transition-all duration-300 cursor-pointer select-none',
-                    selectedVerses.find(sel => sel.id === v.id) 
-                        ? 'bg-[#8B6F47]/20 dark:bg-[#E3C598]/20 translate-x-2' 
-                        : 'hover:bg-[#8B6F47]/5 dark:hover:bg-[#E3C598]/5'
-                ]"
-            >
-                <span 
-                    class="font-bold text-xs mt-2.5 min-w-[1.5rem] tracking-tighter transition-colors"
-                    :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#8B6F47] dark:text-[#E3C598] opacity-100' : 'text-[#8B6F47] dark:text-[#E3C598] opacity-60'"
-                >{{ v.verse }}</span>
-                <p 
-                    class="text-xl md:text-2xl transition-colors duration-200"
-                    :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#3A3026] dark:text-[#F5F0E6] font-medium' : 'text-[#3A3026] dark:text-[#F5F0E6] group-hover:text-black dark:group-hover:text-white'"
+            <div v-for="v in verses" :key="v.id" class="flex flex-col gap-1">
+                <!-- Heading if exists -->
+                <h3 v-if="v.title" class="text-lg font-black uppercase tracking-[0.25em] text-[#8B6F47] dark:text-[#E3C598] mt-8 mb-4 px-3 border-l-2 border-[#8B6F47]/20 dark:border-[#E3C598]/20">
+                    {{ v.title }}
+                </h3>
+
+                <div 
+                    :id="`verse-${v.verse}`" 
+                    @click="$emit('toggleSelection', v)"
+                    :class="[
+                        'group flex gap-5 items-start p-3 rounded-xl transition-all duration-300 cursor-pointer select-none',
+                        selectedVerses.find(sel => sel.id === v.id) 
+                            ? 'bg-[#8B6F47]/20 dark:bg-[#E3C598]/20 translate-x-2' 
+                            : 'hover:bg-[#8B6F47]/5 dark:hover:bg-[#E3C598]/5'
+                    ]"
                 >
-                    {{ v.text }}
-                </p>
+                    <span 
+                        class="font-bold text-xs mt-2.5 min-w-[1.5rem] tracking-tighter transition-colors"
+                        :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#8B6F47] dark:text-[#E3C598] opacity-100' : 'text-[#8B6F47] dark:text-[#E3C598] opacity-60'"
+                    >{{ v.verse }}</span>
+                    <p 
+                        class="text-xl md:text-2xl transition-colors duration-200"
+                        :class="selectedVerses.find(sel => sel.id === v.id) ? 'text-[#3A3026] dark:text-[#F5F0E6] font-medium' : 'text-[#3A3026] dark:text-[#F5F0E6] group-hover:text-black dark:group-hover:text-white'"
+                    >
+                        {{ v.text }}
+                    </p>
+                </div>
             </div>
         </template>
     </div>

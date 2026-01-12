@@ -86,6 +86,7 @@ Route::prefix('es')->group(function () {
             Route::get('/users/{user}', [\App\Http\Controllers\UserManagementController::class, 'show'])->name('users.show');
             Route::post('/users/{user}/role', [\App\Http\Controllers\UserManagementController::class, 'updateRole'])->name('users.update-role');
             Route::resource('contact-messages', \App\Http\Controllers\ContactMessageController::class)->only(['index', 'show', 'destroy']);
+            Route::resource('bible-headings', \App\Http\Controllers\Admin\BibleHeadingController::class)->except(['show']);
         });
     });
 

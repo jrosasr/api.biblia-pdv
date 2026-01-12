@@ -90,6 +90,13 @@ function toggleTheme() {
                                 >
                                     Mensajes
                                 </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')  || $page.props.auth.user.roles.includes('writer')"
+                                    :href="route('bible-headings.index')"
+                                    :active="route().current('bible-headings.*')"
+                                >
+                                    Títulos
+                                </NavLink>
                             </div>
                         </div>
 

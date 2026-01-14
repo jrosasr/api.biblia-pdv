@@ -80,12 +80,12 @@ Para evitar que el servidor SEO se detenga, se recomienda configurar **Superviso
 ```ini
 [program:inertia-ssr]
 process_name=%(program_name)s_%(process_num)02d
-command=node /var/www/tu-proyecto/bootstrap/ssr/ssr.js
+command=node /home/admin/github/elyon/api.biblia-pdv/bootstrap/ssr/ssr.js
 autostart=true
 autorestart=true
 user=www-data
 redirect_stderr=true
-stdout_logfile=/var/www/tu-proyecto/storage/logs/ssr.log
+stdout_logfile=/home/admin/github/elyon/api.biblia-pdv/storage/logs/ssr.log
 ```
 
 _Si usas Supervisor, tus despliegues se actualizan con:_

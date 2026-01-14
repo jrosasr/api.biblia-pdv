@@ -31,7 +31,7 @@ function toggleTheme() {
 import { router } from '@inertiajs/vue3';
 
 function selectDevotional(devotional) {
-    router.get(route('devotionals.public'), { id: devotional.id }, {
+    router.get(route('devotionals.public'), { slug: devotional.slug }, {
         preserveScroll: false,
         preserveState: true,
         only: ['devotionals']

@@ -67,7 +67,7 @@ class SitemapController extends Controller
 
         $urls = $devotionals->map(function ($devotional) {
             return [
-                'loc' => route('devotionals.public') . '?id=' . $devotional->id, // Assuming this is how individual ones are accessed or just the main page
+                'loc' => route('devotionals.public') . '?slug=' . $devotional->slug,
                 'lastmod' => $devotional->updated_at->format('Y-m-d'),
                 'priority' => '0.8',
                 'changefreq' => 'weekly'

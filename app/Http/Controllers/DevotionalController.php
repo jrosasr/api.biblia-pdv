@@ -169,14 +169,14 @@ class DevotionalController extends Controller
 
     public function publicShow(Request $request)
     {
-        $id = $request->input('id');
+        $slug = $request->input('slug');
         $devotionals = $this->devotionalService->getLatestDevotionals(10);
         
-        if ($id) {
-            $specificDevotional = Devotional::find($id);
+        if ($slug) {
+            $specificDevotional = Devotional::where('slug', $slug)->first();
             if ($specificDevotional && $specificDevotional->published_at <= now()) {
                 // Colocar el devocional específico al inicio
-                $devotionals = collect([$specificDevotional])->concat($devotionals->where('id', '!=', $id))->take(4);
+                $devotionals = collect([$specificDevotional])->concat($devotionals->where('slug', '!=', $slug))->take(4);
             }
         } else {
             $devotionals = $devotionals->take(4);

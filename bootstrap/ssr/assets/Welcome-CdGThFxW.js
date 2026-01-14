@@ -281,7 +281,7 @@ const _sfc_main$1 = {
       ssrRenderList(__props.booksList, (book) => {
         _push(ssrRenderComponent(unref(Link), {
           key: book.id,
-          href: _ctx.route("bible.show", { book: book.name }),
+          href: _ctx.route("bible.show", { book: book.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-") }),
           class: "text-xs text-[#8B6F47] dark:text-[#9B8D82] hover:text-[#3A3026] dark:hover:text-[#F5F0E6] transition-colors text-center p-2 rounded-lg hover:bg-white dark:hover:bg-white/5 shadow-sm border border-transparent hover:border-[#E0D5C9] dark:hover:border-[#2E2A25]"
         }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
@@ -379,7 +379,8 @@ const _sfc_main = {
         const book = booksList.value.find((b) => b.id === params.book);
         if (book) bookName = book.name;
       }
-      router.get(route("bible.show", { book: bookName, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
+      const bookSlug = bookName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+      router.get(route("bible.show", { book: bookSlug, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
         preserveScroll: true,
         preserveState: true,
         only: ["books", "initialChapters", "initialVerses", "initialVersion", "initialBook", "initialChapter", "seo"],
@@ -457,7 +458,8 @@ const _sfc_main = {
       const sortedVerses = [...selectedVerses.value].sort((a, b) => a.verse - b.verse);
       const versesText = sortedVerses.map((v) => `${v.verse}. ${v.text}`).join("\n");
       const reference = `${selectedBook.value.name} ${selectedChapter.value}:${sortedVerses.map((v) => v.verse).join(", ")}`;
-      const url = `https://biblia-palabradevida.com/es/leer/${selectedBook.value.name}/${selectedChapter.value}`;
+      const bookSlug = selectedBook.value.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, "-");
+      const url = `https://biblia-palabradevida.com/es/leer/${bookSlug}/${selectedChapter.value}`;
       const finalContent = `${reference}
 ${versesText}
 

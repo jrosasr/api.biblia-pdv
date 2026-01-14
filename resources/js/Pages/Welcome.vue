@@ -99,7 +99,9 @@ const visit = (params) => {
         if (book) bookName = book.name;
     }
 
-    router.get(route('bible.show', { book: bookName, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
+    const bookSlug = bookName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+
+    router.get(route('bible.show', { book: bookSlug, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
         preserveScroll: true,
         preserveState: true,
         only: ['books', 'initialChapters', 'initialVerses', 'initialVersion', 'initialBook', 'initialChapter', 'seo'],
@@ -187,7 +189,8 @@ function copyVerses() {
     const sortedVerses = [...selectedVerses.value].sort((a, b) => a.verse - b.verse);
     const versesText = sortedVerses.map(v => `${v.verse}. ${v.text}`).join('\n');
     const reference = `${selectedBook.value.name} ${selectedChapter.value}:${sortedVerses.map(v => v.verse).join(', ')}`;
-    const url = `https://biblia-palabradevida.com/es/leer/${selectedBook.value.name}/${selectedChapter.value}`;
+    const bookSlug = selectedBook.value.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+    const url = `https://biblia-palabradevida.com/es/leer/${bookSlug}/${selectedChapter.value}`;
     const finalContent = `${reference}\n${versesText}\n\nCompartido desde ${url}`;
 
     navigator.clipboard.writeText(finalContent).then(() => {

@@ -13,7 +13,7 @@ defineProps({
             <Link 
                 v-for="book in booksList" 
                 :key="book.id" 
-                :href="route('bible.show', { book: book.name })"
+                :href="route('bible.show', { book: book.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '-') })"
                 class="text-xs text-[#8B6F47] dark:text-[#9B8D82] hover:text-[#3A3026] dark:hover:text-[#F5F0E6] transition-colors text-center p-2 rounded-lg hover:bg-white dark:hover:bg-white/5 shadow-sm border border-transparent hover:border-[#E0D5C9] dark:hover:border-[#2E2A25]"
             >
                 {{ book.name }}

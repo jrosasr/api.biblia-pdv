@@ -44,9 +44,10 @@ class SitemapController extends Controller
 
         foreach ($books as $book) {
             $chapters = $this->bibleService->getChapters($version, $book->id);
+            $bookSlug = \Illuminate\Support\Str::slug($book->name);
             foreach ($chapters as $chapter) {
                 $urls[] = [
-                    'loc' => route('bible.show', ['book' => $book->name, 'chapter' => $chapter]),
+                    'loc' => route('bible.show', ['book' => $bookSlug, 'chapter' => $chapter]),
                     'lastmod' => '2026-01-12',
                     'priority' => '0.8',
                     'changefreq' => 'monthly'

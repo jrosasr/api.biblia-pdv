@@ -8,18 +8,18 @@
     "/build/assets/AboutModal-DZdY2iax.css"
   ],
   "resources/js/Components/AppDownloadModal.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/ApplicationLogo.vue": [
     "/build/assets/AuthenticatedLayout-CdgzzzdO.js"
   ],
   "resources/js/Components/BibleBreadcrumbs.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleChapterHeader.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleFooter.vue": [
@@ -34,19 +34,19 @@
     "/build/assets/AboutModal-DZdY2iax.css"
   ],
   "resources/js/Components/BibleSEOLinks.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleSelectionBar.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleVerseList.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BookSelectionModal.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/Checkbox.vue": [
@@ -70,7 +70,7 @@
     "/build/assets/Editor-BK5Ds8EJ.css"
   ],
   "resources/js/Components/FavoriteNoteModal.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/InputError.vue": [
@@ -101,7 +101,7 @@
     "/build/assets/TextInput-CKMUgw9s.js"
   ],
   "resources/js/Components/VersionSelectionModal.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Layouts/AuthenticatedLayout.vue": [
@@ -189,12 +189,12 @@
     "/build/assets/Index-lxI8y37N.js"
   ],
   "resources/js/Pages/Devotionals/PublicShow.vue": [
-    "/build/assets/PublicShow-D4fAcxh7.js",
-    "/build/assets/PublicShow-D4DyMQsb.css"
+    "/build/assets/PublicShow-DthJgJza.js",
+    "/build/assets/PublicShow-2sBCdgh7.css"
   ],
-  "resources/js/Pages/Devotionals/PublicShow.vue?vue&type=style&index=0&scoped=705757d1&lang.css": [
-    "/build/assets/PublicShow-D4fAcxh7.js",
-    "/build/assets/PublicShow-D4DyMQsb.css"
+  "resources/js/Pages/Devotionals/PublicShow.vue?vue&type=style&index=0&scoped=6cb9927a&lang.css": [
+    "/build/assets/PublicShow-DthJgJza.js",
+    "/build/assets/PublicShow-2sBCdgh7.css"
   ],
   "resources/js/Pages/Legal/Privacy.vue": [
     "/build/assets/Privacy-kRx8Os5C.js"
@@ -246,11 +246,11 @@
     "/build/assets/Show-SSMp05_r.js"
   ],
   "resources/js/Pages/Welcome.vue": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/Welcome-CGzyzfPP.js",
+    "/build/assets/Welcome-CdGThFxW.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/ssr.js": [],

@@ -28,9 +28,14 @@ function toggleTheme() {
     }
 }
 
+import { router } from '@inertiajs/vue3';
+
 function selectDevotional(devotional) {
-    devotionalsList.value = [devotional, ...devotionalsList.value.filter(d => d.id !== devotional.id)];
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    router.get(route('devotionals.public'), { id: devotional.id }, {
+        preserveScroll: false,
+        preserveState: true,
+        only: ['devotionals']
+    });
 }
 
 onMounted(() => {

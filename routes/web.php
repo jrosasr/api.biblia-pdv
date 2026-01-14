@@ -18,6 +18,12 @@ Route::permanentRedirect('/devocional-diario', '/es/devocional-diario');
 Route::permanentRedirect('/login', '/es/login');
 Route::permanentRedirect('/register', '/es/register');
 
+// Sitemaps
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
+Route::get('/sitemap-static.xml', [\App\Http\Controllers\SitemapController::class, 'static']);
+Route::get('/sitemap-bible.xml', [\App\Http\Controllers\SitemapController::class, 'bible']);
+Route::get('/sitemap-devotionals.xml', [\App\Http\Controllers\SitemapController::class, 'devotionals']);
+
 
 Route::prefix('es')->group(function () {
     Route::get('/', [\App\Http\Controllers\BibleReaderController::class, 'index'])->name('home');

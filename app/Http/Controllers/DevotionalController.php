@@ -167,9 +167,21 @@ class DevotionalController extends Controller
         return new DevotionalResource($devotional);
     }
 
-    public function publicShow()
+    public function publicShow(Request $request)
     {
-        $devotionals = $this->devotionalService->getLatestDevotionals(4);
+        $id = $request->input('id');
+        $devotionals = $this->devotionalService->getLatestDevotionals(10);
+        
+        if ($id) {
+            $specificDevotional = Devotional::find($id);
+            if ($specificDevotional && $specificDevotional->published_at <= now()) {
+                // Colocar el devocional específico al inicio
+                $devotionals = collect([$specificDevotional])->concat($devotionals->where('id', '!=', $id))->take(4);
+            }
+        } else {
+            $devotionals = $devotionals->take(4);
+        }
+
         return Inertia::render('Devotionals/PublicShow', [
             'devotionals' => DevotionalResource::collection($devotionals)->resolve()
         ]);

@@ -97,6 +97,19 @@ function toggleTheme() {
                                 >
                                     Títulos
                                 </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
+                                    href="/pulse"
+                                >
+                                    Pulse
+                                </NavLink>
+                                <NavLink
+                                    v-if="$page.props.auth.user.roles.includes('admin')"
+                                    :href="route('statistics.dashboard')"
+                                    :active="route().current('statistics.*')"
+                                >
+                                    Estadísticas
+                                </NavLink>
                             </div>
                         </div>
 
@@ -262,6 +275,19 @@ function toggleTheme() {
                             :active="route().current('contact-messages.*')"
                         >
                             Mensajes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
+                            href="/pulse"
+                        >
+                            Pulse
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            v-if="$page.props.auth.user.roles.includes('admin')"
+                            :href="route('statistics.dashboard')"
+                            :active="route().current('statistics.*')"
+                        >
+                            Estadísticas
                         </ResponsiveNavLink>
                     </div>
 

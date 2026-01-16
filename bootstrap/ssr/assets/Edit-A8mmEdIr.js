@@ -1,6 +1,6 @@
 import { unref, withCtx, createTextVNode, createVNode, withModifiers, withDirectives, vModelSelect, Transition, createBlock, createCommentVNode, openBlock, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrIncludeBooleanAttr, ssrLooseContain, ssrLooseEqual } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-CdgzzzdO.js";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-FYN_q5vT.js";
 import { useForm, Head, Link } from "@inertiajs/vue3";
 import { P as PrimaryButton } from "./PrimaryButton-DBdTauee.js";
 import { _ as _sfc_main$2, a as _sfc_main$3 } from "./TextInput-CKMUgw9s.js";

@@ -3,9 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Devotional;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\DevotionalSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,12 +18,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.com',
+        $this->call([
+            RolesAndPermissionsSeeder::class,
+            DevotionalSeeder::class
         ]);
 
-        Devotional::factory()->count(10)->create();
+        $user = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $user->assignRole('admin');
     }
 }

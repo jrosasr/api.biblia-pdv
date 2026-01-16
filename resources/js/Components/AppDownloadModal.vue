@@ -3,7 +3,7 @@ defineProps({
     isOpen: Boolean
 });
 
-defineEmits(['close', 'openPlayStore']);
+defineEmits(['close', 'openPlayStore', 'alreadyHaveApp']);
 </script>
 
 <template>
@@ -77,6 +77,14 @@ defineEmits(['close', 'openPlayStore']);
                             alt="Disponible en Google Play" 
                             class="w-3/4 h-12 max-w-[150px] mx-auto transform group-hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"
                         >
+                    </button>
+
+                    <!-- Already Have App Button -->
+                    <button 
+                        @click="$emit('alreadyHaveApp')"
+                        class="mt-4 w-full py-2 px-4 rounded-xl bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 text-[#8B6F47] dark:text-[#E3C598] font-semibold hover:bg-[#8B6F47]/20 dark:hover:bg-[#E3C598]/20 transition-all"
+                    >
+                        Ya tengo la app
                     </button>
 
                     <!-- Skip text -->

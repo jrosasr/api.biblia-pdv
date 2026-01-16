@@ -1,6 +1,6 @@
 import { unref, withCtx, createTextVNode, createVNode, withModifiers, withDirectives, vModelSelect, createBlock, createCommentVNode, openBlock, toDisplayString, useSSRContext } from "vue";
-import { ssrRenderComponent, ssrIncludeBooleanAttr, ssrLooseContain, ssrLooseEqual, ssrInterpolate, ssrRenderAttr, ssrRenderStyle } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-CdgzzzdO.js";
+import { ssrRenderComponent, ssrIncludeBooleanAttr, ssrLooseContain, ssrLooseEqual, ssrRenderAttr, ssrInterpolate, ssrRenderStyle } from "vue/server-renderer";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-FYN_q5vT.js";
 import { useForm, Head, Link } from "@inertiajs/vue3";
 import { P as PrimaryButton } from "./PrimaryButton-DBdTauee.js";
 import { _ as _sfc_main$2, a as _sfc_main$3 } from "./TextInput-CKMUgw9s.js";
@@ -8,36 +8,39 @@ import { _ as _sfc_main$4 } from "./InputError-CAen27BF.js";
 import { _ as _sfc_main$5 } from "./TextArea-DkIJefRA.js";
 import "./_plugin-vue_export-helper-1tPrXgE0.js";
 const _sfc_main = {
-  __name: "Create",
+  __name: "Edit",
   __ssrInlineRender: true,
+  props: {
+    series: Object
+  },
   setup(__props) {
+    const props = __props;
     const form = useForm({
-      title: "",
-      description: "",
-      difficulty_level: 1,
-      cover_image: null
+      title: props.series.title,
+      description: props.series.description || "",
+      difficulty_level: props.series.difficulty_level || 1,
+      cover_image: null,
+      _method: "patch"
     });
     const submit = () => {
-      form.post(route("bible-series.store"), {
-        onFinish: () => form.reset()
-      });
+      form.post(route("bible-series.update", props.series.id));
     };
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<!--[-->`);
-      _push(ssrRenderComponent(unref(Head), { title: "Nueva Serie Bíblica" }, null, _parent));
+      _push(ssrRenderComponent(unref(Head), { title: "Editar Serie Bíblica" }, null, _parent));
       _push(ssrRenderComponent(_sfc_main$1, null, {
         header: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<h2 class="font-bold text-xl text-primary leading-tight"${_scopeId}> Crear Nueva Serie </h2>`);
+            _push2(`<h2 class="font-bold text-xl text-primary leading-tight"${_scopeId}> Editar Serie: ${ssrInterpolate(__props.series.title)}</h2>`);
           } else {
             return [
-              createVNode("h2", { class: "font-bold text-xl text-primary leading-tight" }, " Crear Nueva Serie ")
+              createVNode("h2", { class: "font-bold text-xl text-primary leading-tight" }, " Editar Serie: " + toDisplayString(__props.series.title), 1)
             ];
           }
         }),
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="py-12"${_scopeId}><div class="max-w-3xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-surface overflow-hidden shadow-xl sm:rounded-2xl border border-border"${_scopeId}><div class="p-8"${_scopeId}><header class="mb-8 border-b border-border pb-4 font-bold"${_scopeId}><h3 class="text-lg text-text"${_scopeId}>Información de la Serie</h3><p class="text-sm text-text-tertiary mt-1 font-normal"${_scopeId}> Complete los detalles para crear una nueva colección de historias. </p></header><form class="space-y-6"${_scopeId}><div${_scopeId}>`);
+            _push2(`<div class="py-12"${_scopeId}><div class="max-w-3xl mx-auto sm:px-6 lg:px-8"${_scopeId}><div class="bg-surface overflow-hidden shadow-xl sm:rounded-2xl border border-border"${_scopeId}><div class="p-8"${_scopeId}><header class="mb-8 border-b border-border pb-4 font-bold"${_scopeId}><h3 class="text-lg text-text"${_scopeId}>Información de la Serie</h3></header><form class="space-y-6"${_scopeId}><div${_scopeId}>`);
             _push2(ssrRenderComponent(_sfc_main$2, {
               for: "title",
               value: "Título de la Serie"
@@ -49,8 +52,7 @@ const _sfc_main = {
               modelValue: unref(form).title,
               "onUpdate:modelValue": ($event) => unref(form).title = $event,
               required: "",
-              autofocus: "",
-              placeholder: "Ej: Héroes de la Fe"
+              autofocus: ""
             }, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$4, {
               class: "mt-2",
@@ -66,8 +68,7 @@ const _sfc_main = {
               class: "mt-1 block w-full",
               modelValue: unref(form).description,
               "onUpdate:modelValue": ($event) => unref(form).description = $event,
-              rows: "5",
-              placeholder: "De qué trata esta serie de historias..."
+              rows: "5"
             }, null, _parent2, _scopeId));
             _push2(ssrRenderComponent(_sfc_main$4, {
               class: "mt-2",
@@ -88,13 +89,25 @@ const _sfc_main = {
               for: "cover_image",
               value: "Imagen de Portada"
             }, null, _parent2, _scopeId));
-            _push2(`<div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-xl hover:bg-surface-alt transition-colors cursor-pointer relative group"${_scopeId}><div class="space-y-1 text-center"${_scopeId}><svg class="mx-auto h-12 w-12 text-text-tertiary" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"${_scopeId}><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"${_scopeId}></path></svg><div class="flex text-sm text-text-secondary"${_scopeId}><label for="cover_image" class="relative cursor-pointer bg-background rounded-md font-bold text-primary hover:opacity-80 focus-within:outline-none focus:ring-2 focus:ring-primary px-2"${_scopeId}><span${_scopeId}>Subir un archivo</span><input id="cover_image" name="cover_image" type="file" class="sr-only" accept="image/*"${_scopeId}></label><p class="pl-1"${_scopeId}>o arrastrar y soltar</p></div><p class="text-xs text-text-tertiary"${_scopeId}> PNG, JPG, GIF hasta 10MB </p>`);
-            if (unref(form).cover_image) {
-              _push2(`<p class="text-sm text-primary font-bold mt-2"${_scopeId}> Archivo seleccionado: ${ssrInterpolate(unref(form).cover_image.name)}</p>`);
+            _push2(`<div class="mt-2 flex gap-4 items-start"${_scopeId}>`);
+            if (__props.series.cover_image && !unref(form).cover_image) {
+              _push2(`<div class="w-32 h-32 rounded-xl overflow-hidden border border-border flex-shrink-0 shadow-sm"${_scopeId}><img${ssrRenderAttr("src", __props.series.cover_image)} class="w-full h-full object-cover" alt="Actual cover"${_scopeId}></div>`);
             } else {
               _push2(`<!---->`);
             }
-            _push2(`</div></div>`);
+            _push2(`<div class="flex-grow flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-xl hover:bg-surface-alt transition-colors cursor-pointer relative group"${_scopeId}><div class="space-y-1 text-center"${_scopeId}>`);
+            if (!unref(form).cover_image) {
+              _push2(`<svg class="mx-auto h-12 w-12 text-text-tertiary" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"${_scopeId}><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"${_scopeId}></path></svg>`);
+            } else {
+              _push2(`<!---->`);
+            }
+            _push2(`<div class="flex text-sm text-text-secondary"${_scopeId}><label for="cover_image" class="relative cursor-pointer bg-background rounded-md font-bold text-primary hover:opacity-80 focus-within:outline-none focus:ring-2 focus:ring-primary px-2"${_scopeId}><span${_scopeId}>${ssrInterpolate(unref(form).cover_image ? "Cambiar archivo" : "Subir nueva imagen")}</span><input id="cover_image" name="cover_image" type="file" class="sr-only" accept="image/*"${_scopeId}></label></div>`);
+            if (unref(form).cover_image) {
+              _push2(`<p class="text-sm text-primary font-bold mt-2"${_scopeId}> Seleccionado: ${ssrInterpolate(unref(form).cover_image.name)}</p>`);
+            } else {
+              _push2(`<!---->`);
+            }
+            _push2(`</div></div></div>`);
             _push2(ssrRenderComponent(_sfc_main$4, {
               class: "mt-2",
               message: unref(form).errors.cover_image
@@ -126,10 +139,10 @@ const _sfc_main = {
             }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(` Guardar Serie `);
+                  _push3(` Actualizar Serie `);
                 } else {
                   return [
-                    createTextVNode(" Guardar Serie ")
+                    createTextVNode(" Actualizar Serie ")
                   ];
                 }
               }),
@@ -143,8 +156,7 @@ const _sfc_main = {
                   createVNode("div", { class: "bg-surface overflow-hidden shadow-xl sm:rounded-2xl border border-border" }, [
                     createVNode("div", { class: "p-8" }, [
                       createVNode("header", { class: "mb-8 border-b border-border pb-4 font-bold" }, [
-                        createVNode("h3", { class: "text-lg text-text" }, "Información de la Serie"),
-                        createVNode("p", { class: "text-sm text-text-tertiary mt-1 font-normal" }, " Complete los detalles para crear una nueva colección de historias. ")
+                        createVNode("h3", { class: "text-lg text-text" }, "Información de la Serie")
                       ]),
                       createVNode("form", {
                         onSubmit: withModifiers(submit, ["prevent"]),
@@ -162,8 +174,7 @@ const _sfc_main = {
                             modelValue: unref(form).title,
                             "onUpdate:modelValue": ($event) => unref(form).title = $event,
                             required: "",
-                            autofocus: "",
-                            placeholder: "Ej: Héroes de la Fe"
+                            autofocus: ""
                           }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                           createVNode(_sfc_main$4, {
                             class: "mt-2",
@@ -180,8 +191,7 @@ const _sfc_main = {
                             class: "mt-1 block w-full",
                             modelValue: unref(form).description,
                             "onUpdate:modelValue": ($event) => unref(form).description = $event,
-                            rows: "5",
-                            placeholder: "De qué trata esta serie de historias..."
+                            rows: "5"
                           }, null, 8, ["modelValue", "onUpdate:modelValue"]),
                           createVNode(_sfc_main$4, {
                             class: "mt-2",
@@ -215,44 +225,55 @@ const _sfc_main = {
                             for: "cover_image",
                             value: "Imagen de Portada"
                           }),
-                          createVNode("div", { class: "mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-xl hover:bg-surface-alt transition-colors cursor-pointer relative group" }, [
-                            createVNode("div", { class: "space-y-1 text-center" }, [
-                              (openBlock(), createBlock("svg", {
-                                class: "mx-auto h-12 w-12 text-text-tertiary",
-                                stroke: "currentColor",
-                                fill: "none",
-                                viewBox: "0 0 48 48",
-                                "aria-hidden": "true"
-                              }, [
-                                createVNode("path", {
-                                  d: "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
-                                  "stroke-width": "2",
-                                  "stroke-linecap": "round",
-                                  "stroke-linejoin": "round"
-                                })
-                              ])),
-                              createVNode("div", { class: "flex text-sm text-text-secondary" }, [
-                                createVNode("label", {
-                                  for: "cover_image",
-                                  class: "relative cursor-pointer bg-background rounded-md font-bold text-primary hover:opacity-80 focus-within:outline-none focus:ring-2 focus:ring-primary px-2"
+                          createVNode("div", { class: "mt-2 flex gap-4 items-start" }, [
+                            __props.series.cover_image && !unref(form).cover_image ? (openBlock(), createBlock("div", {
+                              key: 0,
+                              class: "w-32 h-32 rounded-xl overflow-hidden border border-border flex-shrink-0 shadow-sm"
+                            }, [
+                              createVNode("img", {
+                                src: __props.series.cover_image,
+                                class: "w-full h-full object-cover",
+                                alt: "Actual cover"
+                              }, null, 8, ["src"])
+                            ])) : createCommentVNode("", true),
+                            createVNode("div", { class: "flex-grow flex justify-center px-6 pt-5 pb-6 border-2 border-border border-dashed rounded-xl hover:bg-surface-alt transition-colors cursor-pointer relative group" }, [
+                              createVNode("div", { class: "space-y-1 text-center" }, [
+                                !unref(form).cover_image ? (openBlock(), createBlock("svg", {
+                                  key: 0,
+                                  class: "mx-auto h-12 w-12 text-text-tertiary",
+                                  stroke: "currentColor",
+                                  fill: "none",
+                                  viewBox: "0 0 48 48",
+                                  "aria-hidden": "true"
                                 }, [
-                                  createVNode("span", null, "Subir un archivo"),
-                                  createVNode("input", {
-                                    id: "cover_image",
-                                    name: "cover_image",
-                                    type: "file",
-                                    class: "sr-only",
-                                    onInput: ($event) => unref(form).cover_image = $event.target.files[0],
-                                    accept: "image/*"
-                                  }, null, 40, ["onInput"])
+                                  createVNode("path", {
+                                    d: "M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02",
+                                    "stroke-width": "2",
+                                    "stroke-linecap": "round",
+                                    "stroke-linejoin": "round"
+                                  })
+                                ])) : createCommentVNode("", true),
+                                createVNode("div", { class: "flex text-sm text-text-secondary" }, [
+                                  createVNode("label", {
+                                    for: "cover_image",
+                                    class: "relative cursor-pointer bg-background rounded-md font-bold text-primary hover:opacity-80 focus-within:outline-none focus:ring-2 focus:ring-primary px-2"
+                                  }, [
+                                    createVNode("span", null, toDisplayString(unref(form).cover_image ? "Cambiar archivo" : "Subir nueva imagen"), 1),
+                                    createVNode("input", {
+                                      id: "cover_image",
+                                      name: "cover_image",
+                                      type: "file",
+                                      class: "sr-only",
+                                      onInput: ($event) => unref(form).cover_image = $event.target.files[0],
+                                      accept: "image/*"
+                                    }, null, 40, ["onInput"])
+                                  ])
                                 ]),
-                                createVNode("p", { class: "pl-1" }, "o arrastrar y soltar")
-                              ]),
-                              createVNode("p", { class: "text-xs text-text-tertiary" }, " PNG, JPG, GIF hasta 10MB "),
-                              unref(form).cover_image ? (openBlock(), createBlock("p", {
-                                key: 0,
-                                class: "text-sm text-primary font-bold mt-2"
-                              }, " Archivo seleccionado: " + toDisplayString(unref(form).cover_image.name), 1)) : createCommentVNode("", true)
+                                unref(form).cover_image ? (openBlock(), createBlock("p", {
+                                  key: 1,
+                                  class: "text-sm text-primary font-bold mt-2"
+                                }, " Seleccionado: " + toDisplayString(unref(form).cover_image.name), 1)) : createCommentVNode("", true)
+                              ])
                             ])
                           ]),
                           createVNode(_sfc_main$4, {
@@ -286,7 +307,7 @@ const _sfc_main = {
                             class: "shadow-lg"
                           }, {
                             default: withCtx(() => [
-                              createTextVNode(" Guardar Serie ")
+                              createTextVNode(" Actualizar Serie ")
                             ]),
                             _: 1
                           }, 8, ["disabled"])
@@ -308,7 +329,7 @@ const _sfc_main = {
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/BibleSeries/Create.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/BibleSeries/Edit.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
 export {

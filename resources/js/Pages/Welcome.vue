@@ -199,12 +199,31 @@ function copyVerses() {
     });
 }
 
+function trackEvent(type, event, name, description = null) {
+    axios.post('/es/api/statistics/track', {
+        type,
+        event,
+        name,
+        description
+    }).catch(e => console.error('Tracking error', e));
+}
+
 function closeAppDownloadModal() {
     isAppDownloadModalOpen.value = false;
-    localStorage.setItem('hasSeenAppDownloadModal', 'true');
+    // Guardar timestamp actual para mostrar el modal nuevamente en 5 horas
+    const nextShowTime = Date.now() + (5 * 60 * 60 * 1000); // 5 horas en milisegundos
+    localStorage.setItem('appDownloadModalNextShow', nextShowTime.toString());
+}
+
+function handleAlreadyHaveApp() {
+    isAppDownloadModalOpen.value = false;
+    // Marcar permanentemente que el usuario ya tiene la app
+    localStorage.setItem('userHasApp', 'true');
+    trackEvent('click', 'app_download_modal_already_have_app', 'Ya tengo la app', 'El usuario indicó que ya tiene la app');
 }
 
 function openPlayStore() {
+    trackEvent('click', 'app_download_modal_click_download', 'Descarga App', 'Click en botón de descarga Google Play');
     window.open('https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida', '_blank');
     closeAppDownloadModal();
 }
@@ -222,8 +241,23 @@ onMounted(() => {
         }, 800);
     }
 
-    if (!localStorage.getItem('hasSeenAppDownloadModal')) {
-        setTimeout(() => isAppDownloadModalOpen.value = true, 3000);
+    // Verificar si el usuario ya tiene la app
+    const userHasApp = localStorage.getItem('userHasApp');
+    if (userHasApp === 'true') {
+        // No mostrar el modal si el usuario ya tiene la app
+        return;
+    }
+
+    // Verificar si es momento de mostrar el modal
+    const nextShowTime = localStorage.getItem('appDownloadModalNextShow');
+    const currentTime = Date.now();
+
+    if (!nextShowTime || currentTime >= parseInt(nextShowTime)) {
+        // Mostrar el modal después de 3 segundos
+        setTimeout(() => {
+            isAppDownloadModalOpen.value = true;
+            trackEvent('impression', 'app_download_modal_impression', 'Impresión Modal App', 'Se mostró el modal de descarga');
+        }, 3000);
     }
 });
 </script>
@@ -344,6 +378,7 @@ onMounted(() => {
             :isOpen="isAppDownloadModalOpen"
             @close="closeAppDownloadModal"
             @openPlayStore="openPlayStore"
+            @alreadyHaveApp="handleAlreadyHaveApp"
         />
 
         <AboutModal 

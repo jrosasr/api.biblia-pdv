@@ -370,6 +370,41 @@ const _sfc_main = {
       } else {
         _push(`<!---->`);
       }
+      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(ssrRenderComponent(_sfc_main$2, { href: "/pulse" }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Pulse `);
+            } else {
+              return [
+                createTextVNode(" Pulse ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      } else {
+        _push(`<!---->`);
+      }
+      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(ssrRenderComponent(_sfc_main$2, {
+          href: _ctx.route("statistics.dashboard"),
+          active: _ctx.route().current("statistics.*")
+        }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Estadísticas `);
+            } else {
+              return [
+                createTextVNode(" Estadísticas ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      } else {
+        _push(`<!---->`);
+      }
       _push(`</div></div><div class="hidden sm:ms-6 sm:flex sm:items-center gap-4"><button class="p-2 rounded-full hover:bg-surface-alt transition-colors text-text-secondary">`);
       if (!isDark.value) {
         _push(`<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>`);
@@ -616,6 +651,41 @@ const _sfc_main = {
             } else {
               return [
                 createTextVNode(" Mensajes ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      } else {
+        _push(`<!---->`);
+      }
+      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(ssrRenderComponent(_sfc_main$1, { href: "/pulse" }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Pulse `);
+            } else {
+              return [
+                createTextVNode(" Pulse ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+      } else {
+        _push(`<!---->`);
+      }
+      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(ssrRenderComponent(_sfc_main$1, {
+          href: _ctx.route("statistics.dashboard"),
+          active: _ctx.route().current("statistics.*")
+        }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Estadísticas `);
+            } else {
+              return [
+                createTextVNode(" Estadísticas ")
               ];
             }
           }),

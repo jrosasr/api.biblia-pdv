@@ -252,11 +252,11 @@ const _sfc_main$2 = {
   props: {
     isOpen: Boolean
   },
-  emits: ["close", "openPlayStore"],
+  emits: ["close", "openPlayStore", "alreadyHaveApp"],
   setup(__props) {
     return (_ctx, _push, _parent, _attrs) => {
       if (__props.isOpen) {
-        _push(`<div${ssrRenderAttrs(mergeProps({ class: "fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4" }, _attrs))}><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="relative w-full max-w-md bg-gradient-to-br from-[#FFF8F0] to-[#F5EBE0] dark:from-[#1C1C1C] dark:to-[#111111] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden border-2 border-[#8B6F47] dark:border-[#E3C598]"><button class="absolute top-4 right-4 p-2 rounded-full bg-white/80 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 transition-all z-10"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="p-8 text-center"><div class="mb-6 flex justify-center"><div class="w-24 h-24 bg-gradient-to-br from-[#8B6F47] to-[#6B5D52] dark:from-[#E3C598] dark:to-[#CFC6B8] rounded-3xl shadow-2xl flex items-center justify-center transform rotate-6 hover:rotate-0 transition-transform duration-300"><img src="/icon.webp" alt="Logo" class="w-24 h-24"></div></div><h3 class="text-2xl font-black text-[#3A3026] dark:text-[#F5F0E6] mb-3"> ¡Lleva la Palabra de Vida contigo! </h3><p class="text-[#6B5D52] dark:text-[#CFC6B8] mb-6 leading-relaxed"> Descarga nuestra app y accede a la Biblia, devocionales diarios y mucho más desde tu dispositivo móvil. </p><div class="mb-8 space-y-3 text-left"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Lectura sin conexión</span></div><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Devocionales diarios</span></div><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Múltiples versiones de la Biblia</span></div></div><button class="w-full group relative overflow-hidden"><img src="/disponible-en-google-play-badge.webp" alt="Disponible en Google Play" class="w-3/4 h-12 max-w-[150px] mx-auto transform group-hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"></button><button class="mt-4 text-sm text-[#9B8D82] hover:text-[#8B6F47] dark:hover:text-[#E3C598] transition-colors underline"> Continuar en la web </button></div></div></div>`);
+        _push(`<div${ssrRenderAttrs(mergeProps({ class: "fixed inset-0 z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4" }, _attrs))}><div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div><div class="relative w-full max-w-md bg-gradient-to-br from-[#FFF8F0] to-[#F5EBE0] dark:from-[#1C1C1C] dark:to-[#111111] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden border-2 border-[#8B6F47] dark:border-[#E3C598]"><button class="absolute top-4 right-4 p-2 rounded-full bg-white/80 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 transition-all z-10"><svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button><div class="p-8 text-center"><div class="mb-6 flex justify-center"><div class="w-24 h-24 bg-gradient-to-br from-[#8B6F47] to-[#6B5D52] dark:from-[#E3C598] dark:to-[#CFC6B8] rounded-3xl shadow-2xl flex items-center justify-center transform rotate-6 hover:rotate-0 transition-transform duration-300"><img src="/icon.webp" alt="Logo" class="w-24 h-24"></div></div><h3 class="text-2xl font-black text-[#3A3026] dark:text-[#F5F0E6] mb-3"> ¡Lleva la Palabra de Vida contigo! </h3><p class="text-[#6B5D52] dark:text-[#CFC6B8] mb-6 leading-relaxed"> Descarga nuestra app y accede a la Biblia, devocionales diarios y mucho más desde tu dispositivo móvil. </p><div class="mb-8 space-y-3 text-left"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Lectura sin conexión</span></div><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Devocionales diarios</span></div><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 flex items-center justify-center flex-shrink-0"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#8B6F47] dark:text-[#E3C598]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div><span class="text-sm font-medium text-[#3A3026] dark:text-[#F5F0E6]">Múltiples versiones de la Biblia</span></div></div><button class="w-full group relative overflow-hidden"><img src="/disponible-en-google-play-badge.webp" alt="Disponible en Google Play" class="w-3/4 h-12 max-w-[150px] mx-auto transform group-hover:scale-105 transition-transform duration-300 hover:drop-shadow-2xl"></button><button class="mt-4 w-full py-2 px-4 rounded-xl bg-[#8B6F47]/10 dark:bg-[#E3C598]/10 text-[#8B6F47] dark:text-[#E3C598] font-semibold hover:bg-[#8B6F47]/20 dark:hover:bg-[#E3C598]/20 transition-all"> Ya tengo la app </button><button class="mt-4 text-sm text-[#9B8D82] hover:text-[#8B6F47] dark:hover:text-[#E3C598] transition-colors underline"> Continuar en la web </button></div></div></div>`);
       } else {
         _push(`<!---->`);
       }
@@ -469,11 +469,26 @@ Compartido desde ${url}`;
         setTimeout(() => isCopied.value = false, 2e3);
       });
     }
+    function trackEvent(type, event, name, description = null) {
+      axios.post("/es/api/statistics/track", {
+        type,
+        event,
+        name,
+        description
+      }).catch((e) => console.error("Tracking error", e));
+    }
     function closeAppDownloadModal() {
       isAppDownloadModalOpen.value = false;
-      localStorage.setItem("hasSeenAppDownloadModal", "true");
+      const nextShowTime = Date.now() + 5 * 60 * 60 * 1e3;
+      localStorage.setItem("appDownloadModalNextShow", nextShowTime.toString());
+    }
+    function handleAlreadyHaveApp() {
+      isAppDownloadModalOpen.value = false;
+      localStorage.setItem("userHasApp", "true");
+      trackEvent("click", "app_download_modal_already_have_app", "Ya tengo la app", "El usuario indicó que ya tiene la app");
     }
     function openPlayStore() {
+      trackEvent("click", "app_download_modal_click_download", "Descarga App", "Click en botón de descarga Google Play");
       window.open("https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida", "_blank");
       closeAppDownloadModal();
     }
@@ -488,8 +503,17 @@ Compartido desde ${url}`;
           if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
         }, 800);
       }
-      if (!localStorage.getItem("hasSeenAppDownloadModal")) {
-        setTimeout(() => isAppDownloadModalOpen.value = true, 3e3);
+      const userHasApp = localStorage.getItem("userHasApp");
+      if (userHasApp === "true") {
+        return;
+      }
+      const nextShowTime = localStorage.getItem("appDownloadModalNextShow");
+      const currentTime = Date.now();
+      if (!nextShowTime || currentTime >= parseInt(nextShowTime)) {
+        setTimeout(() => {
+          isAppDownloadModalOpen.value = true;
+          trackEvent("impression", "app_download_modal_impression", "Impresión Modal App", "Se mostró el modal de descarga");
+        }, 3e3);
       }
     });
     return (_ctx, _push, _parent, _attrs) => {
@@ -616,7 +640,8 @@ Compartido desde ${url}`;
       _push(ssrRenderComponent(_sfc_main$2, {
         isOpen: isAppDownloadModalOpen.value,
         onClose: closeAppDownloadModal,
-        onOpenPlayStore: openPlayStore
+        onOpenPlayStore: openPlayStore,
+        onAlreadyHaveApp: handleAlreadyHaveApp
       }, null, _parent));
       _push(ssrRenderComponent(_sfc_main$b, {
         isOpen: isAboutModalOpen.value,

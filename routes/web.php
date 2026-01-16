@@ -93,8 +93,21 @@ Route::prefix('es')->group(function () {
             Route::post('/users/{user}/role', [\App\Http\Controllers\UserManagementController::class, 'updateRole'])->name('users.update-role');
             Route::resource('contact-messages', \App\Http\Controllers\ContactMessageController::class)->only(['index', 'show', 'destroy']);
             Route::resource('bible-headings', \App\Http\Controllers\Admin\BibleHeadingController::class)->except(['show']);
+            
+            // Statistics
+            Route::get('/statistics/dashboard', function () {
+                return Inertia::render('Statistics/Dashboard');
+            })->name('statistics.dashboard');
+            Route::get('/api/statistics', [\App\Http\Controllers\StatisticController::class, 'index'])->name('statistics.index');
         });
+        
+        // Tracking endpoint (Authenticated users only?) - No, should be public or guarded by throttle?
+        // Let's put it here for logged in users, or move it outside if guests need to track.
+        // The modal is shown to everyone, so it should be accessible.
     });
+
+    // Public Tracking Route
+    Route::post('/api/statistics/track', [\App\Http\Controllers\StatisticController::class, 'track'])->name('statistics.track');
 
     require __DIR__.'/auth.php';
 });

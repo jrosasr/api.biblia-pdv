@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class StatisticController extends Controller
 {
@@ -11,6 +12,8 @@ class StatisticController extends Controller
      */
     public function track(Request $request)
     {
+        Log::info('Statistics Track Request:', $request->all());
+
         $validated = $request->validate([
             'event' => 'required|string',
             'name' => 'required|string',
@@ -64,29 +67,7 @@ class StatisticController extends Controller
             default => \App\Models\Statistic::getLast24Hours(),
         };
 
-        // Si es 24 horas, es solo un registro por evento del día actual.
-        // Si son 7 o 30 días, queremos agrupar por evento para mostrar totales, 
-        // o devolver la lista diaria para gráficas. 
-        // Para este requerimiento simple de "tabla", agruparé los totales si el rango es mayor a 1 día.
-        
-        if ($filter !== '24h') {
-            // Agrupar por evento para mostrar totales en el periodo
-            $groupedStats = $stats->groupBy('event')->map(function ($items, $event) {
-                return [
-                    'event' => $event,
-                    'name' => $items->first()->name,
-                    'description' => $items->first()->description,
-                    'impressions' => $items->sum('impressions'),
-                    'clicks' => $items->sum('clicks'),
-                    'scrolls' => $items->sum('scrolls'),
-                    // También enviamos los datos diarios por si el frontend quiere graficar
-                    'history' => $items->values(),
-                ];
-            })->values();
-            
-            return response()->json(['data' => $groupedStats]);
-        }
-
+        // Devolvemos la lista de registros (desglose diario) para poder mostrar la fecha
         return response()->json(['data' => $stats]);
     }
 }

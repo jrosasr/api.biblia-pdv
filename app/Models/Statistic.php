@@ -27,18 +27,38 @@ class Statistic extends Model
     /**
      * Incrementar impresiones para un evento en una fecha específica
      */
-    public static function incrementImpressions(string $event, string $name, ?string $description = null, ?string $date = null): void
+    /**
+     * Helper privado para incrementar una columna
+     */
+    private static function incrementMetric(string $column, string $event, string $name, ?string $description = null, ?string $date = null): void
     {
         $date = $date ?? now()->format('Y-m-d');
         
-        static::updateOrCreate(
+        $stat = static::firstOrCreate(
             ['event' => $event, 'date' => $date],
             [
                 'name' => $name,
                 'description' => $description,
-                'impressions' => \DB::raw('impressions + 1'),
+                'impressions' => 0,
+                'scrolls' => 0,
+                'clicks' => 0,
             ]
         );
+
+        $stat->increment($column);
+        
+        // Actualizar metadatos si han cambiado
+        if ($stat->name !== $name || $stat->description !== $description) {
+            $stat->update(['name' => $name, 'description' => $description]);
+        }
+    }
+
+    /**
+     * Incrementar impresiones para un evento en una fecha específica
+     */
+    public static function incrementImpressions(string $event, string $name, ?string $description = null, ?string $date = null): void
+    {
+        static::incrementMetric('impressions', $event, $name, $description, $date);
     }
 
     /**
@@ -46,16 +66,7 @@ class Statistic extends Model
      */
     public static function incrementScrolls(string $event, string $name, ?string $description = null, ?string $date = null): void
     {
-        $date = $date ?? now()->format('Y-m-d');
-        
-        static::updateOrCreate(
-            ['event' => $event, 'date' => $date],
-            [
-                'name' => $name,
-                'description' => $description,
-                'scrolls' => \DB::raw('scrolls + 1'),
-            ]
-        );
+        static::incrementMetric('scrolls', $event, $name, $description, $date);
     }
 
     /**
@@ -63,16 +74,7 @@ class Statistic extends Model
      */
     public static function incrementClicks(string $event, string $name, ?string $description = null, ?string $date = null): void
     {
-        $date = $date ?? now()->format('Y-m-d');
-        
-        static::updateOrCreate(
-            ['event' => $event, 'date' => $date],
-            [
-                'name' => $name,
-                'description' => $description,
-                'clicks' => \DB::raw('clicks + 1'),
-            ]
-        );
+        static::incrementMetric('clicks', $event, $name, $description, $date);
     }
 
     /**

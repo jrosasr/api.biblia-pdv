@@ -219,11 +219,13 @@ function handleAlreadyHaveApp() {
     isAppDownloadModalOpen.value = false;
     // Marcar permanentemente que el usuario ya tiene la app
     localStorage.setItem('userHasApp', 'true');
-    trackEvent('click', 'app_download_modal_already_have_app', 'Ya tengo la app', 'El usuario indicó que ya tiene la app');
+    // Registramos esto como un evento separado para no afectar el CTR de la descarga
+    trackEvent('click', 'app_android_already_installed', 'Usuario ya tiene App', 'El usuario indicó que ya tiene la app instalada');
 }
 
 function openPlayStore() {
-    trackEvent('click', 'app_download_modal_click_download', 'Descarga App', 'Click en botón de descarga Google Play');
+    // Registramos el click en el evento principal
+    trackEvent('click', 'app_download_android', 'Descarga APP Android', 'Click en imagen para ir a PlayStore');
     window.open('https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida', '_blank');
     closeAppDownloadModal();
 }
@@ -256,7 +258,8 @@ onMounted(() => {
         // Mostrar el modal después de 3 segundos
         setTimeout(() => {
             isAppDownloadModalOpen.value = true;
-            trackEvent('impression', 'app_download_modal_impression', 'Impresión Modal App', 'Se mostró el modal de descarga');
+            // Registramos la impresión en el evento principal
+            trackEvent('impression', 'app_download_android', 'Descarga APP Android', 'Se mostró el modal de invitación');
         }, 3000);
     }
 });

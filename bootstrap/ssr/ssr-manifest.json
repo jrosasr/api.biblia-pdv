@@ -8,18 +8,18 @@
     "/build/assets/AboutModal-DZdY2iax.css"
   ],
   "resources/js/Components/AppDownloadModal.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/ApplicationLogo.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Components/BibleBreadcrumbs.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleChapterHeader.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleFooter.vue": [
@@ -34,19 +34,19 @@
     "/build/assets/AboutModal-DZdY2iax.css"
   ],
   "resources/js/Components/BibleSEOLinks.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleSelectionBar.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BibleVerseList.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/BookSelectionModal.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/Checkbox.vue": [
@@ -56,10 +56,10 @@
     "/build/assets/DangerButton-B-RLDyCd.js"
   ],
   "resources/js/Components/Dropdown.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Components/DropdownLink.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Components/Editor.vue": [
     "/build/assets/Editor-crTvPFa9.js",
@@ -70,7 +70,7 @@
     "/build/assets/Editor-BK5Ds8EJ.css"
   ],
   "resources/js/Components/FavoriteNoteModal.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Components/InputError.vue": [
@@ -83,13 +83,13 @@
     "/build/assets/Modal-Ddh620YX.js"
   ],
   "resources/js/Components/NavLink.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Components/PrimaryButton.vue": [
     "/build/assets/PrimaryButton-DBdTauee.js"
   ],
   "resources/js/Components/ResponsiveNavLink.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Components/SecondaryButton.vue": [
     "/build/assets/SecondaryButton-C4moTHdn.js"
@@ -101,23 +101,23 @@
     "/build/assets/TextInput-CKMUgw9s.js"
   ],
   "resources/js/Components/VersionSelectionModal.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Layouts/AuthenticatedLayout.vue": [
-    "/build/assets/AuthenticatedLayout-FYN_q5vT.js"
+    "/build/assets/AuthenticatedLayout-DttxNdiC.js"
   ],
   "resources/js/Layouts/GuestLayout.vue": [
     "/build/assets/GuestLayout-DWct4yhk.js"
   ],
   "resources/js/Pages/Admin/BibleHeadings/Create.vue": [
-    "/build/assets/Create-B9BDTq6U.js"
+    "/build/assets/Create-BxGETT8l.js"
   ],
   "resources/js/Pages/Admin/BibleHeadings/Edit.vue": [
-    "/build/assets/Edit-DMIQVqGe.js"
+    "/build/assets/Edit-CZ30-SF8.js"
   ],
   "resources/js/Pages/Admin/BibleHeadings/Index.vue": [
-    "/build/assets/Index-CeTkumuB.js"
+    "/build/assets/Index-Cxe9z4rg.js"
   ],
   "resources/js/Pages/Auth/AccountDeletion.vue": [
     "/build/assets/AccountDeletion-CZV24-JE.js"
@@ -141,52 +141,52 @@
     "/build/assets/VerifyEmail-DVz0zoRj.js"
   ],
   "resources/js/Pages/BibleSeries/Create.vue": [
-    "/build/assets/Create-ChF61Mca.js"
+    "/build/assets/Create-4hYKUgqP.js"
   ],
   "resources/js/Pages/BibleSeries/Edit.vue": [
-    "/build/assets/Edit-BoQWj2Ld.js"
+    "/build/assets/Edit-BR4q87a1.js"
   ],
   "resources/js/Pages/BibleSeries/Index.vue": [
-    "/build/assets/Index-UmAwjDMi.js"
+    "/build/assets/Index-BW4IrNO5.js"
   ],
   "resources/js/Pages/BibleSeries/Show.vue": [
-    "/build/assets/Show-CWiP9KpD.js"
+    "/build/assets/Show-tLfj6EBt.js"
   ],
   "resources/js/Pages/BibleStories/Create.vue": [
-    "/build/assets/Create-BoJ2vM0M.js"
+    "/build/assets/Create-DM8iqUdB.js"
   ],
   "resources/js/Pages/BibleStories/Edit.vue": [
-    "/build/assets/Edit-DDWEdKzG.js"
+    "/build/assets/Edit-CykKNOWV.js"
   ],
   "resources/js/Pages/BibleStories/Index.vue": [
-    "/build/assets/Index-aH9amIQj.js"
+    "/build/assets/Index-CXqpAlTB.js"
   ],
   "resources/js/Pages/BibleStories/Show.vue": [
-    "/build/assets/Show-BvKG9UQc.js"
+    "/build/assets/Show-DvChLjJF.js"
   ],
   "resources/js/Pages/Contact.vue": [
     "/build/assets/Contact-B9BfuoSj.js"
   ],
   "resources/js/Pages/ContactMessages/Index.vue": [
-    "/build/assets/Index-DpzBElf5.js"
+    "/build/assets/Index-Cj-ECYI2.js"
   ],
   "resources/js/Pages/ContactMessages/Show.vue": [
-    "/build/assets/Show-J48cwCS5.js"
+    "/build/assets/Show-1r-bAhFT.js"
   ],
   "resources/js/Pages/Dashboard.vue": [
-    "/build/assets/Dashboard-DF4j9ZJh.js"
+    "/build/assets/Dashboard-DWzijmzV.js"
   ],
   "resources/js/Pages/DeviceTokens/Index.vue": [
-    "/build/assets/Index-BYnO-Gpq.js"
+    "/build/assets/Index-9x1Xic5K.js"
   ],
   "resources/js/Pages/Devotionals/Create.vue": [
-    "/build/assets/Create-DEJSpExE.js"
+    "/build/assets/Create-CglrYg42.js"
   ],
   "resources/js/Pages/Devotionals/Edit.vue": [
-    "/build/assets/Edit-A8mmEdIr.js"
+    "/build/assets/Edit-o5Z_Dk5k.js"
   ],
   "resources/js/Pages/Devotionals/Index.vue": [
-    "/build/assets/Index-B6msJYLW.js"
+    "/build/assets/Index-CyrABbox.js"
   ],
   "resources/js/Pages/Devotionals/PublicShow.vue": [
     "/build/assets/PublicShow-DthJgJza.js",
@@ -203,7 +203,7 @@
     "/build/assets/Terms-hh8egZr5.js"
   ],
   "resources/js/Pages/Profile/Edit.vue": [
-    "/build/assets/Edit-iHv614M8.js"
+    "/build/assets/Edit-CyRW3SFj.js"
   ],
   "resources/js/Pages/Profile/Favorites.vue": [
     "/build/assets/Favorites-DbJh_I7M.js"
@@ -221,14 +221,14 @@
     "/build/assets/PublicShow-Cr5mxwIi.js"
   ],
   "resources/js/Pages/Statistics/Dashboard.vue": [
-    "/build/assets/Dashboard-DU4Kqfh6.js"
+    "/build/assets/Dashboard-yVUMVQmd.js"
   ],
   "resources/js/Pages/UserDevotionals/Index.vue": [
-    "/build/assets/Index-B6U5vMgI.js",
+    "/build/assets/Index-D0KTSLm5.js",
     "/build/assets/Index-BHCa4YQz.css"
   ],
   "resources/js/Pages/UserDevotionals/Index.vue?vue&type=style&index=0&scoped=3818b8a8&lang.css": [
-    "/build/assets/Index-B6U5vMgI.js",
+    "/build/assets/Index-D0KTSLm5.js",
     "/build/assets/Index-BHCa4YQz.css"
   ],
   "resources/js/Pages/UserDevotionals/PublicIndex.vue": [
@@ -243,17 +243,17 @@
     "/build/assets/Show-vg8JsHAU.js"
   ],
   "resources/js/Pages/Users/Index.vue": [
-    "/build/assets/Index-BP8gam_p.js"
+    "/build/assets/Index-xmvFsNwp.js"
   ],
   "resources/js/Pages/Users/Show.vue": [
-    "/build/assets/Show-DP8Dvn4f.js"
+    "/build/assets/Show-DOFRp0GW.js"
   ],
   "resources/js/Pages/Welcome.vue": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/Welcome-DVa9SJa8.js",
+    "/build/assets/Welcome-CgAufcDz.js",
     "/build/assets/Welcome-okFXlLhL.css"
   ],
   "resources/js/ssr.js": [],

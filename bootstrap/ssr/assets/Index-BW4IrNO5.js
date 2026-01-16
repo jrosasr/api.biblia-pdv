@@ -1,6 +1,6 @@
 import { unref, withCtx, createTextVNode, createVNode, createBlock, openBlock, Fragment, renderList, toDisplayString, createCommentVNode, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrRenderList, ssrRenderAttr, ssrInterpolate } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-FYN_q5vT.js";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-DttxNdiC.js";
 import { Head, Link, router } from "@inertiajs/vue3";
 import { P as PrimaryButton } from "./PrimaryButton-DBdTauee.js";
 import "./DangerButton-B-RLDyCd.js";

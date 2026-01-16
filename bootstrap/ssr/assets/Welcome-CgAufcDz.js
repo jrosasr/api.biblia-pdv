@@ -485,10 +485,10 @@ Compartido desde ${url}`;
     function handleAlreadyHaveApp() {
       isAppDownloadModalOpen.value = false;
       localStorage.setItem("userHasApp", "true");
-      trackEvent("click", "app_download_modal_already_have_app", "Ya tengo la app", "El usuario indicó que ya tiene la app");
+      trackEvent("click", "app_android_already_installed", "Usuario ya tiene App", "El usuario indicó que ya tiene la app instalada");
     }
     function openPlayStore() {
-      trackEvent("click", "app_download_modal_click_download", "Descarga App", "Click en botón de descarga Google Play");
+      trackEvent("click", "app_download_android", "Descarga APP Android", "Click en imagen para ir a PlayStore");
       window.open("https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida", "_blank");
       closeAppDownloadModal();
     }
@@ -512,7 +512,7 @@ Compartido desde ${url}`;
       if (!nextShowTime || currentTime >= parseInt(nextShowTime)) {
         setTimeout(() => {
           isAppDownloadModalOpen.value = true;
-          trackEvent("impression", "app_download_modal_impression", "Impresión Modal App", "Se mostró el modal de descarga");
+          trackEvent("impression", "app_download_android", "Descarga APP Android", "Se mostró el modal de invitación");
         }, 3e3);
       }
     });

@@ -23,6 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
         ]);
 
+        $middleware->validateCsrfTokens(except: [
+            '/es/api/statistics/track', // Permitir tracking público sin CSRF
+            '/api/statistics/track',
+        ]);
+
         $middleware->api(append: [
             SetApiLocale::class,
         ]);

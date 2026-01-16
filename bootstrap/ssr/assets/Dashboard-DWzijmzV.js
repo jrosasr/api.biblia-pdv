@@ -1,6 +1,6 @@
 import { unref, withCtx, createVNode, createBlock, openBlock, withModifiers, withDirectives, createCommentVNode, vModelText, toDisplayString, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrRenderAttr, ssrInterpolate, ssrIncludeBooleanAttr } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-FYN_q5vT.js";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-DttxNdiC.js";
 import { useForm, Head } from "@inertiajs/vue3";
 import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
 import { Bar } from "vue-chartjs";

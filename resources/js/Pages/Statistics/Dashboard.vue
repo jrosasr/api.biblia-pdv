@@ -1,8 +1,29 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import { Line } from 'vue-chartjs';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const stats = ref([]);
 const period = ref('24h');
@@ -25,6 +46,79 @@ const fetchStats = async () => {
         console.error('Error fetching statistics:', error);
     } finally {
         loading.value = false;
+    }
+};
+
+// Computed property para preparar los datos del gráfico
+const chartData = computed(() => {
+    // Agrupar datos por fecha
+    const groupedData = {};
+    
+    // Iterar stats (que pueden tener varios eventos por día) y sumar métricas por fecha
+    stats.value.forEach(stat => {
+        const dateKey = stat.date.split('T')[0];
+        if (!groupedData[dateKey]) {
+            groupedData[dateKey] = { impressions: 0, clicks: 0, scrolls: 0 };
+        }
+        groupedData[dateKey].impressions += stat.impressions || 0;
+        groupedData[dateKey].clicks += stat.clicks || 0;
+        groupedData[dateKey].scrolls += stat.scrolls || 0;
+    });
+
+    // Ordenar fechas ascendente para el gráfico
+    const sortedDates = Object.keys(groupedData).sort();
+    
+    const labels = sortedDates.map(date => date.split('-').reverse().join('/'));
+    const impressionsData = sortedDates.map(date => groupedData[date].impressions);
+    const clicksData = sortedDates.map(date => groupedData[date].clicks);
+
+    return {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Impresiones',
+                backgroundColor: '#3B82F6',
+                borderColor: '#3B82F6', // Azul Tailwind
+                data: impressionsData,
+                tension: 0.4, // Curva suave
+                fill: false
+            },
+            {
+                label: 'Clicks',
+                backgroundColor: '#10B981',
+                borderColor: '#10B981', // Verde Tailwind
+                data: clicksData,
+                tension: 0.4,
+                fill: false
+            }
+        ]
+    };
+});
+
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+        mode: 'index',
+        intersect: false,
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            grid: {
+                color: 'rgba(156, 163, 175, 0.1)' // Gray-400 with opacity
+            },
+            ticks: { color: '#6B7280' }
+        },
+        x: {
+            grid: { display: false },
+            ticks: { color: '#6B7280' }
+        }
+    },
+    plugins: {
+        legend: {
+            labels: { color: '#374151' } // Gray-700
+        }
     }
 };
 
@@ -81,22 +175,32 @@ function calculateCTR(clicks, impressions) {
                             <p class="mt-4 text-text-secondary">Cargando datos...</p>
                         </div>
 
-                        <!-- Empty State -->
-                        <div v-else-if="stats.length === 0" class="text-center py-16 bg-surface-alt/30 rounded-2xl border border-dashed border-border">
-                            <div class="w-16 h-16 bg-surface-alt rounded-full flex items-center justify-center mx-auto mb-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                </svg>
+                        <div v-else>
+                            <!-- Chart Section -->
+                            <div v-if="stats.length > 0" class="mb-8 p-4 bg-surface rounded-xl border border-border h-80">
+                                <h4 class="text-sm font-medium text-text-secondary mb-4 uppercase tracking-wider">Tendencia de Actividad</h4>
+                                <div class="h-64 w-full">
+                                    <Line :data="chartData" :options="chartOptions" />
+                                </div>
                             </div>
-                            <h4 class="text-lg font-medium text-text">No hay datos registrados</h4>
-                            <p class="text-text-secondary mt-1 max-w-sm mx-auto">No se han encontrado eventos para el período seleccionado. Las métricas aparecerán aquí una vez que haya actividad.</p>
-                        </div>
 
-                        <!-- Table -->
-                        <div v-else class="overflow-x-auto rounded-xl border border-border">
+                            <!-- Empty State -->
+                            <div v-if="stats.length === 0" class="text-center py-16 bg-surface-alt/30 rounded-2xl border border-dashed border-border">
+                                <div class="w-16 h-16 bg-surface-alt rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-medium text-text">No hay datos registrados</h4>
+                                <p class="text-text-secondary mt-1 max-w-sm mx-auto">No se han encontrado eventos para el período seleccionado. Las métricas aparecerán aquí una vez que haya actividad.</p>
+                            </div>
+
+                            <!-- Table -->
+                            <div v-if="stats.length > 0" class="overflow-x-auto rounded-xl border border-border">
                             <table class="w-full text-left text-sm">
                                 <thead class="bg-surface-alt text-text-secondary font-semibold border-b border-border">
                                     <tr>
+                                        <th class="px-6 py-4">Fecha</th>
                                         <th class="px-6 py-4">Evento</th>
                                         <th class="px-6 py-4">Descripción</th>
                                         <th class="px-6 py-4 text-center">Impresiones</th>
@@ -106,7 +210,10 @@ function calculateCTR(clicks, impressions) {
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-border bg-surface">
-                                    <tr v-for="stat in stats" :key="stat.event" class="hover:bg-surface-alt/30 transition-colors">
+                                    <tr v-for="stat in stats" :key="stat.id" class="hover:bg-surface-alt/30 transition-colors">
+                                        <td class="px-6 py-4 text-text font-mono whitespace-nowrap">
+                                            {{ stat.date.split('T')[0].split('-').reverse().join('/') }}
+                                        </td>
                                         <td class="px-6 py-4">
                                             <div class="flex flex-col">
                                                 <span class="text-base font-medium text-text">{{ stat.name }}</span>
@@ -144,6 +251,8 @@ function calculateCTR(clicks, impressions) {
                                 * CTR (Click Through Rate) = (Clicks / Impresiones) x 100
                             </p>
                         </div>
+                        
+                        </div> <!-- End v-else wrapper -->
 
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { mergeProps, useSSRContext, onMounted, onUnmounted, computed, ref, unref, withCtx, renderSlot, createVNode, createTextVNode, createBlock, toDisplayString, openBlock } from "vue";
+import { mergeProps, useSSRContext, onMounted, onUnmounted, computed, ref, unref, withCtx, renderSlot, createVNode, createTextVNode, createBlock, openBlock, toDisplayString } from "vue";
 import { ssrRenderAttrs, ssrRenderSlot, ssrRenderStyle, ssrRenderClass, ssrRenderComponent, ssrInterpolate } from "vue/server-renderer";
 import { _ as _export_sfc } from "./_plugin-vue_export-helper-1tPrXgE0.js";
 import { Link } from "@inertiajs/vue3";
@@ -257,151 +257,264 @@ const _sfc_main = {
         _push(`<!---->`);
       }
       if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("device-tokens.index"),
-          active: _ctx.route().current("device-tokens.*")
+        _push(`<div class="hidden sm:flex sm:items-center sm:ms-6">`);
+        _push(ssrRenderComponent(_sfc_main$4, {
+          align: "right",
+          width: "48"
         }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
+          trigger: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` Dispositivos `);
+              _push2(`<button class="${ssrRenderClass([{ "!border-indigo-400 !text-text": _ctx.route().current("bible-series.*") || _ctx.route().current("bible-stories.*") || _ctx.route().current("bible-headings.*") }, "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out"])}"${_scopeId}> Contenido <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"${_scopeId}><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"${_scopeId}></path></svg></button>`);
             } else {
               return [
-                createTextVNode(" Dispositivos ")
+                createVNode("button", {
+                  class: ["inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out", { "!border-indigo-400 !text-text": _ctx.route().current("bible-series.*") || _ctx.route().current("bible-stories.*") || _ctx.route().current("bible-headings.*") }]
+                }, [
+                  createTextVNode(" Contenido "),
+                  (openBlock(), createBlock("svg", {
+                    class: "ms-2 -me-0.5 h-4 w-4",
+                    xmlns: "http://www.w3.org/2000/svg",
+                    viewBox: "0 0 20 20",
+                    fill: "currentColor"
+                  }, [
+                    createVNode("path", {
+                      "fill-rule": "evenodd",
+                      d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
+                      "clip-rule": "evenodd"
+                    })
+                  ]))
+                ], 2)
+              ];
+            }
+          }),
+          content: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("bible-series.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Series`);
+                  } else {
+                    return [
+                      createTextVNode("Series")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("bible-stories.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Historias`);
+                  } else {
+                    return [
+                      createTextVNode("Historias")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("bible-headings.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Títulos`);
+                  } else {
+                    return [
+                      createTextVNode("Títulos")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+            } else {
+              return [
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("bible-series.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Series")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("bible-stories.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Historias")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("bible-headings.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Títulos")
+                  ]),
+                  _: 1
+                }, 8, ["href"])
               ];
             }
           }),
           _: 1
         }, _parent));
+        _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
       if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("bible-series.index"),
-          active: _ctx.route().current("bible-series.*")
+        _push(`<div class="hidden sm:flex sm:items-center sm:ms-6">`);
+        _push(ssrRenderComponent(_sfc_main$4, {
+          align: "right",
+          width: "48"
         }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
+          trigger: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` Series `);
+              _push2(`<button class="${ssrRenderClass([{ "!border-indigo-400 !text-text": _ctx.route().current("users.*") || _ctx.route().current("contact-messages.*") || _ctx.route().current("device-tokens.*") || _ctx.route().current("statistics.*") }, "inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out"])}"${_scopeId}> Administración <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"${_scopeId}><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"${_scopeId}></path></svg></button>`);
             } else {
               return [
-                createTextVNode(" Series ")
+                createVNode("button", {
+                  class: ["inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out", { "!border-indigo-400 !text-text": _ctx.route().current("users.*") || _ctx.route().current("contact-messages.*") || _ctx.route().current("device-tokens.*") || _ctx.route().current("statistics.*") }]
+                }, [
+                  createTextVNode(" Administración "),
+                  (openBlock(), createBlock("svg", {
+                    class: "ms-2 -me-0.5 h-4 w-4",
+                    xmlns: "http://www.w3.org/2000/svg",
+                    viewBox: "0 0 20 20",
+                    fill: "currentColor"
+                  }, [
+                    createVNode("path", {
+                      "fill-rule": "evenodd",
+                      d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
+                      "clip-rule": "evenodd"
+                    })
+                  ]))
+                ], 2)
+              ];
+            }
+          }),
+          content: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("users.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Usuarios`);
+                  } else {
+                    return [
+                      createTextVNode("Usuarios")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("contact-messages.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Mensajes`);
+                  } else {
+                    return [
+                      createTextVNode("Mensajes")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("device-tokens.index")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Dispositivos`);
+                  } else {
+                    return [
+                      createTextVNode("Dispositivos")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(`<div class="border-t border-gray-100 dark:border-gray-700 my-1"${_scopeId}></div>`);
+              _push2(ssrRenderComponent(_sfc_main$3, {
+                href: _ctx.route("statistics.dashboard")
+              }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Estadísticas`);
+                  } else {
+                    return [
+                      createTextVNode("Estadísticas")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+              _push2(ssrRenderComponent(_sfc_main$3, { href: "/pulse" }, {
+                default: withCtx((_2, _push3, _parent3, _scopeId2) => {
+                  if (_push3) {
+                    _push3(`Pulse`);
+                  } else {
+                    return [
+                      createTextVNode("Pulse")
+                    ];
+                  }
+                }),
+                _: 1
+              }, _parent2, _scopeId));
+            } else {
+              return [
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("users.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Usuarios")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("contact-messages.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Mensajes")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("device-tokens.index")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Dispositivos")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode("div", { class: "border-t border-gray-100 dark:border-gray-700 my-1" }),
+                createVNode(_sfc_main$3, {
+                  href: _ctx.route("statistics.dashboard")
+                }, {
+                  default: withCtx(() => [
+                    createTextVNode("Estadísticas")
+                  ]),
+                  _: 1
+                }, 8, ["href"]),
+                createVNode(_sfc_main$3, { href: "/pulse" }, {
+                  default: withCtx(() => [
+                    createTextVNode("Pulse")
+                  ]),
+                  _: 1
+                })
               ];
             }
           }),
           _: 1
         }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("bible-stories.index"),
-          active: _ctx.route().current("bible-stories.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Historias `);
-            } else {
-              return [
-                createTextVNode(" Historias ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("users.index"),
-          active: _ctx.route().current("users.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Usuarios `);
-            } else {
-              return [
-                createTextVNode(" Usuarios ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("contact-messages.index"),
-          active: _ctx.route().current("contact-messages.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Mensajes `);
-            } else {
-              return [
-                createTextVNode(" Mensajes ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("bible-headings.index"),
-          active: _ctx.route().current("bible-headings.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Títulos `);
-            } else {
-              return [
-                createTextVNode(" Títulos ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, { href: "/pulse" }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Pulse `);
-            } else {
-              return [
-                createTextVNode(" Pulse ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$2, {
-          href: _ctx.route("statistics.dashboard"),
-          active: _ctx.route().current("statistics.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Estadísticas `);
-            } else {
-              return [
-                createTextVNode(" Estadísticas ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
+        _push(`</div>`);
       } else {
         _push(`<!---->`);
       }
@@ -565,25 +678,7 @@ const _sfc_main = {
         _push(`<!---->`);
       }
       if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$1, {
-          href: _ctx.route("device-tokens.index"),
-          active: _ctx.route().current("device-tokens.*")
-        }, {
-          default: withCtx((_, _push2, _parent2, _scopeId) => {
-            if (_push2) {
-              _push2(` Dispositivos `);
-            } else {
-              return [
-                createTextVNode(" Dispositivos ")
-              ];
-            }
-          }),
-          _: 1
-        }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(`<!--[--><div class="pt-2 pb-1 border-t border-border mt-2"><div class="px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Contenido</div></div>`);
         _push(ssrRenderComponent(_sfc_main$1, {
           href: _ctx.route("bible-series.index"),
           active: _ctx.route().current("bible-series.*")
@@ -599,10 +694,6 @@ const _sfc_main = {
           }),
           _: 1
         }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
         _push(ssrRenderComponent(_sfc_main$1, {
           href: _ctx.route("bible-stories.index"),
           active: _ctx.route().current("bible-stories.*")
@@ -618,10 +709,27 @@ const _sfc_main = {
           }),
           _: 1
         }, _parent));
+        _push(ssrRenderComponent(_sfc_main$1, {
+          href: _ctx.route("bible-headings.index"),
+          active: _ctx.route().current("bible-headings.*")
+        }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Títulos `);
+            } else {
+              return [
+                createTextVNode(" Títulos ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+        _push(`<!--]-->`);
       } else {
         _push(`<!---->`);
       }
       if (_ctx.$page.props.auth.user.roles.includes("admin")) {
+        _push(`<!--[--><div class="pt-2 pb-1 border-t border-border mt-2"><div class="px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Sistema</div></div>`);
         _push(ssrRenderComponent(_sfc_main$1, {
           href: _ctx.route("users.index"),
           active: _ctx.route().current("users.*")
@@ -637,10 +745,6 @@ const _sfc_main = {
           }),
           _: 1
         }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
         _push(ssrRenderComponent(_sfc_main$1, {
           href: _ctx.route("contact-messages.index"),
           active: _ctx.route().current("contact-messages.*")
@@ -656,26 +760,21 @@ const _sfc_main = {
           }),
           _: 1
         }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
-        _push(ssrRenderComponent(_sfc_main$1, { href: "/pulse" }, {
+        _push(ssrRenderComponent(_sfc_main$1, {
+          href: _ctx.route("device-tokens.index"),
+          active: _ctx.route().current("device-tokens.*")
+        }, {
           default: withCtx((_, _push2, _parent2, _scopeId) => {
             if (_push2) {
-              _push2(` Pulse `);
+              _push2(` Dispositivos `);
             } else {
               return [
-                createTextVNode(" Pulse ")
+                createTextVNode(" Dispositivos ")
               ];
             }
           }),
           _: 1
         }, _parent));
-      } else {
-        _push(`<!---->`);
-      }
-      if (_ctx.$page.props.auth.user.roles.includes("admin")) {
         _push(ssrRenderComponent(_sfc_main$1, {
           href: _ctx.route("statistics.dashboard"),
           active: _ctx.route().current("statistics.*")
@@ -691,6 +790,19 @@ const _sfc_main = {
           }),
           _: 1
         }, _parent));
+        _push(ssrRenderComponent(_sfc_main$1, { href: "/pulse" }, {
+          default: withCtx((_, _push2, _parent2, _scopeId) => {
+            if (_push2) {
+              _push2(` Pulse `);
+            } else {
+              return [
+                createTextVNode(" Pulse ")
+              ];
+            }
+          }),
+          _: 1
+        }, _parent));
+        _push(`<!--]-->`);
       } else {
         _push(`<!---->`);
       }

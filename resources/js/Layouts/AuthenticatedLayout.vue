@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -9,7 +9,11 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 
-const isDark = ref(document.documentElement.classList.contains('dark'));
+const isDark = ref(false);
+
+onMounted(() => {
+    isDark.value = document.documentElement.classList.contains('dark');
+});
 function toggleTheme() {
     isDark.value = !isDark.value;
     if (isDark.value) {

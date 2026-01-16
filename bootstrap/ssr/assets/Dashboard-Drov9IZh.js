@@ -1,6 +1,6 @@
 import { ref, computed, watch, onMounted, unref, withCtx, createVNode, createBlock, openBlock, Fragment, renderList, toDisplayString, createCommentVNode, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrRenderList, ssrRenderClass, ssrInterpolate, ssrRenderAttr } from "vue/server-renderer";
-import { _ as _sfc_main$1 } from "./AuthenticatedLayout-DttxNdiC.js";
+import { _ as _sfc_main$1 } from "./AuthenticatedLayout-M76oUEYl.js";
 import { Head } from "@inertiajs/vue3";
 import axios from "axios";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";

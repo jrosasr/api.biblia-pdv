@@ -200,7 +200,10 @@ const _sfc_main = {
   __ssrInlineRender: true,
   setup(__props) {
     const showingNavigationDropdown = ref(false);
-    const isDark = ref(document.documentElement.classList.contains("dark"));
+    const isDark = ref(false);
+    onMounted(() => {
+      isDark.value = document.documentElement.classList.contains("dark");
+    });
     return (_ctx, _push, _parent, _attrs) => {
       _push(`<div${ssrRenderAttrs(mergeProps({ class: "min-h-screen bg-background text-text transition-colors duration-300" }, _attrs))}><nav class="border-b border-border bg-surface"><div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div class="flex h-16 justify-between"><div class="flex"><div class="flex shrink-0 items-center">`);
       _push(ssrRenderComponent(unref(Link), {

@@ -114,7 +114,7 @@ const visit = (params) => {
 };
 
 function handleVersionChange(version) {
-    visit({ version, book: selectedBook.value.id, chapter: 1 });
+    visit({ version, book: selectedBook.value.id, chapter: selectedChapter.value });
 }
 
 async function expandBook(book) {

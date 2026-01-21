@@ -9,7 +9,7 @@ const props = defineProps({
     devotionals: [Array, Object],
 });
 
-const devotionalsList = ref(props.devotionals?.data || props.devotionals || []);
+const devotionalsList = computed(() => props.devotionals?.data || props.devotionals || []);
 const loading = ref(false); 
 const isAboutModalOpen = ref(false);
 const currentDevotional = computed(() => (devotionalsList.value && devotionalsList.value.length > 0) ? devotionalsList.value[0] : null);

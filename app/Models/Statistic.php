@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Statistic extends Model
@@ -15,6 +16,7 @@ class Statistic extends Model
         'impressions',
         'scrolls',
         'clicks',
+        'uniques',
     ];
 
     protected $casts = [
@@ -22,6 +24,7 @@ class Statistic extends Model
         'impressions' => 'integer',
         'scrolls' => 'integer',
         'clicks' => 'integer',
+        'uniques' => 'integer',
     ];
 
     /**
@@ -33,7 +36,19 @@ class Statistic extends Model
     private static function incrementMetric(string $column, string $event, string $name, ?string $description = null, ?string $date = null): void
     {
         $date = $date ?? now()->format('Y-m-d');
+        $ip = request()->ip();
+
+        // Registrar el hit individual (siempre se registra para auditoría/userAgent)
+        StatisticHit::log($event, Auth::id());
+
+        // Si es el primer hit de esta IP para este evento hoy, es una visita única
+        $hitsToday = StatisticHit::where('event', $event)
+            ->where('date', $date)
+            ->where('ip_address', $ip)
+            ->count();
         
+        $shouldIncrementUnique = ($hitsToday === 1);
+
         $stat = static::firstOrCreate(
             ['event' => $event, 'date' => $date],
             [
@@ -42,10 +57,15 @@ class Statistic extends Model
                 'impressions' => 0,
                 'scrolls' => 0,
                 'clicks' => 0,
+                'uniques' => 0,
             ]
         );
 
         $stat->increment($column);
+        
+        if ($shouldIncrementUnique) {
+            $stat->increment('uniques');
+        }
         
         // Actualizar metadatos si han cambiado
         if ($stat->name !== $name || $stat->description !== $description) {

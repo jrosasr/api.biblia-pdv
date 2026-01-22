@@ -13,10 +13,10 @@ defineProps({
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Detalles de la Serie: {{ series.title }}</h2>
-                <Link :href="route('bible-series.index')">
-                    <SecondaryButton>Volver</SecondaryButton>
+                <Link :href="route('bible-series.index')" class="w-full sm:w-auto">
+                    <SecondaryButton class="w-full justify-center">Volver</SecondaryButton>
                 </Link>
             </div>
         </template>

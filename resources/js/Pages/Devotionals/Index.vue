@@ -39,14 +39,14 @@ const formatDate = (dateString) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="font-bold text-xl text-primary leading-tight">Devocionales</h2>
-                <div class="flex space-x-3">
-                    <SecondaryButton @click="notifyNewDevotional">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <SecondaryButton @click="notifyNewDevotional" class="w-full sm:w-auto justify-center">
                         Notificar sobre nuevo devocional
                     </SecondaryButton>
-                    <Link :href="route('devotionals.create')">
-                        <PrimaryButton>
+                    <Link :href="route('devotionals.create')" class="w-full sm:w-auto">
+                        <PrimaryButton class="w-full justify-center">
                             Nuevo Devocional
                         </PrimaryButton>
                     </Link>

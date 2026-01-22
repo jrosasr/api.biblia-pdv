@@ -99,6 +99,7 @@ Route::prefix('es')->group(function () {
                 return Inertia::render('Statistics/Dashboard');
             })->name('statistics.dashboard');
             Route::get('/api/statistics', [\App\Http\Controllers\StatisticController::class, 'index'])->name('statistics.index');
+            Route::get('/api/statistics/{id}', [\App\Http\Controllers\StatisticController::class, 'show'])->name('statistics.show');
         });
         
         // Tracking endpoint (Authenticated users only?) - No, should be public or guarded by throttle?

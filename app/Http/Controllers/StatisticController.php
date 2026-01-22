@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class StatisticController extends Controller
 {
@@ -69,5 +71,59 @@ class StatisticController extends Controller
 
         // Devolvemos la lista de registros (desglose diario) para poder mostrar la fecha
         return response()->json(['data' => $stats]);
+    }
+    /**
+     * Obtener detalles de un evento específico
+     */
+    public function show(Request $request, $id)
+    {
+        if (!$request->user() || !$request->user()->hasRole('admin')) {
+            abort(403, 'No autorizado');
+        }
+
+        $statistic = \App\Models\Statistic::findOrFail($id);
+        $dateStr = $statistic->date instanceof Carbon ? $statistic->date->format('Y-m-d') : Carbon::parse($statistic->date)->format('Y-m-d');
+        
+        $query = \App\Models\StatisticHit::with('user:id,name,email')
+            ->where('event', $statistic->event)
+            ->where('date', $dateStr);
+
+        // Búsqueda por IP o Nombre de usuario
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('ip_address', 'like', "%$search%")
+                  ->orWhereHas('user', function($qu) use ($search) {
+                      $qu->where('name', 'like', "%$search%");
+                  });
+            });
+        }
+
+        $hits = $query->latest()->paginate(10);
+
+        // Métricas agregadas para el modal
+        $aggregates = [
+            'browsers' => \App\Models\StatisticHit::where('event', $statistic->event)
+                ->where('date', $dateStr)
+                ->select('browser', DB::raw('count(*) as total'))
+                ->groupBy('browser')
+                ->get(),
+            'platforms' => \App\Models\StatisticHit::where('event', $statistic->event)
+                ->where('date', $dateStr)
+                ->select('platform', DB::raw('count(*) as total'))
+                ->groupBy('platform')
+                ->get(),
+            'devices' => \App\Models\StatisticHit::where('event', $statistic->event)
+                ->where('date', $dateStr)
+                ->select('device', DB::raw('count(*) as total'))
+                ->groupBy('device')
+                ->get(),
+        ];
+
+        return response()->json([
+            'statistic' => $statistic,
+            'hits' => $hits,
+            'aggregates' => $aggregates
+        ]);
     }
 }

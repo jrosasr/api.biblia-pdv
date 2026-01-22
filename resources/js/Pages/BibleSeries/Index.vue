@@ -20,10 +20,10 @@ const deleteSeries = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="font-bold text-xl text-primary leading-tight">Series Bíblicas</h2>
-                <Link :href="route('bible-series.create')">
-                    <PrimaryButton>
+                <Link :href="route('bible-series.create')" class="w-full sm:w-auto">
+                    <PrimaryButton class="w-full justify-center">
                         Nueva Serie
                     </PrimaryButton>
                 </Link>

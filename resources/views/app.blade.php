@@ -9,9 +9,24 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link rel="canonical" href="{{ url()->current() }}" />
-        <link rel="alternate" hreflang="es" href="{{ url()->current() }}" />
-        <link rel="alternate" hreflang="x-default" href="{{ url()->current() }}" />
+        <!-- SEO -->
+        @php
+            $canonical = url()->current();
+            $allowedParams = ['version']; // Solo permitimos 'version' como parámetro relevante para SEO en la Biblia
+            $queryParams = request()->only($allowedParams);
+            
+            // Si la versión es la por defecto (RV1960), no la incluimos en la canonical para evitar duplicados
+            if (isset($queryParams['version']) && $queryParams['version'] === 'RV1960') {
+                unset($queryParams['version']);
+            }
+
+            if (!empty($queryParams)) {
+                $canonical .= '?' . http_build_query($queryParams);
+            }
+        @endphp
+        <link rel="canonical" href="{{ $canonical }}" />
+        <link rel="alternate" hreflang="es" href="{{ $canonical }}" />
+        <link rel="alternate" hreflang="x-default" href="{{ $canonical }}" />
 
         <!-- Scripts -->
         @routes

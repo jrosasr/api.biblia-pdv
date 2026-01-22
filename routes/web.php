@@ -18,6 +18,12 @@ Route::permanentRedirect('/devocional-diario', '/es/devocional-diario');
 Route::permanentRedirect('/login', '/es/login');
 Route::permanentRedirect('/register', '/es/register');
 
+// Sitemaps
+Route::get('/sitemap.xml', [\App\Http\Controllers\SitemapController::class, 'index']);
+Route::get('/sitemap-static.xml', [\App\Http\Controllers\SitemapController::class, 'static']);
+Route::get('/sitemap-bible.xml', [\App\Http\Controllers\SitemapController::class, 'bible']);
+Route::get('/sitemap-devotionals.xml', [\App\Http\Controllers\SitemapController::class, 'devotionals']);
+
 
 Route::prefix('es')->group(function () {
     Route::get('/', [\App\Http\Controllers\BibleReaderController::class, 'index'])->name('home');
@@ -87,8 +93,22 @@ Route::prefix('es')->group(function () {
             Route::post('/users/{user}/role', [\App\Http\Controllers\UserManagementController::class, 'updateRole'])->name('users.update-role');
             Route::resource('contact-messages', \App\Http\Controllers\ContactMessageController::class)->only(['index', 'show', 'destroy']);
             Route::resource('bible-headings', \App\Http\Controllers\Admin\BibleHeadingController::class)->except(['show']);
+            
+            // Statistics
+            Route::get('/statistics/dashboard', function () {
+                return Inertia::render('Statistics/Dashboard');
+            })->name('statistics.dashboard');
+            Route::get('/api/statistics', [\App\Http\Controllers\StatisticController::class, 'index'])->name('statistics.index');
+            Route::get('/api/statistics/{id}', [\App\Http\Controllers\StatisticController::class, 'show'])->name('statistics.show');
         });
+        
+        // Tracking endpoint (Authenticated users only?) - No, should be public or guarded by throttle?
+        // Let's put it here for logged in users, or move it outside if guests need to track.
+        // The modal is shown to everyone, so it should be accessible.
     });
+
+    // Public Tracking Route
+    Route::post('/api/statistics/track', [\App\Http\Controllers\StatisticController::class, 'track'])->name('statistics.track');
 
     require __DIR__.'/auth.php';
 });

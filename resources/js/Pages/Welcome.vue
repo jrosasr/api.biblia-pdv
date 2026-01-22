@@ -99,7 +99,9 @@ const visit = (params) => {
         if (book) bookName = book.name;
     }
 
-    router.get(route('bible.show', { book: bookName, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
+    const bookSlug = bookName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+
+    router.get(route('bible.show', { book: bookSlug, chapter: params.chapter || 1 }), { version: params.version || selectedVersion.value }, {
         preserveScroll: true,
         preserveState: true,
         only: ['books', 'initialChapters', 'initialVerses', 'initialVersion', 'initialBook', 'initialChapter', 'seo'],
@@ -112,7 +114,7 @@ const visit = (params) => {
 };
 
 function handleVersionChange(version) {
-    visit({ version, book: selectedBook.value.id, chapter: 1 });
+    visit({ version, book: selectedBook.value.id, chapter: selectedChapter.value });
 }
 
 async function expandBook(book) {
@@ -187,7 +189,8 @@ function copyVerses() {
     const sortedVerses = [...selectedVerses.value].sort((a, b) => a.verse - b.verse);
     const versesText = sortedVerses.map(v => `${v.verse}. ${v.text}`).join('\n');
     const reference = `${selectedBook.value.name} ${selectedChapter.value}:${sortedVerses.map(v => v.verse).join(', ')}`;
-    const url = `https://biblia-palabradevida.com/es/leer/${selectedBook.value.name}/${selectedChapter.value}`;
+    const bookSlug = selectedBook.value.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+    const url = `https://biblia-palabradevida.com/es/leer/${bookSlug}/${selectedChapter.value}`;
     const finalContent = `${reference}\n${versesText}\n\nCompartido desde ${url}`;
 
     navigator.clipboard.writeText(finalContent).then(() => {
@@ -196,12 +199,33 @@ function copyVerses() {
     });
 }
 
+function trackEvent(type, event, name, description = null) {
+    axios.post('/es/api/statistics/track', {
+        type,
+        event,
+        name,
+        description
+    }).catch(e => console.error('Tracking error', e));
+}
+
 function closeAppDownloadModal() {
     isAppDownloadModalOpen.value = false;
-    localStorage.setItem('hasSeenAppDownloadModal', 'true');
+    // Guardar timestamp actual para mostrar el modal nuevamente en 5 horas
+    const nextShowTime = Date.now() + (5 * 60 * 60 * 1000); // 5 horas en milisegundos
+    localStorage.setItem('appDownloadModalNextShow', nextShowTime.toString());
+}
+
+function handleAlreadyHaveApp() {
+    isAppDownloadModalOpen.value = false;
+    // Marcar permanentemente que el usuario ya tiene la app
+    localStorage.setItem('userHasApp', 'true');
+    // Registramos esto como un evento separado para no afectar el CTR de la descarga
+    trackEvent('click', 'app_android_already_installed', 'Usuario ya tiene App', 'El usuario indicó que ya tiene la app instalada');
 }
 
 function openPlayStore() {
+    // Registramos el click en el evento principal
+    trackEvent('click', 'app_download_android', 'Descarga APP Android', 'Click en imagen para ir a PlayStore');
     window.open('https://play.google.com/store/apps/details?id=com.soluciones.elyon.bibliapalabradevida', '_blank');
     closeAppDownloadModal();
 }
@@ -219,8 +243,24 @@ onMounted(() => {
         }, 800);
     }
 
-    if (!localStorage.getItem('hasSeenAppDownloadModal')) {
-        setTimeout(() => isAppDownloadModalOpen.value = true, 3000);
+    // Verificar si el usuario ya tiene la app
+    const userHasApp = localStorage.getItem('userHasApp');
+    if (userHasApp === 'true') {
+        // No mostrar el modal si el usuario ya tiene la app
+        return;
+    }
+
+    // Verificar si es momento de mostrar el modal
+    const nextShowTime = localStorage.getItem('appDownloadModalNextShow');
+    const currentTime = Date.now();
+
+    if (!nextShowTime || currentTime >= parseInt(nextShowTime)) {
+        // Mostrar el modal después de 3 segundos
+        setTimeout(() => {
+            isAppDownloadModalOpen.value = true;
+            // Registramos la impresión en el evento principal
+            trackEvent('impression', 'app_download_android', 'Descarga APP Android', 'Se mostró el modal de invitación');
+        }, 3000);
     }
 });
 </script>
@@ -341,6 +381,7 @@ onMounted(() => {
             :isOpen="isAppDownloadModalOpen"
             @close="closeAppDownloadModal"
             @openPlayStore="openPlayStore"
+            @alreadyHaveApp="handleAlreadyHaveApp"
         />
 
         <AboutModal 

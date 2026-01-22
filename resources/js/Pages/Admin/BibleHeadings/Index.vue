@@ -40,13 +40,13 @@ const getBookName = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="text-xl font-bold leading-tight text-primary">
                     Títulos de la Biblia (Perícopes)
                 </h2>
                 <Link 
                     :href="route('bible-headings.create')"
-                    class="px-4 py-2 bg-primary text-white dark:text-background font-bold rounded-full shadow-lg hover:opacity-90 transition-all font-sans"
+                    class="w-full sm:w-auto text-center px-4 py-2 bg-primary text-white dark:text-background font-bold rounded-full shadow-lg hover:opacity-90 transition-all font-sans"
                 >
                     + Agregar Títulos
                 </Link>

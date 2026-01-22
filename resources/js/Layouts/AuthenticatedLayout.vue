@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -9,7 +9,11 @@ import { Link } from '@inertiajs/vue3';
 
 const showingNavigationDropdown = ref(false);
 
-const isDark = ref(document.documentElement.classList.contains('dark'));
+const isDark = ref(false);
+
+onMounted(() => {
+    isDark.value = document.documentElement.classList.contains('dark');
+});
 function toggleTheme() {
     isDark.value = !isDark.value;
     if (isDark.value) {
@@ -38,9 +42,8 @@ function toggleTheme() {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <!-- Dashboard Link -->
                                 <NavLink
                                     v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                                     :href="route('dashboard')"
@@ -48,6 +51,8 @@ function toggleTheme() {
                                 >
                                     Dashboard
                                 </NavLink>
+                                
+                                <!-- Devotionals Link -->
                                 <NavLink
                                     v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                                     :href="route('devotionals.index')"
@@ -55,48 +60,53 @@ function toggleTheme() {
                                 >
                                     Devocionales
                                 </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('device-tokens.index')"
-                                    :active="route().current('device-tokens.*')"
-                                >
-                                    Dispositivos
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('bible-series.index')"
-                                    :active="route().current('bible-series.*')"
-                                >
-                                    Series
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('bible-stories.index')"
-                                    :active="route().current('bible-stories.*')"
-                                >
-                                    Historias
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('users.index')"
-                                    :active="route().current('users.*')"
-                                >
-                                    Usuarios
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('contact-messages.index')"
-                                    :active="route().current('contact-messages.*')"
-                                >
-                                    Mensajes
-                                </NavLink>
-                                <NavLink
-                                    v-if="$page.props.auth.user.roles.includes('admin')"
-                                    :href="route('bible-headings.index')"
-                                    :active="route().current('bible-headings.*')"
-                                >
-                                    Títulos
-                                </NavLink>
+
+                                <!-- Content Dropdown -->
+                                <div class="hidden sm:flex sm:items-center sm:ms-6" v-if="$page.props.auth.user.roles.includes('admin')">
+                                    <Dropdown align="right" width="48">
+                                        <template #trigger>
+                                            <button 
+                                                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out"
+                                                :class="{ '!border-indigo-400 !text-text': route().current('bible-series.*') || route().current('bible-stories.*') || route().current('bible-headings.*') }"
+                                            >
+                                                Contenido
+                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template #content>
+                                            <DropdownLink :href="route('bible-series.index')">Series</DropdownLink>
+                                            <DropdownLink :href="route('bible-stories.index')">Historias</DropdownLink>
+                                            <DropdownLink :href="route('bible-headings.index')">Títulos</DropdownLink>
+                                        </template>
+                                    </Dropdown>
+                                </div>
+
+                                <!-- Admin Dropdown -->
+                                <div class="hidden sm:flex sm:items-center sm:ms-6" v-if="$page.props.auth.user.roles.includes('admin')">
+                                    <Dropdown align="right" width="48">
+                                        <template #trigger>
+                                            <button 
+                                                class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-text-secondary hover:text-text hover:border-gray-300 focus:outline-none focus:text-text focus:border-gray-300 transition duration-150 ease-in-out"
+                                                :class="{ '!border-indigo-400 !text-text': route().current('users.*') || route().current('contact-messages.*') || route().current('device-tokens.*') || route().current('statistics.*') }"
+                                            >
+                                                Administración
+                                                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </template>
+                                        <template #content>
+                                            <DropdownLink :href="route('users.index')">Usuarios</DropdownLink>
+                                            <DropdownLink :href="route('contact-messages.index')">Mensajes</DropdownLink>
+                                            <DropdownLink :href="route('device-tokens.index')">Dispositivos</DropdownLink>
+                                            <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                                            <DropdownLink :href="route('statistics.dashboard')">Estadísticas</DropdownLink>
+                                            <DropdownLink href="/pulse">Pulse</DropdownLink>
+                                        </template>
+                                    </Dropdown>
+                                </div>
                             </div>
                         </div>
 
@@ -208,6 +218,7 @@ function toggleTheme() {
                     class="sm:hidden"
                 >
                     <div class="space-y-1 pb-3 pt-2">
+                        <!-- Principal -->
                         <ResponsiveNavLink
                             v-if="$page.props.auth.user.roles.includes('admin') || $page.props.auth.user.roles.includes('writer')"
                             :href="route('dashboard')"
@@ -228,41 +239,67 @@ function toggleTheme() {
                         >
                             Admin Devocionales
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.roles.includes('admin')"
-                            :href="route('device-tokens.index')"
-                            :active="route().current('device-tokens.*')"
-                        >
-                            Dispositivos
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.roles.includes('admin')"
-                            :href="route('bible-series.index')"
-                            :active="route().current('bible-series.*')"
-                        >
-                            Series
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.roles.includes('admin')"
-                            :href="route('bible-stories.index')"
-                            :active="route().current('bible-stories.*')"
-                        >
-                            Historias
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.roles.includes('admin')"
-                            :href="route('users.index')"
-                            :active="route().current('users.*')"
-                        >
-                            Usuarios
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="$page.props.auth.user.roles.includes('admin')"
-                            :href="route('contact-messages.index')"
-                            :active="route().current('contact-messages.*')"
-                        >
-                            Mensajes
-                        </ResponsiveNavLink>
+
+                        <!-- Contenido Group -->
+                        <template v-if="$page.props.auth.user.roles.includes('admin')">
+                            <div class="pt-2 pb-1 border-t border-border mt-2">
+                                <div class="px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Contenido</div>
+                            </div>
+                            <ResponsiveNavLink
+                                :href="route('bible-series.index')"
+                                :active="route().current('bible-series.*')"
+                            >
+                                Series
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('bible-stories.index')"
+                                :active="route().current('bible-stories.*')"
+                            >
+                                Historias
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('bible-headings.index')"
+                                :active="route().current('bible-headings.*')"
+                            >
+                                Títulos
+                            </ResponsiveNavLink>
+                        </template>
+
+                        <!-- Admin Group -->
+                        <template v-if="$page.props.auth.user.roles.includes('admin')">
+                            <div class="pt-2 pb-1 border-t border-border mt-2">
+                                <div class="px-4 text-xs font-semibold text-text-secondary uppercase tracking-wider">Sistema</div>
+                            </div>
+                            <ResponsiveNavLink
+                                :href="route('users.index')"
+                                :active="route().current('users.*')"
+                            >
+                                Usuarios
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('contact-messages.index')"
+                                :active="route().current('contact-messages.*')"
+                            >
+                                Mensajes
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('device-tokens.index')"
+                                :active="route().current('device-tokens.*')"
+                            >
+                                Dispositivos
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('statistics.dashboard')"
+                                :active="route().current('statistics.*')"
+                            >
+                                Estadísticas
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                href="/pulse"
+                            >
+                                Pulse
+                            </ResponsiveNavLink>
+                        </template>
                     </div>
 
                     <!-- Responsive Settings Options -->

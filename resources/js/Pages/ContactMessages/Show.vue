@@ -31,13 +31,13 @@ const formatDate = (dateString) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-black text-2xl text-[#3A3026] dark:text-[#F5F0E6] leading-tight">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+                <h2 class="font-black text-2xl text-[#3A3026] dark:text-[#F5F0E6] leading-tight text-center sm:text-left">
                     Detalle del Mensaje
                 </h2>
                 <Link 
                     :href="route('contact-messages.index')"
-                    class="text-[#8B6F47] dark:text-[#E3C598] font-black flex items-center gap-2 hover:translate-x-[-4px] transition-transform"
+                    class="text-[#8B6F47] dark:text-[#E3C598] font-black flex items-center justify-center sm:justify-start gap-2 hover:translate-x-[-4px] transition-transform"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />

@@ -1,59 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📖 Biblia Palabra de Vida
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="public/icon.webp" width="128" alt="Logo Biblia Palabra de Vida">
 </p>
 
-## About Laravel
+## 🌟 Resumen del Proyecto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Biblia Palabra de Vida** es una plataforma web moderna y minimalista diseñada para la lectura de la Biblia y el estudio espiritual. Construida con **Laravel 12**, **Vue 3** e **Inertia.js**, ofrece una experiencia de usuario premium, rápida y totalmente optimizada para dispositivos móviles y buscadores (SEO).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Características Principales:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   **Lectura Fluida**: Navegación rápida entre libros y capítulos de la Biblia.
+-   **Devocional Diario**: Reflexiones diarias actualizadas para el crecimiento espiritual.
+-   **Optimización SEO**: Implementación de **Server-Side Rendering (SSR)** y **Sitemaps Dinámicos** para máxima visibilidad en Google.
+-   **Modo Oscuro/Claro**: Interfaz adaptable con estética premium (Glassmorphism).
+-   **Multi-dispositivo**: Sincronización de favoritos y notas personales (en desarrollo).
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🚀 Requisitos para Despliegue
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Para garantizar el correcto funcionamiento del proyecto, especialmente del motor de renderizado SSR y las funciones de búsqueda, el servidor debe cumplir con:
 
-## Laravel Sponsors
+-   **PHP**: ^8.2
+-   **Node.js**: ^22.0 (Requerido para el soporte total de SSR y Vite 7)
+-   **Base de Datos**: SQLite (para las versiones de la Biblia) y MySQL/PostgreSQL para la gestión de usuarios.
+-   **Extensiones PHP**: `pdo_sqlite`, `mbstring`, `openssl`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ Comandos de Actualización y Despliegue
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Cada vez que realices cambios en el código o despliegues en tu VPS, sigue este orden estrictamente para aplicar las optimizaciones y actualizar las vistas:
 
-## Contributing
+### 1. Actualizar dependencias y base de datos
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+```
 
-## Code of Conduct
+### 2. Optimización de Laravel
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan optimize
+composer dump-autoload
+```
 
-## Security Vulnerabilities
+### 3. Construcción de activos (Cliente + SSR)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Este comando generará tanto los archivos de la web como el bundle para el servidor de renderizado.
 
-## License
+```bash
+# Asegúrate de usar Node 22 (nvm use 22)
+npm install
+npm run build
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Reinicio del Servicio SSR (Crucial para SEO)
+
+Para que los cambios en las vistas se reflejen en los buscadores, debes reiniciar el proceso de Node que maneja el SSR:
+
+```bash
+php artisan inertia:stop-ssr
+php artisan inertia:start-ssr &
+```
+
+---
+
+## 🛡️ Configuración de Producción (Recomendada)
+
+### Gestionar SSR con Supervisor
+
+Para evitar que el servidor SEO se detenga, se recomienda configurar **Supervisor** en tu VPS.
+
+**Ejemplo de configuración (`/etc/supervisor/conf.d/inertia-ssr.conf`):**
+
+```ini
+[program:inertia-ssr]
+process_name=%(program_name)s_%(process_num)02d
+command=node /home/admin/github/elyon/api.biblia-pdv/bootstrap/ssr/ssr.js
+autostart=true
+autorestart=true
+user=www-data
+redirect_stderr=true
+stdout_logfile=/home/admin/github/elyon/api.biblia-pdv/storage/logs/ssr.log
+```
+
+_Si usas Supervisor, tus despliegues se actualizan con:_
+`sudo supervisorctl restart inertia-ssr`
+
+---
+
+## 🗺️ Estructura de SEO y Sitemaps
+
+El proyecto genera automáticamente sitemaps dinámicos en las siguientes rutas:
+
+-   `/sitemap.xml`: Índice principal.
+-   `/sitemap-static.xml`: Páginas institucionales.
+-   `/sitemap-bible.xml`: Todos los libros y capítulos de la Biblia.
+-   `/sitemap-devotionals.xml`: Archivo de devocionales diarios.
+
+---
+
+<p align="center">
+  Desarrollado por <b>Soluciones Elyon</b>
+</p>

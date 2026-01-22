@@ -65,11 +65,11 @@ const closeModal = () => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="text-xl font-bold leading-tight text-primary">Mis Devocionales</h2>
                 <button 
                     @click="openCreateModal"
-                    class="px-6 py-2 bg-primary text-white dark:text-background font-bold rounded-full shadow-lg hover:opacity-90 transition-all text-sm flex items-center gap-2"
+                    class="w-full sm:w-auto px-6 py-2 bg-primary text-white dark:text-background font-bold rounded-full shadow-lg hover:opacity-90 transition-all text-sm flex items-center justify-center gap-2"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

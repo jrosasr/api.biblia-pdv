@@ -19,10 +19,10 @@ const deleteStory = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 class="font-bold text-xl text-primary leading-tight">Historias Bíblicas</h2>
-                <Link :href="route('bible-stories.create')">
-                    <PrimaryButton>
+                <Link :href="route('bible-stories.create')" class="w-full sm:w-auto">
+                    <PrimaryButton class="w-full justify-center">
                         Nueva Historia
                     </PrimaryButton>
                 </Link>

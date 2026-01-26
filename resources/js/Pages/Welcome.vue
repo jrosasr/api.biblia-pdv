@@ -1,6 +1,6 @@
 <script setup>
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import axios from 'axios';
 
 // Layout & UI Components
@@ -18,6 +18,9 @@ import VersionSelectionModal from '@/Components/VersionSelectionModal.vue';
 import FavoriteNoteModal from '@/Components/FavoriteNoteModal.vue';
 import AppDownloadModal from '@/Components/AppDownloadModal.vue';
 import BibleSEOLinks from '@/Components/BibleSEOLinks.vue';
+
+// Composables
+import { useTracking } from '@/composables/useTracking.js';
 
 const props = defineProps({
     canLogin: Boolean,
@@ -78,6 +81,17 @@ const noteForm = useForm({
 });
 
 const isDark = ref(typeof document !== 'undefined' ? document.documentElement.classList.contains('dark') : false);
+
+// --- Tracking Avanzado ---
+const { 
+    initTracking, 
+    cleanupTracking, 
+    trackEvent,
+    getSessionDuration,
+    getTotalTimeSpent,
+    formatDuration
+} = useTracking();
+
 
 // --- Methods ---
 function toggleTheme() {
@@ -199,15 +213,6 @@ function copyVerses() {
     });
 }
 
-function trackEvent(type, event, name, description = null) {
-    axios.post('/es/api/statistics/track', {
-        type,
-        event,
-        name,
-        description
-    }).catch(e => console.error('Tracking error', e));
-}
-
 function closeAppDownloadModal() {
     isAppDownloadModalOpen.value = false;
     // Guardar timestamp actual para mostrar el modal nuevamente en 5 horas
@@ -247,6 +252,8 @@ onMounted(() => {
     const userHasApp = localStorage.getItem('userHasApp');
     if (userHasApp === 'true') {
         // No mostrar el modal si el usuario ya tiene la app
+        // Inicializar tracking avanzado
+        initTracking();
         return;
     }
 
@@ -262,6 +269,14 @@ onMounted(() => {
             trackEvent('impression', 'app_download_android', 'Descarga APP Android', 'Se mostró el modal de invitación');
         }, 3000);
     }
+    
+    // Inicializar tracking avanzado (scroll y tiempo de permanencia)
+    initTracking();
+});
+
+onUnmounted(() => {
+    // Limpiar listeners y guardar tiempo de sesión
+    cleanupTracking();
 });
 </script>
 

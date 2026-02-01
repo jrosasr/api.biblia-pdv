@@ -102,8 +102,3 @@ El proyecto genera automáticamente sitemaps dinámicos en las siguientes rutas:
 -   `/sitemap-bible.xml`: Todos los libros y capítulos de la Biblia.
 -   `/sitemap-devotionals.xml`: Archivo de devocionales diarios.
 
----
-
-<p align="center">
-  Desarrollado por <b>Soluciones Elyon</b>
-</p>

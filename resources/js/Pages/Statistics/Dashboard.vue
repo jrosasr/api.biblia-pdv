@@ -243,6 +243,7 @@ watch(hitSearch, () => {
                                         <th class="px-6 py-4">Descripción</th>
                                         <th class="px-6 py-4 text-center">Impresiones</th>
                                         <th class="px-6 py-4 text-center">Unicos</th>
+                                        <th class="px-6 py-4 text-center">Scrolls</th>
                                         <th class="px-6 py-4 text-center">Clicks</th>
                                         <th class="px-6 py-4 text-center">CTR</th>
                                         <th class="px-6 py-4"></th>
@@ -275,6 +276,11 @@ watch(hitSearch, () => {
                                         <td class="px-6 py-4 text-center">
                                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
                                                 {{ (stat.uniques || 0).toLocaleString() }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 text-center">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300">
+                                                {{ (stat.scrolls || 0).toLocaleString() }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-center">

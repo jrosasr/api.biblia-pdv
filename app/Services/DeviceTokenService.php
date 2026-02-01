@@ -77,14 +77,14 @@ class DeviceTokenService
     /**
      * Send a notification to a specific token.
      */
-    public function sendNotification(DeviceToken $deviceToken, string $title, string $body): void
+    public function sendNotification(DeviceToken $deviceToken, string $title, string $body, array $data = []): void
     {
         try {
             $messaging = app('firebase.messaging');
 
             $message = CloudMessage::withTarget('token', $deviceToken->fcm_token)
                 ->withNotification(Notification::create($title, $body))
-                ->withData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK']);
+                ->withData(array_merge(['click_action' => 'FLUTTER_NOTIFICATION_CLICK'], $data));
 
             $messaging->send($message);
         } catch (\Exception $e) {

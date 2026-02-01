@@ -1,31 +1,32 @@
 <?php
 
-namespace Tests\Feature\Auth;
+/**
+ * Tests de Registro de Usuarios
+ * 
+ * Estos tests verifican el proceso de registro de nuevos usuarios,
+ * incluyendo la renderización de la pantalla y el registro exitoso.
+ */
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+// Test: La pantalla de registro puede ser renderizada
+test('la pantalla de registro puede ser renderizada', function () {
+    $response = $this->get('/register');
 
-class RegistrationTest extends TestCase
-{
-    use RefreshDatabase;
+    $response->assertStatus(200);
+});
 
-    public function test_registration_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/register');
+// Test: Los nuevos usuarios pueden registrarse
+test('los nuevos usuarios pueden registrarse', function () {
+    // Registrar un nuevo usuario
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
 
-        $response->assertStatus(200);
-    }
-
-    public function test_new_users_can_register(): void
-    {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
-
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
-}
+    // Verificar que el usuario está autenticado después del registro
+    $this->assertAuthenticated();
+    
+    // Verificar redirección al dashboard
+    $response->assertRedirect(route('dashboard', absolute: false));
+});

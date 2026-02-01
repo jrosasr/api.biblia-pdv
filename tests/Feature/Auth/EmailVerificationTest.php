@@ -1,58 +1,71 @@
 <?php
 
-namespace Tests\Feature\Auth;
+/**
+ * Tests de Verificación de Email
+ * 
+ * Estos tests verifican el proceso de verificación de email de los usuarios,
+ * incluyendo la renderización de la pantalla, verificación exitosa y manejo
+ * de hashes inválidos.
+ */
 
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
-use Tests\TestCase;
 
-class EmailVerificationTest extends TestCase
-{
-    use RefreshDatabase;
+// Test: La pantalla de verificación de email puede ser renderizada
+test('la pantalla de verificación de email puede ser renderizada', function () {
+    // Crear un usuario sin verificar
+    $user = User::factory()->unverified()->create();
 
-    public function test_email_verification_screen_can_be_rendered(): void
-    {
-        $user = User::factory()->unverified()->create();
+    $response = $this->actingAs($user)->get('/verify-email');
 
-        $response = $this->actingAs($user)->get('/verify-email');
+    $response->assertStatus(200);
+});
 
-        $response->assertStatus(200);
-    }
+// Test: El email puede ser verificado
+test('el email puede ser verificado', function () {
+    // Crear un usuario sin verificar
+    $user = User::factory()->unverified()->create();
 
-    public function test_email_can_be_verified(): void
-    {
-        $user = User::factory()->unverified()->create();
+    // Simular eventos para verificar que se dispara el evento Verified
+    Event::fake();
 
-        Event::fake();
+    // Generar URL de verificación firmada temporalmente
+    $verificationUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        ['id' => $user->id, 'hash' => sha1($user->email)]
+    );
 
-        $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1($user->email)]
-        );
+    // Visitar la URL de verificación
+    $response = $this->actingAs($user)->get($verificationUrl);
 
-        $response = $this->actingAs($user)->get($verificationUrl);
+    // Verificar que se disparó el evento Verified
+    Event::assertDispatched(Verified::class);
+    
+    // Verificar que el usuario ahora tiene el email verificado
+    $this->assertTrue($user->fresh()->hasVerifiedEmail());
+    
+    // Verificar redirección al dashboard con parámetro verified
+    $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+});
 
-        Event::assertDispatched(Verified::class);
-        $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
-    }
+// Test: El email no es verificado con hash inválido
+test('el email no es verificado con hash inválido', function () {
+    // Crear un usuario sin verificar
+    $user = User::factory()->unverified()->create();
 
-    public function test_email_is_not_verified_with_invalid_hash(): void
-    {
-        $user = User::factory()->unverified()->create();
+    // Generar URL de verificación con hash incorrecto
+    $verificationUrl = URL::temporarySignedRoute(
+        'verification.verify',
+        now()->addMinutes(60),
+        ['id' => $user->id, 'hash' => sha1('wrong-email')]
+    );
 
-        $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
-            now()->addMinutes(60),
-            ['id' => $user->id, 'hash' => sha1('wrong-email')]
-        );
+    // Intentar verificar con hash incorrecto
+    $this->actingAs($user)->get($verificationUrl);
 
-        $this->actingAs($user)->get($verificationUrl);
-
-        $this->assertFalse($user->fresh()->hasVerifiedEmail());
-    }
-}
+    // Verificar que el email sigue sin verificar
+    $this->assertFalse($user->fresh()->hasVerifiedEmail());
+});

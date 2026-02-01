@@ -1,54 +1,61 @@
 <?php
 
-namespace Tests\Feature\Auth;
+/**
+ * Tests de Autenticación
+ * 
+ * Estos tests verifican el flujo completo de autenticación de usuarios,
+ * incluyendo login, logout y validación de credenciales.
+ */
 
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-class AuthenticationTest extends TestCase
-{
-    use RefreshDatabase;
+// Test: La pantalla de login puede ser renderizada
+test('la pantalla de login puede ser renderizada', function () {
+    $response = $this->get('/login');
 
-    public function test_login_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/login');
+    $response->assertStatus(200);
+});
 
-        $response->assertStatus(200);
-    }
+// Test: Los usuarios pueden autenticarse usando la pantalla de login
+test('los usuarios pueden autenticarse usando la pantalla de login', function () {
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
 
-    public function test_users_can_authenticate_using_the_login_screen(): void
-    {
-        $user = User::factory()->create();
+    // Intentar hacer login con las credenciales correctas
+    $response = $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+    // Verificar que el usuario está autenticado
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
+});
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
+// Test: Los usuarios no pueden autenticarse con contraseña inválida
+test('los usuarios no pueden autenticarse con contraseña inválida', function () {
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
 
-    public function test_users_can_not_authenticate_with_invalid_password(): void
-    {
-        $user = User::factory()->create();
+    // Intentar hacer login con contraseña incorrecta
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ]);
 
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
+    // Verificar que el usuario no está autenticado
+    $this->assertGuest();
+});
 
-        $this->assertGuest();
-    }
+// Test: Los usuarios pueden cerrar sesión
+test('los usuarios pueden cerrar sesión', function () {
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
 
-    public function test_users_can_logout(): void
-    {
-        $user = User::factory()->create();
+    // Hacer logout
+    $response = $this->actingAs($user)->post('/logout');
 
-        $response = $this->actingAs($user)->post('/logout');
-
-        $this->assertGuest();
-        $response->assertRedirect('/');
-    }
-}
+    // Verificar que el usuario ya no está autenticado
+    $this->assertGuest();
+    $response->assertRedirect('/');
+});

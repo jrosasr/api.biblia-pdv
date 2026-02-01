@@ -78,9 +78,22 @@ const currentYear = new Date().getFullYear();
 
             <!-- Bottom Section -->
             <div class="mt-12 pt-8 border-t border-[#E0D5C9] dark:border-[#2E2A25] flex flex-col md:flex-row justify-between items-center gap-6">
-                <p class="text-[#8B6F47] dark:text-[#9B8D82] font-medium text-center md:text-left">
-                    © {{ currentYear }} <span class="text-[#3A3026] dark:text-[#F5F0E6] font-black">Biblia PDV</span>. Todos los derechos reservados.
-                </p>
+                <div class="flex flex-col gap-2 text-center md:text-left">
+                    <p class="text-[#8B6F47] dark:text-[#9B8D82] font-medium">
+                        © {{ currentYear }} <span class="text-[#3A3026] dark:text-[#F5F0E6] font-black">Biblia PDV</span>. Todos los derechos reservados.
+                    </p>
+                    <p class="text-[#8B6F47] dark:text-[#9B8D82] text-sm">
+                        Desarrollado por 
+                        <a 
+                            href="https://github.com/jrosasr" 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-[#3A3026] dark:text-[#F5F0E6] font-semibold hover:text-[#8B6F47] dark:hover:text-[#E3C598] transition-colors underline decoration-dotted underline-offset-2"
+                        >
+                            Ing. Juan Rosas
+                        </a>
+                    </p>
+                </div>
                 <div class="flex gap-8">
                     <Link :href="route('privacy')" class="text-[#8B6F47] dark:text-[#9B8D82] hover:text-[#3A3026] dark:hover:text-[#F5F0E6] text-sm font-medium transition-colors">Privacidad</Link>
                     <Link :href="route('terms')" class="text-[#8B6F47] dark:text-[#9B8D82] hover:text-[#3A3026] dark:hover:text-[#F5F0E6] text-sm font-medium transition-colors">Términos y Condiciones</Link>

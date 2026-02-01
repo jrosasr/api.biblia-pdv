@@ -1,19 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+/**
+ * Test de Ejemplo - Feature
+ * 
+ * Este es un test de ejemplo básico que verifica que la aplicación
+ * retorna una respuesta exitosa en la ruta principal.
+ */
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+// Test: La aplicación retorna una respuesta exitosa
+test('la aplicación retorna una respuesta exitosa', function () {
+    $response = $this->get('/');
 
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-}
+    $response->assertStatus(200);
+});

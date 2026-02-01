@@ -1,3 +1,7 @@
+---
+trigger: always_on
+---
+
 # 🏗️ Informe de arquitectura: api.biblia-pdv
 
 ## 🛠️ Pila tecnológica
@@ -11,7 +15,7 @@
   - `spatie/laravel-permission`: Control de roles y permisos.
   - `vue 3`: Framework para el frontend (Inertia).
   - `editorjs/editorjs`: Editor de contenido enriquecido.
-- **Herramientas de compilación/análisis:** Vite, PHPUnit, Scribe (Documentación de API), Laravel Pint (Linter).
+- **Herramientas de compilación/análisis:** Vite, Pest, Scribe (Documentación de API), Laravel Pint (Linter).
 
 ## 📂 Estructura del proyecto
 ```texto

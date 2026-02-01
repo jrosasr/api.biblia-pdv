@@ -1,73 +1,86 @@
 <?php
 
-namespace Tests\Feature\Auth;
+/**
+ * Tests de Restablecimiento de Contraseña
+ * 
+ * Estos tests verifican el flujo completo de restablecimiento de contraseña,
+ * incluyendo la solicitud del enlace, renderización de pantallas y el proceso
+ * de restablecimiento con token válido.
+ */
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
-class PasswordResetTest extends TestCase
-{
-    use RefreshDatabase;
+// Test: La pantalla de enlace de restablecimiento puede ser renderizada
+test('la pantalla de enlace de restablecimiento puede ser renderizada', function () {
+    $response = $this->get('/forgot-password');
 
-    public function test_reset_password_link_screen_can_be_rendered(): void
-    {
-        $response = $this->get('/forgot-password');
+    $response->assertStatus(200);
+});
+
+// Test: El enlace de restablecimiento puede ser solicitado
+test('el enlace de restablecimiento puede ser solicitado', function () {
+    // Simular notificaciones para verificar que se envía
+    Notification::fake();
+
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
+
+    // Solicitar enlace de restablecimiento
+    $this->post('/forgot-password', ['email' => $user->email]);
+
+    // Verificar que se envió la notificación de restablecimiento
+    Notification::assertSentTo($user, ResetPassword::class);
+});
+
+// Test: La pantalla de restablecimiento puede ser renderizada
+test('la pantalla de restablecimiento puede ser renderizada', function () {
+    // Simular notificaciones
+    Notification::fake();
+
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
+
+    // Solicitar enlace de restablecimiento
+    $this->post('/forgot-password', ['email' => $user->email]);
+
+    // Verificar que se puede acceder a la pantalla de restablecimiento
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
+        $response = $this->get('/reset-password/'.$notification->token);
 
         $response->assertStatus(200);
-    }
 
-    public function test_reset_password_link_can_be_requested(): void
-    {
-        Notification::fake();
+        return true;
+    });
+});
 
-        $user = User::factory()->create();
+// Test: La contraseña puede ser restablecida con token válido
+test('la contraseña puede ser restablecida con token válido', function () {
+    // Simular notificaciones
+    Notification::fake();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+    // Crear un usuario de prueba
+    $user = User::factory()->create();
 
-        Notification::assertSentTo($user, ResetPassword::class);
-    }
+    // Solicitar enlace de restablecimiento
+    $this->post('/forgot-password', ['email' => $user->email]);
 
-    public function test_reset_password_screen_can_be_rendered(): void
-    {
-        Notification::fake();
+    // Verificar que se puede restablecer la contraseña con el token
+    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
+        // Restablecer contraseña con el token recibido
+        $response = $this->post('/reset-password', [
+            'token' => $notification->token,
+            'email' => $user->email,
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
 
-        $user = User::factory()->create();
+        // Verificar que el restablecimiento fue exitoso
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect(route('login'));
 
-        $this->post('/forgot-password', ['email' => $user->email]);
-
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
-
-            $response->assertStatus(200);
-
-            return true;
-        });
-    }
-
-    public function test_password_can_be_reset_with_valid_token(): void
-    {
-        Notification::fake();
-
-        $user = User::factory()->create();
-
-        $this->post('/forgot-password', ['email' => $user->email]);
-
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
-                'password_confirmation' => 'password',
-            ]);
-
-            $response
-                ->assertSessionHasNoErrors()
-                ->assertRedirect(route('login'));
-
-            return true;
-        });
-    }
-}
+        return true;
+    });
+});

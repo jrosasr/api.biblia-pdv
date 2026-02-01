@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+/**
+ * Test de Ejemplo - Unit
+ * 
+ * Este es un test unitario de ejemplo básico que verifica una
+ * aserción simple.
+ */
 
-use PHPUnit\Framework\TestCase;
-
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     */
-    public function test_that_true_is_true(): void
-    {
-        $this->assertTrue(true);
-    }
-}
+// Test: Verificar que verdadero es verdadero
+test('verificar que verdadero es verdadero', function () {
+    $this->assertTrue(true);
+});

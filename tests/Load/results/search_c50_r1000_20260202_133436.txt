@@ -1,0 +1,44 @@
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /es/api/bible/search?version=RV1960&query=amor
+Document Length:        337136 bytes
+
+Concurrency Level:      50
+Time taken for tests:   91.083 seconds
+Complete requests:      1000
+Failed requests:        984
+   (Connect: 0, Receive: 0, Length: 984, Exceptions: 0)
+Non-2xx responses:      1000
+Total transferred:      337360211 bytes
+HTML transferred:       337156211 bytes
+Requests per second:    10.98 [#/sec] (mean)
+Time per request:       4554.148 [ms] (mean)
+Time per request:       91.083 [ms] (mean, across all concurrent requests)
+Transfer rate:          3617.07 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:    96 4436 583.3   4538    4707
+Waiting:       92 4432 583.3   4534    4703
+Total:         96 4436 583.2   4538    4708
+
+Percentage of the requests served within a certain time (ms)
+  50%   4538
+  66%   4554
+  75%   4565
+  80%   4583
+  90%   4629
+  95%   4671
+  98%   4692
+  99%   4697
+ 100%   4708 (longest request)

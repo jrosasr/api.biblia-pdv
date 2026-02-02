@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
@@ -47,11 +48,13 @@ class BibleReaderService
 
     public function getBooks($version)
     {
-        $conn = $this->setConnection($version);
-        return $conn->table('book')
-            ->select('id', 'name', 'abbreviation', 'testament_id')
-            ->orderBy('id')
-            ->get();
+        return Cache::remember("bible:books:{$version}", 86400, function () use ($version) {
+            $conn = $this->setConnection($version);
+            return $conn->table('book')
+                ->select('id', 'name', 'abbreviation', 'testament_id')
+                ->orderBy('id')
+                ->get();
+        });
     }
 
     public function getBookByName($version, $name)
@@ -111,102 +114,108 @@ class BibleReaderService
 
     public function getVerses($version, $bookId, $chapter)
     {
-        $conn = $this->setConnection($version);
-        $verses = $conn->table('verse')
-            ->where('book_id', $bookId)
-            ->where('chapter', $chapter)
-            ->orderBy('verse')
-            ->get();
-
-        $hConn = $this->setHeadingsConnection();
-        if ($hConn) {
-            $headings = $hConn->table('headings')
+        return Cache::remember("bible:verses:{$version}:{$bookId}:{$chapter}", 86400, function () use ($version, $bookId, $chapter) {
+            $conn = $this->setConnection($version);
+            $verses = $conn->table('verse')
                 ->where('book_id', $bookId)
                 ->where('chapter', $chapter)
+                ->orderBy('verse')
                 ->get();
 
-            foreach ($verses as $verse) {
-                $heading = $headings->firstWhere('verse', $verse->verse);
-                if ($heading) {
-                    $verse->title = $heading->title;
+            $hConn = $this->setHeadingsConnection();
+            if ($hConn) {
+                $headings = $hConn->table('headings')
+                    ->where('book_id', $bookId)
+                    ->where('chapter', $chapter)
+                    ->get();
+
+                foreach ($verses as $verse) {
+                    $heading = $headings->firstWhere('verse', $verse->verse);
+                    if ($heading) {
+                        $verse->title = $heading->title;
+                    }
                 }
             }
-        }
 
-        return $verses;
+            return $verses;
+        });
     }
 
     public function search($version, $query)
     {
-        $conn = $this->setConnection($version);
         $query = trim($query);
-
-        // 1. Try to parse as reference (e.g. "Juan 3:16" or "Génesis 1")
-        // We'll get all books for this version to match names
-        $books = $this->getBooks($version);
-        $lowerQuery = mb_strtolower($query);
+        $cacheKey = "bible:search:{$version}:" . md5($query);
         
-        $matchBook = null;
-        $matchLength = 0;
+        return Cache::remember($cacheKey, 3600, function () use ($version, $query) {
+            $conn = $this->setConnection($version);
 
-        foreach ($books as $book) {
-            $bName = mb_strtolower($book->name);
-            if (str_starts_with($lowerQuery, $bName)) {
-                $after = mb_substr($lowerQuery, mb_strlen($bName), 1);
-                if ($after === '' || $after === ' ') {
-                    if (mb_strlen($bName) > $matchLength) {
-                        $matchLength = mb_strlen($bName);
-                        $matchBook = $book;
+            // 1. Try to parse as reference (e.g. "Juan 3:16" or "Génesis 1")
+            // We'll get all books for this version to match names
+            $books = $this->getBooks($version);
+            $lowerQuery = mb_strtolower($query);
+            
+            $matchBook = null;
+            $matchLength = 0;
+
+            foreach ($books as $book) {
+                $bName = mb_strtolower($book->name);
+                if (str_starts_with($lowerQuery, $bName)) {
+                    $after = mb_substr($lowerQuery, mb_strlen($bName), 1);
+                    if ($after === '' || $after === ' ') {
+                        if (mb_strlen($bName) > $matchLength) {
+                            $matchLength = mb_strlen($bName);
+                            $matchBook = $book;
+                        }
                     }
                 }
             }
-        }
 
-        if ($matchBook) {
-            $rest = trim(mb_substr($lowerQuery, $matchLength));
-            // Regex for chapter and optional verses: ^(\d+)(?::(\d+)(?:-(\d+))?)?$
-            if (preg_match('/^(\d+)(?::(\d+)(?:-(\d+))?)?$/', $rest, $matches)) {
-                $chapterNum = (int)$matches[1];
-                $startVerse = isset($matches[2]) ? (int)$matches[2] : null;
-                $endVerse = isset($matches[3]) ? (int)$matches[3] : null;
+            if ($matchBook) {
+                $rest = trim(mb_substr($lowerQuery, $matchLength));
+                // Regex for chapter and optional verses: ^(\d+)(?::(\d+)(?:-(\d+))?)?$
+                if (preg_match('/^(\d+)(?::(\d+)(?:-(\d+))?)?$/', $rest, $matches)) {
+                    $chapterNum = (int)$matches[1];
+                    $startVerse = isset($matches[2]) ? (int)$matches[2] : null;
+                    $endVerse = isset($matches[3]) ? (int)$matches[3] : null;
 
-                $q = $conn->table('verse')
-                    ->join('book', 'verse.book_id', '=', 'book.id')
-                    ->select('verse.*', 'book.name as book_name')
-                    ->where('verse.book_id', $matchBook->id)
-                    ->where('verse.chapter', $chapterNum);
+                    $q = $conn->table('verse')
+                        ->join('book', 'verse.book_id', '=', 'book.id')
+                        ->select('verse.*', 'book.name as book_name')
+                        ->where('verse.book_id', $matchBook->id)
+                        ->where('verse.chapter', $chapterNum);
 
-                if ($startVerse !== null) {
-                    if ($endVerse !== null) {
-                        $q->whereBetween('verse.verse', [$startVerse, $endVerse]);
-                    } else {
-                        $q->where('verse.verse', $startVerse);
+                    if ($startVerse !== null) {
+                        if ($endVerse !== null) {
+                            $q->whereBetween('verse.verse', [$startVerse, $endVerse]);
+                        } else {
+                            $q->where('verse.verse', $startVerse);
+                        }
+                    }
+
+                    $results = $q->orderBy('verse.verse')->get();
+                    if ($results->count() > 0) {
+                        return [
+                            'type' => 'reference',
+                            'book_id' => $matchBook->id,
+                            'chapter' => $chapterNum,
+                            'results' => $results
+                        ];
                     }
                 }
-
-                $results = $q->orderBy('verse.verse')->get();
-                if ($results->count() > 0) {
-                    return [
-                        'type' => 'reference',
-                        'book_id' => $matchBook->id,
-                        'chapter' => $chapterNum,
-                        'results' => $results
-                    ];
-                }
             }
-        }
 
-        // 2. Keyword search
-        $results = $conn->table('verse')
-            ->join('book', 'verse.book_id', '=', 'book.id')
-            ->select('verse.*', 'book.name as book_name')
-            ->where('verse.text', 'like', "%{$query}%")
-            ->limit(100)
-            ->get();
+            // 2. Keyword search
+            $results = $conn->table('verse')
+                ->join('book', 'verse.book_id', '=', 'book.id')
+                ->select('verse.*', 'book.name as book_name')
+                ->where('verse.text', 'like', "%{$query}%")
+                ->limit(100)
+                ->get();
 
-        return [
-            'type' => 'search',
-            'results' => $results
-        ];
+            return [
+                'type' => 'search',
+                'results' => $results
+            ];
+        });
     }
 }

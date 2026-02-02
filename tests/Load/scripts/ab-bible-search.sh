@@ -29,7 +29,7 @@ fi
 CONCURRENCY=${1:-10}
 REQUESTS=${2:-100}
 QUERY=${3:-$SEARCH_QUERY}
-ENDPOINT="${APP_URL}/api/bible/search?version=${BIBLE_VERSION}&query=${QUERY}"
+ENDPOINT="${APP_URL}/es/api/bible/search?version=${BIBLE_VERSION}&query=${QUERY}"
 
 # Crear directorio de resultados si no existe
 mkdir -p "$RESULTS_DIR"

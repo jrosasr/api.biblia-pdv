@@ -1,0 +1,44 @@
+This is ApacheBench, Version 2.3 <$Revision: 1903618 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+
+
+Server Software:        
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /es/api/bible/books/RV1960
+Document Length:        335909 bytes
+
+Concurrency Level:      50
+Time taken for tests:   137.771 seconds
+Complete requests:      1000
+Failed requests:        975
+   (Connect: 0, Receive: 0, Length: 975, Exceptions: 0)
+Non-2xx responses:      1000
+Total transferred:      336111565 bytes
+HTML transferred:       335907565 bytes
+Requests per second:    7.26 [#/sec] (mean)
+Time per request:       6888.561 [ms] (mean)
+Time per request:       137.771 [ms] (mean, across all concurrent requests)
+Transfer rate:          2382.46 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:    94 6772 2496.3   9018    9347
+Waiting:       88 6768 2496.3   9013    9342
+Total:         94 6772 2496.3   9018    9347
+
+Percentage of the requests served within a certain time (ms)
+  50%   9018
+  66%   9163
+  75%   9218
+  80%   9232
+  90%   9260
+  95%   9288
+  98%   9318
+  99%   9331
+ 100%   9347 (longest request)

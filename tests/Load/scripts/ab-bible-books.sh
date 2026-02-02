@@ -26,7 +26,7 @@ fi
 # Parámetros
 CONCURRENCY=${1:-10}
 REQUESTS=${2:-100}
-ENDPOINT="${APP_URL}/api/bible/books/${BIBLE_VERSION}"
+ENDPOINT="${APP_URL}/es/api/bible/books/${BIBLE_VERSION}"
 
 # Crear directorio de resultados si no existe
 mkdir -p "$RESULTS_DIR"

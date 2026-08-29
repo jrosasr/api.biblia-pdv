@@ -28,8 +28,8 @@ Route::prefix('v1')->group(function () {
     // Endpoint return array with version of api
     Route::get('/version', function () {
         return [
-            'version' => '1.0.7',
-            'versionApp' => '1.0.7',
+            'version' => '1.0.9',
+            'versionApp' => '1.0.9',
             'status' => 'ok',
             'message' => 'APIbiblia-pdv',
         ];

@@ -95,6 +95,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the daily habit completions mirrored from the user's devices.
+     */
+    public function dailyCompletions(): HasMany
+    {
+        return $this->hasMany(DailyCompletion::class);
+    }
+
+    /**
      * Get the user devotionals for the user.
      */
     public function userDevotionals(): HasMany

@@ -63,6 +63,10 @@ Route::prefix('v1')->group(function () {
 
         // Track reading
         Route::post('reading/track', [\App\Http\Controllers\ReadingController::class, 'track']);
+
+        // Daily habit completions (mirror of the app's local engine)
+        Route::get('daily-completions', [\App\Http\Controllers\DailyCompletionController::class, 'index']);
+        Route::post('daily-completions', [\App\Http\Controllers\DailyCompletionController::class, 'store']);
     });
 });
 
